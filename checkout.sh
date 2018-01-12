@@ -6,7 +6,7 @@ GIT_SERVER_REPO="https://github.com/peterweissig/bash_repo.git"
 
 # export paths
 export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
-export ROBO_PATH_SCRIPTS="${ROBO_PATH_WORKSPACE}${BASH_ROBOAG_PATH}bashrc.sh"
+export ROBO_PATH_SCRIPTS="${ROBO_PATH_WORKSPACE}${BASH_ROBOAG_PATH}"
 
 export ROBO_HOME="$(cd && pwd )/"
 
