@@ -2,8 +2,7 @@
 # 2018 01 11
 
 export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
-export ROBO_PATH_WORKSPACE="$(cd "${ROBOLIB_PATH_SCRIPTS}../../" \
-  && pwd )/"
+export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
 
 #***************************[repository]*************************************
