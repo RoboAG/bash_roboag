@@ -4,8 +4,13 @@
 export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
 export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
+#***************************[help]********************************************
+# 2018 02 15
 
-#***************************[repository]*************************************
+. ${ROBO_PATH_SCRIPTS}scripts/help_install_server.sh
+
+
+#***************************[repository]**************************************
 # 2018 01 30
 
 . ${ROBO_PATH_SCRIPTS}scripts/repository.sh

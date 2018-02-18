@@ -1,24 +1,26 @@
 # bash_roboag
-scripts for setup, configuration und daily tasks within RoboAG
+Scripts for setup, configuration und daily tasks within RoboAG.
 
-## setup
+## Setup for linux (Ubuntu)
 create workspace directory
-```
-mkdir -p ~/workspace
-cd ~/workspace
-```
+
+    mkdir -p ~/workspace
+    cd ~/workspace
+
 
 download scripts
-```
-wget -nv https://raw.githubusercontent.com/peterweissig/bash_roboag/master/checkout.sh
-bash ./checkout.sh
-```
+
+    wget -nv https://raw.githubusercontent.com/RoboAG/bash_roboag/master/checkout.sh
+    bash ./checkout.sh
+
 
 checkout additionals repositories (e.g. robolib)
-```
-git_clone_robo_lib
-git_clone_robo_pololu
-```
 
-## installation
+    git_clone_robo_lib
+    git_clone_robo_pololu
+    ...
+    repo_help #list of all referenced repositories
+
+
+## Installation
 For install instructions see [doc/install](doc/install.md).
