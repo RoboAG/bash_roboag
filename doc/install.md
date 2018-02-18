@@ -1,7 +1,7 @@
 # Installation instructions
 
 ## Client config
-<content will follow>
+... content will follow ...
 
 
 ## Server config
