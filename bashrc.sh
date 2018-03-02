@@ -4,6 +4,12 @@
 export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
 export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
+#***************************[config]******************************************
+# 2018 03 01
+
+. ${ROBO_PATH_SCRIPTS}scripts/config.sh
+
+
 #***************************[help]********************************************
 # 2018 02 15
 
