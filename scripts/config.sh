@@ -45,7 +45,7 @@ export _ROBO_SERVER_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag/"
 export _ROBO_SERVER_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax/"
 
 
-if [ "ROBO_CONFIG_IS_SERVER" != "" ]; then
+if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
 
     # setup hard-drives
     export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
@@ -78,7 +78,6 @@ if [ "ROBO_CONFIG_IS_SERVER" != "" ]; then
     export REPO_ROBOAG_PATH="${ROBO_PATH_ROBOAG}Projekte/"
         # gluecksrad
         # 3pi
-        # filebrowser ==> PHP!
 
         export REPO_ROBOSAX_PROJECT_PATH="${REPO_ROBOAG_PATH}RoboSAX/"
             # ledbox
@@ -96,10 +95,10 @@ if [ "ROBO_CONFIG_IS_SERVER" != "" ]; then
             # nearfieldmap_pa
 
     temp="${ROBO_PATH_ROBOAG}PHP/"
-    export REPO_ROBOAG_PHP_PATH="${temp}/"
+    export REPO_ROBOAG_PHP_PATH="${temp}"
         # filebrowser
 
-    export REPO_ROBOSAX_PHP_PATH="${temp}/"
+    export REPO_ROBOSAX_PHP_PATH="${temp}"
         # Punkte RoboSAX
 
 fi
