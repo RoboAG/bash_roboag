@@ -87,12 +87,15 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # opa
             # dimmer
 
+    export REPO_CPP_PATH="${ROBO_PATH_ROBOAG}C++/Peter/"
+            # avr_downloader and xbee_tool
+
     export REPO_ROS_PATH="${ROBO_PATH_ROBOAG}ROS/"
         # ProAut
-            # parameter_pa
-            # pcdfilter_pa
-            # octomap_pa
-            # nearfieldmap_pa
+            # parameter
+            # pcdfilter
+            # octomap
+            # nearfield_map
 
     temp="${ROBO_PATH_ROBOAG}PHP/"
     export REPO_ROBOAG_PHP_PATH="${temp}"
