@@ -13,12 +13,14 @@
 #   https://github.com/RoboAG/bash_roboag/                                    #
 ###############################################################################
 
-PATH_THIS="bash/roboag"
-PATH_ADD="bash/repo"
+NAME_THIS="roboag"
+NAME_ADD="repo"
 
 ###############################################################################
-NAME_GIT_THIS="bash_roboag"
-NAME_GIT_ADD="bash_repo"
+PATH_THIS="bash/${NAME_THIS}/"
+PATH_ADD="bash/${NAME_ADD}/"
+NAME_GIT_THIS="bash_${NAME_THIS}"
+NAME_GIT_ADD="bash_${NAME_ADD}"
 
 URL_GIT_THIS="https://github.com/RoboAG/${NAME_GIT_THIS}.git"
 URL_GIT_ADD="https://github.com/peterweissig/${NAME_GIT_ADD}.git"
@@ -27,7 +29,7 @@ NAME_CHECKOUT_SCRIPT="checkout.sh"
 
 ###############################################################################
 echo "The projects"
-echo "  \"${PATH_THIS}\" and \"${PATH_ADD}\""
+echo "  \"${NAME_THIS}\" and \"${NAME_ADD}\""
 echo "will be checked out completely."
 echo ""
 
@@ -43,12 +45,14 @@ export ROBO_HOME="$(cd && pwd )/"
 if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
     echo ""
     echo "This script must be placed at the top-level of the working"
-    echo "directory - not in \"bash/\" or \"bash/roboag/\"!"
+    echo -n "directory - usually \"~/workspace/\" - not in "
+    echo "\"bash/\" or \"bash/roboag/\"!"
     echo ""
 
     echo "Do you want to continue ? (yes/No)"
     read answer
-    if [ ! "$answer" == "yes" ]; then
+    read -s -n 1 ANS; echo ""
+    if [ "$ANS" != "y" ]; then
         echo "  Stopped"
         return -1
         exit   -1
