@@ -1,8 +1,36 @@
-# setup repositories
-BASH_ROBOAG_PATH="bash/roboag/"
-BASH_REPO_PATH="bash/repo/"
-GIT_SERVER_ROBOAG="https://github.com/peterweissig/bash_roboag.git"
-GIT_SERVER_REPO="https://github.com/peterweissig/bash_repo.git"
+#!/bin/sh
+
+###############################################################################
+#                                                                             #
+# checkout.sh                                                                 #
+# ===========                                                                 #
+#                                                                             #
+# Version: 1.0.0                                                              #
+# Date   : 13.03.18                                                           #
+# Author : Peter Weissig                                                      #
+#                                                                             #
+# For help or bug report please visit:                                        #
+#   https://github.com/RoboAG/bash_roboag/                                    #
+###############################################################################
+
+PATH_THIS="bash/roboag"
+PATH_ADD="bash/repo"
+
+###############################################################################
+NAME_GIT_THIS="bash_roboag"
+NAME_GIT_ADD="bash_repo"
+
+URL_GIT_THIS="https://github.com/RoboAG/${NAME_GIT_THIS}.git"
+URL_GIT_ADD="https://github.com/peterweissig/${NAME_GIT_ADD}.git"
+
+NAME_CHECKOUT_SCRIPT="checkout.sh"
+
+###############################################################################
+echo "The projects"
+echo "  \"${PATH_THIS}\" and \"${PATH_ADD}\""
+echo "will be checked out completely."
+echo ""
+
 
 # export paths
 export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
@@ -10,63 +38,54 @@ export ROBO_PATH_SCRIPTS="${ROBO_PATH_WORKSPACE}${BASH_ROBOAG_PATH}"
 
 export ROBO_HOME="$(cd && pwd )/"
 
-##
-## inform user
-##
 
-echo
-echo "This script checks out \"bash/roboag\" and \"bash/repo\" to the local"
-echo "working directory. It must be manually placed at the top-level"
-echo "of the working directory - not in \"bash/\" or \"bash/roboag/\"!"
-echo
+# check paths
+if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
+    echo ""
+    echo "This script must be placed at the top-level of the working"
+    echo "directory - not in \"bash/\" or \"bash/roboag/\"!"
+    echo ""
 
-echo "Run this script ? (yes/No)"
-read answer
-if [ ! "$answer" == "yes" ]; then
-  echo "  Stopped"
-  exit -1
+    echo "Do you want to continue ? (yes/No)"
+    read answer
+    if [ ! "$answer" == "yes" ]; then
+        echo "  Stopped"
+        return -1
+        exit   -1
+    fi
 fi
 
-##
-## check out roboag
-##
 
-echo "mkdir -p ${BASH_ROBOAG_PATH}"
-mkdir -p "${BASH_ROBOAG_PATH}"
-
-echo "git clone \"$GIT_SERVER_ROBOAG\" \"$BASH_ROBOAG_PATH\""
-git clone "$GIT_SERVER_ROBOAG" "$BASH_ROBOAG_PATH"
-
-##
-## update .bashrc
-##
-
-LINE_BASHRC=". ${ROBO_PATH_SCRIPTS}bashrc.sh"
-FOUND="$(cat "${ROBO_HOME}.bashrc" | grep "${LINE_BASHRC}")"
-
-if [ "$FOUND" == "" ]; then
-    echo "Add entry to \"~/.bashrc\""
-    echo ""                                   >> "${ROBO_HOME}.bashrc"
-    echo "# helper script for roboag :-)"     >> "${ROBO_HOME}.bashrc"
-    echo "${LINE_BASHRC}"                     >> "${ROBO_HOME}.bashrc"
+echo ""
+echo "### checking out the project"
+if [ -d "${PATH_THIS}" ]; then
+    echo "This project already exists!"
+    return
 fi
-
-##
-## clone bash_repo repository
-##
-
-echo "git clone \"$GIT_SERVER_REPO\" \"$BASH_REPO_PATH\""
-git clone "$GIT_SERVER_REPO" "$BASH_REPO_PATH"
+git clone "${URL_GIT_THIS}" "${PATH_THIS}"
 
 
-##
-## source bashrc.sh
-##
+echo ""
+echo "### automatically sourcing this project"
+./${PATH_THIS}setup_bashrc.sh
 
-. ${ROBO_PATH_SCRIPTS}bashrc.sh
 
-##
-## remove this file
-##
+echo ""
+echo "### checking out the additional repository"
+if [ -d "${PATH_ADD}" ]; then
+    echo "This project already exists!"
+    return
+fi
+git clone "${URL_GIT_ADD}" "${PATH_ADD}"
 
-rm checkout.sh
+
+if [ $? -ne 0 ]; then
+    echo "### There have been errors! ###"
+    return -1;
+else
+    echo ""
+    echo "### deleting this script"
+    rm "${NAME_CHECKOUT_SCRIPT}"
+
+    echo "all done :-)"
+fi
