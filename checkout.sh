@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.0.0                                                              #
+# Version: 1.0.1                                                              #
 # Date   : 13.03.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -50,7 +50,6 @@ if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
     echo ""
 
     echo "Do you want to continue ? (yes/No)"
-    read answer
     read -s -n 1 ANS; echo ""
     if [ "$ANS" != "y" ]; then
         echo "  Stopped"
