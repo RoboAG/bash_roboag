@@ -21,6 +21,7 @@ checkout additionals repositories (e.g. robolib)
     ...
     repo_help #list of all referenced repositories
 
+see also [help_config_workspace.sh](scripts/help_config_workspace.sh).
 
 ## Installation
 For install instructions see [doc/install](doc/install.md).

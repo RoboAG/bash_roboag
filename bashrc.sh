@@ -11,9 +11,10 @@ export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
 
 #***************************[help]********************************************
-# 2018 02 15
+# 2018 03 30
 
 . ${ROBO_PATH_SCRIPTS}scripts/help_install_server.sh
+. ${ROBO_PATH_SCRIPTS}scripts/help_config_workspace.sh
 
 
 #***************************[repository]**************************************
@@ -52,4 +53,3 @@ if [ "${REPO_ROBO_LIB[0]}" != "" ] && \
   [ -d "${REPO_ROBO_LIB[0]}" ]; then
     . ${REPO_ROBO_LIB[0]}scripts/bashrc.sh
 fi
-
