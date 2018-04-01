@@ -37,7 +37,7 @@ fi
 
 
 #***************************[server config]***********************************
-# 2018 03 01
+# 2018 04 01
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
@@ -76,6 +76,7 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # dmx_driver
 
     export REPO_ROBOAG_PATH="${ROBO_PATH_ROBOAG}Projekte/"
+        # display
         # gluecksrad
         # 3pi
 
