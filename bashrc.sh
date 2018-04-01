@@ -35,10 +35,10 @@ fi
 
 
 #***************************[network]*****************************************
-# 2018 01 11
+# 2018 04 01
 if [ "${REPO_BASH_NETWORK[0]}" != "" ] && \
   [ -d "${REPO_BASH_NETWORK[0]}" ]; then
-    . ${REPO_BASH_NETWORK[0]}functions.sh
+    . ${REPO_BASH_NETWORK[0]}bashrc.sh
 fi
 
 
