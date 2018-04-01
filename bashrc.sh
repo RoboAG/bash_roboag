@@ -7,12 +7,6 @@ export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
 export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
 
-#***************************[config]******************************************
-# 2018 03 01
-
-. ${ROBO_PATH_SCRIPTS}scripts/config.sh
-
-
 #***************************[help]********************************************
 # 2018 03 30
 
@@ -23,11 +17,20 @@ export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 #***************************[repository]**************************************
 # 2018 04 01
 
+. ${ROBO_PATH_SCRIPTS}scripts/config.sh
 . ${ROBO_PATH_SCRIPTS}scripts/repository.sh
 
 if [ -d "${REPO_BASH_REPO[0]}" ]; then
     export REPO_PATH_WORKSPACE="${ROBO_PATH_WORKSPACE}"
     . ${REPO_BASH_REPO[0]}bashrc.sh
+fi
+
+
+#***************************[config]******************************************
+# 2018 04 01
+
+if [ -d "${REPO_BASH_CONFIG[0]}" ]; then
+    . ${REPO_BASH_CONFIG[0]}bashrc.sh
 fi
 
 

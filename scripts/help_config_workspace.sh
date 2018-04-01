@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2018 03 30
+# 2018 04 01
 
 function robo_help_config_workspace() {
 
@@ -38,7 +38,7 @@ function robo_help_config_workspace() {
     echo "    nothing todo"
     echo ""
     echo "  b) Standalone client (no server avaiable)"
-    echo "    $ touch  ${ROBO_PATH_CONFIG}standalone.txt"
+    echo "    $ touch  $${ROBO_PATH_CONFIG}standalone.txt"
     echo ""
     echo "  c) RoboAG server"
     echo "    $ touch  $${ROBO_PATH_CONFIG}is_server.txt"
