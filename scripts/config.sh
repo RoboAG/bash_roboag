@@ -1,7 +1,12 @@
-#***************************[needed external variables]***********************
-# 2018 03 01
+#!/bin/bash
 
-# ROBO_PATH_WORKSPACE
+#***************************[needed external variables]***********************
+# 2018 04 01
+
+# ROBO_PATH_SCRIPTS
+
+# note: repo files must be sourced after this script
+
 
 
 #***************************[path]********************************************

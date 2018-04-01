@@ -1,8 +1,11 @@
+#!/bin/bash
+
 #***************************[paths and files]*********************************
 # 2018 01 11
 
 export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
 export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
+
 
 #***************************[config]******************************************
 # 2018 03 01
@@ -18,16 +21,13 @@ export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
 
 #***************************[repository]**************************************
-# 2018 01 30
+# 2018 04 01
 
 . ${ROBO_PATH_SCRIPTS}scripts/repository.sh
 
 if [ -d "${REPO_BASH_REPO[0]}" ]; then
     export REPO_PATH_WORKSPACE="${ROBO_PATH_WORKSPACE}"
-    . ${REPO_BASH_REPO[0]}list.sh
-    . ${REPO_BASH_REPO[0]}functions.sh
-    . ${REPO_BASH_REPO[0]}alias.sh
-    . ${REPO_BASH_REPO[0]}help.sh
+    . ${REPO_BASH_REPO[0]}bashrc.sh
 fi
 
 

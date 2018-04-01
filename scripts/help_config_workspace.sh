@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #***************************[help]********************************************
 # 2018 03 30
 
@@ -8,7 +10,7 @@ function robo_help_config_workspace() {
     echo ""
     echo "see also https://github.com/RoboAG/bash_roboag"
     echo ""
-    
+
 
     echo "0. Open Terminal"
     echo "  <strg>+<alt>+<T>"
@@ -42,7 +44,7 @@ function robo_help_config_workspace() {
     echo "    $ touch  $${ROBO_PATH_CONFIG}is_server.txt"
     echo -e "\n<enter>\n"; read dummy
 
-    
+
     echo "3) Download additional repositories"
     echo "  If not in server mode, download additional repositories as needed."
     echo "  $ git_clone_..."
@@ -52,6 +54,6 @@ function robo_help_config_workspace() {
     echo "  $ repo_help"
     echo -e "\n<enter>\n"; read dummy
 
-    
+
     echo "done :-)"
 }
