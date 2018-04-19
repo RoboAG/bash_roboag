@@ -27,11 +27,11 @@ fi
 
 
 #***************************[config]******************************************
-# 2018 04 01
+# 2018 04 15
 
-if [ -d "${REPO_BASH_CONFIG[0]}" ]; then
-    . ${REPO_BASH_CONFIG[0]}bashrc.sh
-fi
+#if [ -d "${REPO_BASH_CONFIG[0]}" ]; then
+#    . ${REPO_BASH_CONFIG[0]}bashrc.sh
+#fi
 
 
 #***************************[network]*****************************************
