@@ -42,7 +42,7 @@ fi
 
 
 #***************************[server config]***********************************
-# 2018 04 01
+# 2018 09 05
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
@@ -56,8 +56,11 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
     export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
 
+    # setup repo directory
+    export ROBO_PATH_REPOS="${ROBO_PATH_ROBOAG}Repos/"
+
     # override standard-directories
-    export REPO_ROBO_PATH="${ROBO_PATH_ROBOAG}WinAVR/"
+    export REPO_ROBO_PATH="${ROBO_PATH_REPOS}WinAVR/"
         # robolib
         # pololu
 
@@ -65,8 +68,8 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # licht robosax
 
 
-    temp="${ROBO_PATH_ROBOAG}Eagle/"
-        export REPO_ROBO_EAGLE_PATH="${temp}RoboAG/"
+    temp="${ROBO_PATH_REPOS}Eagle/"
+        export REPO_ROBO_EAGLE_PATH="${temp}"
             # config
             # keplerboard
             # xbee
@@ -80,7 +83,7 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
         export REPO_PROJECTS_EAGLE_PATH="${temp}Peter/"
             # dmx_driver
 
-    export REPO_ROBOAG_PATH="${ROBO_PATH_ROBOAG}Projekte/"
+    export REPO_ROBOAG_PATH="${ROBO_PATH_REPOS}Projekte/"
         # display
         # gluecksrad
         # 3pi
@@ -93,17 +96,20 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # opa
             # dimmer
 
-    export REPO_CPP_PATH="${ROBO_PATH_ROBOAG}C++/Peter/"
+    export REPO_CPP_PATH="${ROBO_PATH_REPOS}C++/Peter/"
             # avr_downloader and xbee_tool
 
-    export REPO_ROS_PATH="${ROBO_PATH_ROBOAG}ROS/"
-        # ProAut
+    export REPO_ROS_PATH="${ROBO_PATH_REPOS}ROS/"
+        # ros-tools-pa
             # parameter
             # pcdfilter
             # octomap
             # nearfield_map
+            # odometry
+        # ros-sensors-pa
+            # radar
 
-    temp="${ROBO_PATH_ROBOAG}PHP/"
+    temp="${ROBO_PATH_REPOS}PHP/"
     export REPO_ROBOAG_PHP_PATH="${temp}"
         # filebrowser
 
