@@ -5,12 +5,289 @@
 
 function robo_help_install_server() {
 
-    if [ $# -lt 0 ] || [ $# -gt 1 ]; then
-        echo "Error - robo_help_install_server needs 0-1 parameters"
-        echo "       [#1]: system which will be installed"
-        echo "             if used this parameter must be set to"
-        echo "               \"roboag\" (default value) or \"peter\""
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<system>]"
 
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 0-1 parameters"
+        echo "    [#1:]system for which install instructions will be shown"
+        echo "         Leave option empty to run for \"roboag\"."
+        echo "           \"roboag\"     Server of RoboAG (and RoboSAX)"
+        echo "           \"togo\"       Peters ToGo-Server"
+        echo "           \"peter\"      Peters Home-Server"
+        echo "         Deprecated versions:"
+        echo "           \"roboag1604\" Server of RoboAG (Ubuntu 16.04)"
+        echo "           \"togo1604\"   ToGo-Server (Ubuntu 16.04)"
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check first parameter (system-flag)
+    system_flag="roboag"
+    if [ $# -gt 0 ]; then
+        # check for deprecated versions
+        if [ "$1" == "roboag1604" ]; then
+            robo_help_install_server1604 roboag
+            return
+        fi
+        if [ "$1" == "togo1604" ]; then
+            robo_help_install_server1604 peter
+            return
+        fi
+
+        #check for current versions
+        if [ "$1" == "roboag" ]; then
+            # nothing to do :-)
+            dummy=1
+        elif [ "$1" == "peter" ]; then
+            system_flag="peter"
+        elif [ "$1" == "togo" ]; then
+            system_flag="togo"
+        else
+            echo "$FUNCNAME: Parameter Error."
+            $FUNCNAME --help
+            return -1
+        fi
+    fi
+
+    echo ""
+    echo "### Install Server ###"
+    echo ""
+    echo "Operating System: Ubuntu Server 18.04.1 LTS"
+    echo ""
+
+    echo "0. Source"
+    echo "  Internet:"
+    echo "    https://releases.ubuntu.com/18.04/"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "1. GNU GRUB"
+    echo "  [x] Install Ubuntu Server"
+    echo "  [ ] OEM install (for manufacturers)"
+    echo "  [ ] Check disk for defects"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "2. Select language (1/11)"
+    echo "  Please choose your preferred language."
+    echo "    [Deutsch]"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "3. Keyboard configuration (2/11)"
+    echo "  Please select your keyboard layout below, ..."
+    echo "  Layout   [Deutsch]"
+    echo "  Variant  [Deutsch]"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "4. Ubuntu 18.04 (3/11)"
+    echo "  Welcome to Ubuntu! The world's favourite platform for ..."
+    echo "    [Install Ubuntu]"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "5. Network connections (4/11)"
+    echo "  Configure at least one interface this server can use ..."
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "    enp1s0"
+        echo "    enp4s0"
+    fi
+    echo -n "  <nothing todo - this page just lists all available ethernet "
+    echo "connections>"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "6. Configure proxy (5/11)"
+    echo "  If this system requires a proxy to connect to the internet, ..."
+    echo "  Proxy address: [  ]"
+    echo "  <nothing todo - leave proxy address empty>"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "7. Configure Ubuntu archive mirror (6/11)"
+    echo "  If you use an alternative mirror for Ubuntu, ..."
+    echo "  Mirror address: [http://archive.ubuntu.com/ubuntu]"
+    echo "  <nothing todo - leave mirror address as it is>"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "8. Dateisystem einrichten (7/11)"
+    echo "  The installer can guide you though partitioning ..."
+    echo "  [Manual]"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "8.a) Dateisystem einrichten (7/11)"
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "  SSD:"
+        echo "    a) System"
+        echo "       Size (max. 111G)   : 50G         <ca. 45%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /"
+        echo "    b) Swap"
+        echo "       Size (max.  61G)   : 10G"
+        echo "       Format             : swap"
+        echo "       Mount              : SWAP"
+        echo "    c) Home"
+        echo "       Size (max.  51G)   :             <leave empty>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /home"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "  HDD:"
+        echo "    a) Data"
+        echo "       Size (max. 931G)   : 750G        <ca. 75%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/data"
+        echo "    b) Share"
+        echo "       Size (max. 181G)   : 100G        <ca. 10%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/share"
+        echo "    c) Internal"
+        echo "       Size (max.  81G)   :             <leave empty>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /mnt/internal"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "FILE SYSTEM SUMMARY"
+        echo "  /               50G  ext4   ..."
+        echo "  /boot/efi      512M  fat32  ..."
+        echo "  /home           51G  ext4   ..."
+        echo "  /media/data    750G  ext4   ..."
+        echo "  /media/share   100G  ext4   ..."
+        echo "  /mnt/internal   81G  ext4   ..."
+        echo "  SWAP            10G  swap   ..."
+        echo ""
+        echo "AVAILABLE DEVICES"
+        echo ""
+        echo "USED DEVICES"
+        echo "  ... <similar to file system summary>"
+    fi
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "8.b) Confirm destructive action"
+    echo "  Selecting Continue below will begin the Installation ..."
+    echo "  You will not be able to return ..."
+    echo "  Are you sure you want to continue ?"
+    echo "    [Continue]"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "9. Profil setup (9/11)"
+    echo "  Enter the username and password ..."
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "  Your name             : Peter"
+        echo "  Your server's name    : blackbox"
+        echo "  Pick a username       : peter"
+        echo "  Choose a password     : xxx"
+        echo "  Confirm your password : xxx"
+        echo "  Import SSH identity   : [No]"
+    fi
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "10. Featured Server Snaps (9/11)"
+    echo "  These are popular snaps in server environments. ..."
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "  [ ] ..."
+        echo "  [x] nextcloud"
+        echo "  [ ] ..."
+        echo "  [x] minidlna-escoand"
+    fi
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "11. Install complete (11/11)"
+    echo "  --Finished install!--"
+    echo "  ..."
+    echo "  <nothing todo - this page just lists every step done>"
+    echo "  [Reboot Now]"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "12. Reboot"
+    echo "  <wait some time>"
+    echo "  Please remove the installation medium, then press ENTER:"
+    echo "  <do as written ;-)>"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "13. Update"
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "  <wait some time for minidlna and nextcloud installation>"
+    fi
+    echo "  log into server"
+    echo "  $ sudo apt-get update"
+    echo "  $ sudo apt-get upgrade && sudo apt-get dist-upgrade"
+    echo "  <wait some time for the updates to be done>"
+    if [ "$system_flag" == "roboag" ]; then
+        echo "    ~ToDo~"
+    elif [ "$system_flag" == "peter" ]; then
+        echo "    ~ToDo~"
+    else
+        echo "  $ sudo apt-get install ubuntu-desktop"
+        echo "  <wait some time for the upgrade to be done>"
+    fi
+    echo "  $ sudo reboot"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "14. ... ToDo ..."
+
+    echo "done :-)"
+}
+
+#***************************[16.04.]******************************************
+# 2018 02 18
+
+function robo_help_install_server1604() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<system>]"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 0-1 parameters"
+        echo "    [#1:]system for which install instructions will be shown"
+        echo "         Leave option empty to run for \"roboag\"."
+        echo "           \"roboag\"     Server of RoboAG (and RoboSAX)"
+        echo "           \"peter\"      Peter's ToGo-Server"
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
         return -1
     fi
 
@@ -23,16 +300,11 @@ function robo_help_install_server() {
         elif [ "$1" == "peter" ]; then
             system_flag="peter"
         else
-            echo "Error - robo_help_install_server"
-            echo "       [#1]: must be \"roboag\" or \"peter\""
-            return -2
+            echo "$FUNCNAME: Parameter Error."
+            $FUNCNAME --help
+            return -1
         fi
-    else
-        echo "Warning - robo_help_install_server expects 1 parameter"
-        echo "       [#1]: system which will be installed"
-        echo "             (defaults to \"roboag\")"
     fi
-
 
     echo ""
     echo "### Install Server ###"
@@ -42,7 +314,7 @@ function robo_help_install_server() {
 
     echo "0. Source"
     echo "  Internet:"
-    echo "    https://www.ubuntu.com/download/server"
+    echo "    https://releases.ubuntu.com/16.04/"
     echo -e "\n<enter>\n"; read dummy
 
 
@@ -100,7 +372,7 @@ function robo_help_install_server() {
     echo "    <vergeben   : Server   (RoboAG),"
     echo "                  blackbox (peter) ,"
     echo "                  flunder  (peter) >"
-    #echo "    <noch offen : ?                >"
+    echo "    <noch offen : ?                >"
     echo -e "\n<enter>\n"; read dummy
 
 
@@ -152,7 +424,7 @@ function robo_help_install_server() {
 
     echo "10.b) Festplatten partitionieren"
     if [ "$system_flag" == "roboag" ]; then
-        echo "  TODO"
+        echo "    ~ToDo~"
         echo -e "\n<enter>\n"; read dummy
     else
         echo "  SSD:"
@@ -160,7 +432,7 @@ function robo_help_install_server() {
         echo "       Neue Größe der Partition    : <50%>"
         echo "       Typ der neuen Partition     : <Primär>"
         echo "       Position der neuen Partition: <Anfang>"
-        echo "       Benutzen als       : Ext4-Journaling-Daeisystem"
+        echo "       Benutzen als       : Ext4-Journaling-Dateisystem"
         echo "       Einbindungspunkt   : /"
         echo "       Einbindungsoptionen: defaults"
         echo "       Name               : Root"
@@ -175,19 +447,19 @@ function robo_help_install_server() {
         echo "       Neue Größe der Partition    : <unverändert>"
         echo "       Typ der neuen Partition     : <Logisch>"
         echo "       Position der neuen Partition: <Anfang>"
-        echo "       Benutzen als       : Ext4-Journaling-Daeisystem"
+        echo "       Benutzen als       : Ext4-Journaling-Dateisystem"
         echo "       Einbindungspunkt   : /home"
         echo "       Einbindungsoptionen: defaults"
         echo "       Name               : Home"
         echo "       Boot-Flag          : Aus"
         echo -e "\n<enter>\n"; read dummy
 
-        echo "  HD:"
+        echo "  HDD:"
         echo "    a) Data"
         echo "       Neue Größe der Partition    : <75%>"
         echo "       Typ der neuen Partition     : <Logisch>"
         echo "       Position der neuen Partition: <Anfang>"
-        echo "       Benutzen als       : Ext4-Journaling-Daeisystem"
+        echo "       Benutzen als       : Ext4-Journaling-Dateisystem"
         echo "       Einbindungspunkt   : /media/data"
         echo "       Einbindungsoptionen: defaults"
         echo "       Name               : Data"
@@ -196,7 +468,7 @@ function robo_help_install_server() {
         echo "       Neue Größe der Partition    : <40%>"
         echo "       Typ der neuen Partition     : <Logisch>"
         echo "       Position der neuen Partition: <Anfang>"
-        echo "       Benutzen als       : Ext4-Journaling-Daeisystem"
+        echo "       Benutzen als       : Ext4-Journaling-Dateisystem"
         echo "       Einbindungspunkt   : /media/share"
         echo "       Einbindungsoptionen: defaults"
         echo "       Name               : Share"
@@ -205,7 +477,7 @@ function robo_help_install_server() {
         echo "       Neue Größe der Partition    : <unverändert>"
         echo "       Typ der neuen Partition     : <Logisch>"
         echo "       Position der neuen Partition: <Anfang>"
-        echo "       Benutzen als       : Ext4-Journaling-Daeisystem"
+        echo "       Benutzen als       : Ext4-Journaling-Dateisystem"
         echo "       Einbindungspunkt   : /mnt/internal"
         echo "       Einbindungsoptionen: defaults"
         echo "       Name               : Internal"
