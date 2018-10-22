@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2018 02 18
+# 2018 10 22
 
 function robo_help_install_server() {
 
@@ -100,7 +100,7 @@ function robo_help_install_server() {
     echo "5. Network connections (4/11)"
     echo "  Configure at least one interface this server can use ..."
     if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
+        echo "    enp63s0"
     elif [ "$system_flag" == "peter" ]; then
         echo "    ~ToDo~"
     else
@@ -131,7 +131,44 @@ function robo_help_install_server() {
 
     echo "8.a) Dateisystem einrichten (7/11)"
     if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
+        echo "  SSD:"
+        echo "    a) System"
+        echo "       Size (max. 111G)   : 50G         <ca. 45%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /"
+        echo "    b) Swap"
+        echo "       Size (max.  61G)   : 10G"
+        echo "       Format             : swap"
+        echo "       Mount              : SWAP"
+        echo "    c) Home"
+        echo "       Size (max.  51G)   :             <leave empty>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /home"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "  HDD:"
+        echo "    a) Data"
+        echo "       Size (max. 232G)   : 50G"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/data"
+        echo "    b) Backup"
+        echo "       Size (max. 182G)   :             <leave empty>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/backup"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "FILE SYSTEM SUMMARY"
+        echo "  /               50G  ext4   ..."
+        echo "  /boot/efi      512M  fat32  ..."
+        echo "  /home           51G  ext4   ..."
+        echo "  /media/data     50G  ext4   ..."
+        echo "  /media/backup  182G  ext4   ..."
+        echo "  SWAP            10G  swap   ..."
+        echo ""
+        echo "AVAILABLE DEVICES"
+        echo ""
+        echo "USED DEVICES"
+        echo "  ... <similar to file system summary>"
     elif [ "$system_flag" == "peter" ]; then
         echo "    ~ToDo~"
     else
@@ -192,7 +229,12 @@ function robo_help_install_server() {
     echo "9. Profil setup (9/11)"
     echo "  Enter the username and password ..."
     if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
+        echo "  Your name             : Guru"
+        echo "  Your server's name    : server"
+        echo "  Pick a username       : guru"
+        echo "  Choose a password     : xxx"
+        echo "  Confirm your password : xxx"
+        echo "  Import SSH identity   : [No]"
     elif [ "$system_flag" == "peter" ]; then
         echo "    ~ToDo~"
     else
@@ -208,7 +250,8 @@ function robo_help_install_server() {
     echo "10. Featured Server Snaps (9/11)"
     echo "  These are popular snaps in server environments. ..."
     if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
+        echo "  [ ] ..."
+        echo "  <leave all options unchecked>"
     elif [ "$system_flag" == "peter" ]; then
         echo "    ~ToDo~"
     else
@@ -236,24 +279,19 @@ function robo_help_install_server() {
 
 
     echo "13. Update"
-    if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
-    elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
-    else
-        echo "  <wait some time for minidlna and nextcloud installation>"
-    fi
+    echo "  <wait some time for final installations>"
     echo "  log into server"
     echo "  $ sudo apt-get update"
     echo "  $ sudo apt-get upgrade && sudo apt-get dist-upgrade"
     echo "  <wait some time for the updates to be done>"
     if [ "$system_flag" == "roboag" ]; then
-        echo "    ~ToDo~"
+        echo "  $ sudo apt-get install ubuntu-desktop"
+        echo "  <wait some time for the installation to be done>"
     elif [ "$system_flag" == "peter" ]; then
         echo "    ~ToDo~"
     else
         echo "  $ sudo apt-get install ubuntu-desktop"
-        echo "  <wait some time for the upgrade to be done>"
+        echo "  <wait some time for the installation to be done>"
     fi
     echo "  $ sudo reboot"
     echo -e "\n<enter>\n"; read dummy
