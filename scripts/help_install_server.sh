@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2018 10 22
+# 2018 11 15
 
 function robo_help_install_server() {
 
@@ -102,7 +102,7 @@ function robo_help_install_server() {
     if [ "$system_flag" == "roboag" ]; then
         echo "    enp63s0"
     elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
+        echo "    enp4s0"
     else
         echo "    enp1s0"
         echo "    enp4s0"
@@ -130,22 +130,22 @@ function robo_help_install_server() {
     echo -e "\n<enter>\n"; read dummy
 
     echo "8.a) Dateisystem einrichten (7/11)"
-    if [ "$system_flag" == "roboag" ]; then
-        echo "  SSD:"
-        echo "    a) System"
-        echo "       Size (max. 111G)   : 50G         <ca. 45%>"
-        echo "       Format             : ext4"
-        echo "       Mount              : /"
-        echo "    b) Swap"
-        echo "       Size (max.  61G)   : 10G"
-        echo "       Format             : swap"
-        echo "       Mount              : SWAP"
-        echo "    c) Home"
-        echo "       Size (max.  51G)   :             <leave empty>"
-        echo "       Format             : ext4"
-        echo "       Mount              : /home"
-        echo -e "\n<enter>\n"; read dummy
+    echo "  SSD:"
+    echo "    a) System"
+    echo "       Size (max. 111G)   : 50G         <ca. 45%>"
+    echo "       Format             : ext4"
+    echo "       Mount              : /"
+    echo "    b) Swap"
+    echo "       Size (max.  61G)   : 10G"
+    echo "       Format             : swap"
+    echo "       Mount              : SWAP"
+    echo "    c) Home"
+    echo "       Size (max.  51G)   :             <leave empty>"
+    echo "       Format             : ext4"
+    echo "       Mount              : /home"
+    echo -e "\n<enter>\n"; read dummy
 
+    if [ "$system_flag" == "roboag" ]; then
         echo "  HDD:"
         echo "    a) Data"
         echo "       Size (max. 232G)   : 50G"
@@ -164,29 +164,26 @@ function robo_help_install_server() {
         echo "  /media/data     50G  ext4   ..."
         echo "  /media/backup  182G  ext4   ..."
         echo "  SWAP            10G  swap   ..."
-        echo ""
-        echo "AVAILABLE DEVICES"
-        echo ""
-        echo "USED DEVICES"
-        echo "  ... <similar to file system summary>"
     elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
-    else
-        echo "  SSD:"
-        echo "    a) System"
-        echo "       Size (max. 111G)   : 50G         <ca. 45%>"
+        echo "  HDD:"
+        echo "    a) Data"
+        echo "       Size (max. 931G)   :             <leave empty>"
         echo "       Format             : ext4"
-        echo "       Mount              : /"
-        echo "    b) Swap"
-        echo "       Size (max.  61G)   : 10G"
-        echo "       Format             : swap"
-        echo "       Mount              : SWAP"
-        echo "    c) Home"
-        echo "       Size (max.  51G)   :             <leave empty>"
-        echo "       Format             : ext4"
-        echo "       Mount              : /home"
+        echo "       Mount              : /mnt/hdd"
         echo -e "\n<enter>\n"; read dummy
 
+        echo "  RAID:"
+        echo "    Setting up the raid here didn't work at all."
+        echo "    No configuration to be done!"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "FILE SYSTEM SUMMARY"
+        echo "  /               50G  ext4   ..."
+        echo "  /boot/efi      512M  fat32  ..."
+        echo "  /home           51G  ext4   ..."
+        echo "  /mnt/hdd       931G  ext4   ..."
+        echo "  SWAP            10G  swap   ..."
+    else
         echo "  HDD:"
         echo "    a) Data"
         echo "       Size (max. 931G)   : 750G        <ca. 75%>"
@@ -210,12 +207,13 @@ function robo_help_install_server() {
         echo "  /media/share   100G  ext4   ..."
         echo "  /mnt/internal   81G  ext4   ..."
         echo "  SWAP            10G  swap   ..."
-        echo ""
-        echo "AVAILABLE DEVICES"
-        echo ""
-        echo "USED DEVICES"
-        echo "  ... <similar to file system summary>"
     fi
+    echo ""
+    echo "AVAILABLE DEVICES"
+    echo ""
+    echo "USED DEVICES"
+    echo "  ... <similar to file system summary>"
+
     echo -e "\n<enter>\n"; read dummy
 
     echo "8.b) Confirm destructive action"
@@ -232,19 +230,18 @@ function robo_help_install_server() {
         echo "  Your name             : Guru"
         echo "  Your server's name    : server"
         echo "  Pick a username       : guru"
-        echo "  Choose a password     : xxx"
-        echo "  Confirm your password : xxx"
-        echo "  Import SSH identity   : [No]"
     elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
+        echo "  Your name             : Peter"
+        echo "  Your server's name    : flunder"
+        echo "  Pick a username       : peter"
     else
         echo "  Your name             : Peter"
         echo "  Your server's name    : blackbox"
         echo "  Pick a username       : peter"
-        echo "  Choose a password     : xxx"
-        echo "  Confirm your password : xxx"
-        echo "  Import SSH identity   : [No]"
     fi
+    echo "  Choose a password     : xxx"
+    echo "  Confirm your password : xxx"
+    echo "  Import SSH identity   : [No]"
     echo -e "\n<enter>\n"; read dummy
 
     echo "10. Featured Server Snaps (9/11)"
@@ -252,9 +249,8 @@ function robo_help_install_server() {
     if [ "$system_flag" == "roboag" ]; then
         echo "  [ ] ..."
         echo "  <leave all options unchecked>"
-    elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
     else
+        # peter and togo
         echo "  [ ] ..."
         echo "  [x] nextcloud"
         echo "  [ ] ..."
@@ -284,19 +280,14 @@ function robo_help_install_server() {
     echo "  $ sudo apt-get update"
     echo "  $ sudo apt-get upgrade && sudo apt-get dist-upgrade"
     echo "  <wait some time for the updates to be done>"
-    if [ "$system_flag" == "roboag" ]; then
-        echo "  $ sudo apt-get install ubuntu-desktop"
-        echo "  <wait some time for the installation to be done>"
-    elif [ "$system_flag" == "peter" ]; then
-        echo "    ~ToDo~"
-    else
-        echo "  $ sudo apt-get install ubuntu-desktop"
-        echo "  <wait some time for the installation to be done>"
-    fi
+    echo "  $ sudo apt-get install ubuntu-desktop"
+    echo "  <wait some time for the installation to be done>"
     echo "  $ sudo reboot"
     echo -e "\n<enter>\n"; read dummy
 
-    echo "14. ... ToDo ..."
+    echo "14. Config"
+    echo "  for further configuration and setup see"
+    echo "  $ robo_help_config ${system_flag}"
 
     echo "done :-)"
 }
