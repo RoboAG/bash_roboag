@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.0.1                                                              #
-# Date   : 13.03.18                                                           #
+# Version: 1.0.2                                                              #
+# Date   : 17.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -64,6 +64,7 @@ echo "### checking out the project"
 if [ -d "${PATH_THIS}" ]; then
     echo "This project already exists!"
     return
+    exit
 fi
 git clone "${URL_GIT_THIS}" "${PATH_THIS}"
 
@@ -78,13 +79,15 @@ echo "### checking out the additional repository"
 if [ -d "${PATH_ADD}" ]; then
     echo "This project already exists!"
     return
+    exit
 fi
 git clone "${URL_GIT_ADD}" "${PATH_ADD}"
 
 
 if [ $? -ne 0 ]; then
     echo "### There have been errors! ###"
-    return -1;
+    return -1
+    exit   -1
 else
     echo ""
     echo "### deleting this script"
