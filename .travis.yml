@@ -2,7 +2,9 @@ before_install:
 before_script:
 script:
   - ./checkout.sh --yes
-  - source bash/roboag/bashrc.sh && robo_help
+  - echo $ROBO_PATH_WORKSPACE
+  - source bash/roboag/bashrc.sh && echo $ROBO_PATH_WORKSPACE
+  - source bash/roboag/bashrc.sh && alias
   - source bash/roboag/bashrc.sh && repo_help
   - source bash/roboag/bashrc.sh && repo_clone_all --yes
 
