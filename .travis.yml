@@ -1,10 +1,6 @@
-before_install:
-before_script:
 script:
   - shopt -s expand_aliases
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
   - cd ~/workspace/ && ./checkout.sh --yes
   - source ~/workspace/bash/roboag/bashrc.sh && repo_clone_all --yes
-
-deploy:
