@@ -49,9 +49,16 @@ if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
     echo "\"bash/\" or \"bash/roboag/\"!"
     echo ""
 
-    echo "Do you want to continue ? (yes/No)"
-    read -s -n 1 ANS; echo ""
-    if [ "$ANS" != "y" ]; then
+    echo "Do you wish to continue ? (No/yes)"
+    if [ "$1" != "-y" ] && [ "$1" != "--yes" ]; then
+        read answer
+    else
+        echo "<auto answer \"yes\">"
+        answer="yes"
+    fi
+    if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
+      [ "$answer" != "yes" ]; then
+
         echo "  Stopped"
         return -1
         exit   -1
@@ -71,7 +78,7 @@ git clone "${URL_GIT_THIS}" "${PATH_THIS}"
 
 echo ""
 echo "### automatically sourcing this project"
-./${PATH_THIS}setup_bashrc.sh
+./${PATH_THIS}setup_bashrc.sh $1
 
 
 echo ""
