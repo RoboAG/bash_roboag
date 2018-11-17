@@ -2,12 +2,9 @@ before_install:
 before_script:
 script:
   - shopt -s expand_aliases
-  - ./checkout.sh --yes
-  - echo $ROBO_PATH_WORKSPACE
-  - source bash/roboag/bashrc.sh && echo $ROBO_PATH_WORKSPACE
-  - source bash/roboag/bashrc.sh && alias
-  - source bash/roboag/bashrc.sh && repo_help
-  - source bash/roboag/bashrc.sh && git_clone_bash_file
-  - source bash/roboag/bashrc.sh && repo_clone_all --yes
+  - mkdir -p ~/workspace
+  - cp checkout.sh ~/workspace/
+  - ~/workspace/checkout.sh --yes
+  - source ~/workspace/bash/roboag/bashrc.sh && repo_clone_all --yes
 
 deploy:
