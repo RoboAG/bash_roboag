@@ -23,5 +23,7 @@ checkout additionals repositories (e.g. robolib)
 
 see also [help_config_workspace.sh](scripts/help_config_workspace.sh).
 
+[![Build Status](https://travis-ci.org/RoboAG/bash_roboag.svg?branch=master)](https://travis-ci.org/RoboAG/bash_roboag)
+
 ## Installation
 For install instructions see [doc/install](doc/install.md).
