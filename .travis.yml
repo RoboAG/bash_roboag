@@ -1,6 +1,7 @@
 before_install:
 before_script:
 script:
+  - shopt -s expand_aliases
   - ./checkout.sh --yes
   - echo $ROBO_PATH_WORKSPACE
   - source bash/roboag/bashrc.sh && echo $ROBO_PATH_WORKSPACE
