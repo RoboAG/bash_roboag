@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.0.3                                                              #
+# Version: 1.0.4                                                              #
 # Date   : 17.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -35,7 +35,7 @@ echo ""
 
 
 # export paths
-export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
+export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
 export ROBO_PATH_SCRIPTS="${ROBO_PATH_WORKSPACE}${BASH_ROBOAG_PATH}"
 
 export ROBO_PATH_HOME="$(cd && pwd )/"

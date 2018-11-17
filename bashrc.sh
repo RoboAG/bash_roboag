@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #***************************[paths and files]*********************************
-# 2018 01 11
+# 2018 11 17
 
-export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
+export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
 export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
 
 
