@@ -1,0 +1,9 @@
+language: C
+
+before_install:
+before_script:
+script:
+  - ./checkout.sh --yes
+  - source bash/roboag/bashrc.sh && repo_clone_all --yes
+
+deploy:
