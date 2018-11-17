@@ -5,6 +5,10 @@ script:
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
   - ~/workspace/checkout.sh --yes
+  - echo "testing"
+  - pwd
+  - ls ~/workspace/
+  - echo "${BASH_SOURCE[0]}"
   - source ~/workspace/bash/roboag/bashrc.sh && repo_clone_all --yes
 
 deploy:
