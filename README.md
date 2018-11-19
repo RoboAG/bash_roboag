@@ -16,6 +16,7 @@ download scripts
 
 checkout additionals repositories (e.g. robolib)
 
+    repo_clone_bash
     git_clone_robo_lib
     git_clone_robo_pololu
     ...
