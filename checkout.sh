@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.0.4                                                              #
-# Date   : 17.11.18                                                           #
+# Version: 1.0.5                                                              #
+# Date   : 30.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -17,7 +17,7 @@ NAME_THIS="roboag"
 NAME_ADD="repo"
 
 ###############################################################################
-PATH_THIS="bash/${NAME_THIS}/"
+PATH_THIS="bash/master/${NAME_THIS}/"
 PATH_ADD="bash/${NAME_ADD}/"
 NAME_GIT_THIS="bash_${NAME_THIS}"
 NAME_GIT_ADD="bash_${NAME_ADD}"
@@ -36,17 +36,15 @@ echo ""
 
 # export paths
 export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
-export ROBO_PATH_SCRIPTS="${ROBO_PATH_WORKSPACE}${BASH_ROBOAG_PATH}"
-
 export ROBO_PATH_HOME="$(cd && pwd )/"
 
 
 # check paths
 if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
     echo ""
-    echo "This script must be placed at the top-level of the working"
+    echo "This script must be placed at the top-level of the working "
     echo -n "directory - usually \"~/workspace/\" - not in "
-    echo "\"bash/\" or \"bash/roboag/\"!"
+    echo "\"bash/\" or \"bash/master/roboag/\"!"
     echo ""
 
     echo "Do you wish to continue ? (No/yes)"

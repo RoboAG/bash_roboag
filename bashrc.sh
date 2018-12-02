@@ -1,24 +1,35 @@
 #!/bin/bash
 
-#***************************[paths and files]*********************************
-# 2018 11 17
+#***************************[check if already sourced]************************
+# 2018 11 30
 
-export ROBO_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
-export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPTS}../../" && pwd )/"
+if [ "$SOURCED_BASH_MASTER_ROBOAG" != "" ]; then
+
+    return
+    exit
+fi
+
+export SOURCED_BASH_MASTER_ROBOAG=1
+
+#***************************[paths and files]*********************************
+# 2018 11 30
+
+export ROBO_PATH_SCRIPT="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
+export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPT}../../../" && pwd )/"
 
 
 #***************************[help]********************************************
-# 2018 03 30
+# 2018 11 30
 
-. ${ROBO_PATH_SCRIPTS}scripts/help_install_server.sh
-. ${ROBO_PATH_SCRIPTS}scripts/help_config_workspace.sh
+. ${ROBO_PATH_SCRIPT}scripts/help_install_server.sh
+. ${ROBO_PATH_SCRIPT}scripts/help_config_workspace.sh
 
 
 #***************************[repository]**************************************
-# 2018 04 01
+# 2018 11 30
 
-. ${ROBO_PATH_SCRIPTS}scripts/config.sh
-. ${ROBO_PATH_SCRIPTS}scripts/repository.sh
+. ${ROBO_PATH_SCRIPT}scripts/config.sh
+. ${ROBO_PATH_SCRIPT}scripts/repository.sh
 
 if [ -d "${REPO_BASH_REPO[0]}" ]; then
     export REPO_PATH_WORKSPACE="${ROBO_PATH_WORKSPACE}"
@@ -26,40 +37,17 @@ if [ -d "${REPO_BASH_REPO[0]}" ]; then
 fi
 
 
-#***************************[config]******************************************
-# 2018 09 27
+#***************************[simple bash scripts]*****************************
+# 2018 11 30
 
-if [ -d "${REPO_BASH_CONFIG[0]}" ]; then
-    . ${REPO_BASH_CONFIG[0]}bashrc.sh
-fi
-
-
-#***************************[network]*****************************************
-# 2018 04 01
-if [ "${REPO_BASH_NETWORK[0]}" != "" ] && \
-  [ -d "${REPO_BASH_NETWORK[0]}" ]; then
-    . ${REPO_BASH_NETWORK[0]}bashrc.sh
-fi
-
-
-#***************************[multimedia]**************************************
-# 2018 04 01
-if [ "${REPO_BASH_MULTIMEDIA[0]}" != "" ] && \
-  [ -d "${REPO_BASH_MULTIMEDIA[0]}" ]; then
-    . ${REPO_BASH_MULTIMEDIA[0]}bashrc.sh
-fi
-
-
-#***************************[file]********************************************
-# 2018 09 27
-if [ "${REPO_BASH_FILE[0]}" != "" ] && \
-  [ -d "${REPO_BASH_FILE[0]}" ]; then
-    . ${REPO_BASH_FILE[0]}bashrc.sh
+if [ -d "${REPO_BASH_MASTER_BASHONLY[0]}" ]; then
+    . ${REPO_BASH_MASTER_BASHONLY[0]}bashrc.sh
 fi
 
 
 #***************************[robolib]*****************************************
 # 2018 01 11
+
 if [ "${REPO_ROBO_LIB[0]}" != "" ] && \
   [ -d "${REPO_ROBO_LIB[0]}" ]; then
     . ${REPO_ROBO_LIB[0]}scripts/bashrc.sh

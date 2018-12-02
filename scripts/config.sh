@@ -12,7 +12,7 @@
 #***************************[path]********************************************
 # 2018 03 01
 
-export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPTS}config/"
+export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
 
 
 

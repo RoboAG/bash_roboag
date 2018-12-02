@@ -29,7 +29,7 @@ else
         echo "Adding roboag to your bashrc."
 
         echo ""                                        >> ~/.bashrc
-        echo "# $(date +"%Y_%m_%d") sourcing roboag:"  >> ~/.bashrc
+        echo "# $(date +"%Y %m %d") sourcing roboag:"  >> ~/.bashrc
         echo "$BASHRC_SOURCE"                          >> ~/.bashrc
     fi
 fi
