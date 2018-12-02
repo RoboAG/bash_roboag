@@ -3,4 +3,4 @@ script:
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
   - cd ~/workspace/ && ./checkout.sh --yes
-  - source ~/workspace/bash/roboag/bashrc.sh && repo_clone_all --yes
+  - source ~/workspace/bash/master/roboag/bashrc.sh && repo_clone_all --yes
