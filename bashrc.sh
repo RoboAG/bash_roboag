@@ -12,11 +12,20 @@ fi
 export SOURCED_BASH_MASTER_ROBOAG=1
 
 #***************************[paths and files]*********************************
-# 2018 11 30
+# 2018 12 11
 
 export ROBO_PATH_SCRIPT="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
-export ROBO_PATH_WORKSPACE="$(cd "${ROBO_PATH_SCRIPT}../../../" && pwd )/"
-
+parent_path="$(basename "$(dirname "$ROBO_PATH_SCRIPT")")"
+if [ "$parent_path" == "master" ]; then
+    export ROBO_PATH_WORKSPACE="$( \
+      cd "${ROBO_PATH_SCRIPT}../../../" && pwd )/"
+else
+    if [ "$parent_path" != "bash" ]; then
+        echo "roboag scripts: unknown file structure!"
+    fi
+    export ROBO_PATH_WORKSPACE="$( \
+      cd "${ROBO_PATH_SCRIPT}../../" && pwd )/"
+fi
 
 #***************************[help]********************************************
 # 2018 11 30
