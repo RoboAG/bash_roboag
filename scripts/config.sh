@@ -42,7 +42,7 @@ fi
 
 
 #***************************[server config]***********************************
-# 2018 09 05
+# 2019 01 05
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
@@ -116,4 +116,6 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export REPO_ROBOSAX_PHP_PATH="${temp}"
         # Punkte RoboSAX
 
+    export REPO_DOC_PATH="${ROBO_PATH_REPOS}doc/"
+            # documentation of servers
 fi
