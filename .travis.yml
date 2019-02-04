@@ -4,3 +4,7 @@ script:
   - cp checkout.sh ~/workspace/
   - cd ~/workspace/ && ./checkout.sh --yes
   - source ~/workspace/bash/master/roboag/bashrc.sh && repo_clone_all --yes
+
+notifications:
+  email:
+    - secure: fp8cJ95OL7SA9v5IZ0hAT2VPJwjhz8/QKf2svwWD9qj8lghMb8dqXc6+qRL4gyt5exoA1OV/5U+DYK0zsA3YSFfeWCSWRUsr0jI/uUJDxBPkhbbOOPelbuTB8ClYairqHz/bPOzZx1SQQlvkt883vMG5bxyA2EEOLMw0UeB7wx5gABYHKCIB0ja/wWOI/akUFshzwqEW0UY7Ygv/xdvVqRe+MiG0x95qp+0dI5/J6xa2AgUgh+KtAtI7Zz4WMJnQfuANHCXxXXs+uWH8PXz2hlljwbgT6cG0Gs93uFE1Sh54IgWpYVuXNkD7QnDvFHpA9CksM0qH6F5JbBCjudP+9pcbeEhOM0lZouReJ8KsBxZECctK6vFuaMOmxT83UYpGhuiv9HtI4We3KVfxFi3GhRz6MA3dbECpDr+9THQQpxBvL/+GzfeNYQPsDihEMNn62G2dKVx20LCRmPH9JdRZgKD9qCVMWuOvY2F6srFdwYbk6C2ouLw0+yr0rHpxuLKf9iKNyRe5jq0OpHCHBr9PfguVTXizTfom+X0cQzTK842axgJIlml1QaO5Hc2s0Ok/YTXcVCrnUDtObevssIPXEVpnQ31zikwR7N/Fc6+jcVsmw8jfPEjlRg0lnh9Bg0oBOIwH1b8E/bO3slsPba7TGXaoLq3EE/9cx2SZokFFTFM=
