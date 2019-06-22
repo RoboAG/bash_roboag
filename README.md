@@ -11,7 +11,7 @@ create workspace directory
 download scripts
 
     wget -nv https://raw.githubusercontent.com/RoboAG/bash_roboag/master/checkout.sh
-    bash ./checkout.sh
+    bash . checkout.sh
 
 
 checkout additionals repositories (e.g. robolib)
