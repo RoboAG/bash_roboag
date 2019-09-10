@@ -55,8 +55,8 @@ function robo_help_all() {
     fi
     echo ""
     echo "repository functions"
-    echo -n "  "; robo_repo_status -h
-    echo -n "  "; robo_repo_update -h
+    echo -n "  "; echo "robo_repo_status            #no help"
+    echo -n "  "; echo "robo_repo_update            #no help"
     echo ""
     echo "install functions"
     echo -n "  "; echo "robo_system_update          #no help"
@@ -79,8 +79,8 @@ function robo_help() {
     echo -n "  "; echo "robo_help_install_server    #no help"
     echo ""
     echo "repository functions"
-    echo -n "  "; robo_repo_status -h
-    echo -n "  "; robo_repo_update -h
+    echo -n "  "; echo "robo_repo_status            #no help"
+    echo -n "  "; echo "robo_repo_update            #no help"
     echo ""
     echo "install functions"
     echo -n "  "; echo "robo_system_update          #no help"
