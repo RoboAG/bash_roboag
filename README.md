@@ -11,16 +11,17 @@ create workspace directory
 download scripts
 
     wget -nv https://raw.githubusercontent.com/RoboAG/bash_roboag/master/checkout.sh
-    . checkout.sh
+    source checkout.sh
 
 
 checkout additionals repositories (e.g. robolib)
 
+    # reopen terminal before continuing
     repo_clone_bash
     git_clone_robo_lib
     git_clone_robo_pololu
     ...
-    repo_help #list of all referenced repositories
+    repo_help_overview #list of all referenced repositories
 
 see also [help_config_workspace.sh](scripts/help_config_workspace.sh).
 
