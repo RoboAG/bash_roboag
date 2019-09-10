@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2018 10 03
+# 2019 09 10
 
 function robo_help_config_workspace() {
 
@@ -23,35 +23,42 @@ function robo_help_config_workspace() {
     echo "  $ cd ~/workspace"
     echo -e "\n<enter>\n"; read dummy
 
-
     echo "1.b) Download scripts"
     file_part="https://raw.githubusercontent.com/RoboAG/bash_roboag"
     file="${file_part}/master/checkout.sh"
     echo "  $ wget -nv ${file}"
-    echo "  $ bash ./checkout.sh"
+    echo "  $ . checkout.sh"
     echo "    answer all question with \"y\" (yes)"
     echo -e "\n<enter>\n"; read dummy
 
 
     echo "2. Set Mode of Computer"
-    echo "  a) Client within RoboAG (connection to RoboAG server)"
+    echo "  a) Standalone client (no server available)"
     echo "    nothing todo"
     echo ""
-    echo "  b) Standalone client (no server avaiable)"
-    echo "    $ touch  \${ROBO_PATH_CONFIG}standalone.txt"
+    echo "  b) Client within RoboAG (connection to RoboAG server)"
+    echo "    $ touch \${ROBO_PATH_CONFIG}is_client.txt"
     echo ""
     echo "  c) RoboAG server"
-    echo "    $ touch  \${ROBO_PATH_CONFIG}is_server.txt"
+    echo "    $ touch \${ROBO_PATH_CONFIG}is_server.txt"
     echo -e "\n<enter>\n"; read dummy
 
 
-    echo "3) Download additional repositories"
-    echo "  If not in server mode, download additional repositories as needed."
-    echo "  $ git_clone_..."
-    echo "  E.g. $ git_clone_robo_lib"
+    echo "3.a) Source workspace"
+    echo "  If you accepted auto sourcing in step 1.b):"
+    echo "    Just close terminal and reopen it."
+    echo "  Otherwise, you need to source the downloaded scripts directly:"
+    echo "    $ source ~/workspace/bash/master/roboag/bashrc.sh"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "3.b) Download additional repositories"
+    echo "  Only if in standalone-mode, download additional repositories."
+    echo "  Get all repos        : $ repo_clone_all"
+    echo "  Select specific repos: $ repo_clone_bash"
+    echo "                         $ git_clone_... (e.g. git_clone_robo_lib)"
     echo ""
-    echo "  For a overview and some hints see:"
-    echo "  $ repo_help_overview"
+    echo "  For an overview and some hints see:"
+    echo "    $ repo_help_overview"
     echo -e "\n<enter>\n"; read dummy
 
 
