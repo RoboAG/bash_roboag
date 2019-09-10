@@ -17,7 +17,7 @@ export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
 
 
 #***************************[check mode of operation]*************************
-# 2018 03 01
+# 2019 09 10
 
 # unset all possible config states
 unset ROBO_CONFIG_IS_SERVER
@@ -29,13 +29,13 @@ if [ "$(ls $ROBO_PATH_CONFIG  | grep -i is_server | wc -w)" -gt 0 ]; then
     export ROBO_CONFIG_IS_SERVER="1"
 else
 
-    # Standalone-Mode ?
-    if [ "$(ls $ROBO_PATH_CONFIG  | grep -i standalone | wc -w)" -gt 0 ]; then
-        export ROBO_CONFIG_STANDALONE="1"
+    # Is in client-mode ?
+    if [ "$(ls $ROBO_PATH_CONFIG  | grep -i is_client | wc -w)" -gt 0 ]; then
+        export ROBO_CONFIG_IS_CLIENT="1"
     else
 
-        # Is in client-mode!
-        export ROBO_CONFIG_IS_CLIENT="1"
+        # Standalone-Mode!
+        export ROBO_CONFIG_STANDALONE="1"
     fi
 fi
 
