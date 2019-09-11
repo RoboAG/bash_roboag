@@ -87,11 +87,10 @@ function robo_system_install() {
             libreoffice libreoffice-help-de
             okular gwenview
 
-            vlc"
+            vlc
+            " "" --yes
     else
         _config_install_list "
-            nautilus-open-terminal
-
             exfat-fuse exfat-utils
 
             apt-cacher-ng
@@ -102,7 +101,8 @@ function robo_system_install() {
 
             apache2
             mariadb-server
-            php php-mysql phpmyadmin"
+            php php-mysql phpmyadmin
+            " "" --yes
     fi
 
     if [ $? -ne 0 ]; then return -2; fi
