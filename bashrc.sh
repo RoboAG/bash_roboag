@@ -28,9 +28,10 @@ else
 fi
 
 #***************************[help]********************************************
-# 2019 09 10
+# 2019 09 26
 
 . ${ROBO_PATH_SCRIPT}scripts/help.sh
+. ${ROBO_PATH_SCRIPT}scripts/help_setup.sh
 . ${ROBO_PATH_SCRIPT}scripts/help_install_server.sh
 . ${ROBO_PATH_SCRIPT}scripts/help_config_workspace.sh
 
