@@ -23,10 +23,11 @@ function robo_config_aptcacher_server() {
           print \"# roboag:\",\$0
           \$0 = \"BindAddress: localhost 192.168.2.20\";
         }
-        \$0 ~ /^# Offlinemode/ {
-          print \"# roboag:\",\$0
-          \$0 = \"Offlinemode:1\";
-        }
+        # 2019 11 20: removed offline mode - it is not useful anymore
+        #\$0 ~ /^# Offlinemode/ {
+        #  print \"# roboag:\",\$0
+        #  \$0 = \"Offlinemode:1\";
+        #}
 
         { print \$0 }
     "
