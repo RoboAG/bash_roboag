@@ -49,9 +49,10 @@ fi
 
 
 #***************************[install]*****************************************
-# 2019 09 10
+# 2019 11 20
 
 . ${ROBO_PATH_SCRIPT}scripts/install.sh
+. ${ROBO_PATH_SCRIPT}scripts/install_server.sh
 
 
 #***************************[simple bash scripts]*****************************
