@@ -33,6 +33,13 @@ function robo_config_aptcacher_server() {
     "
 
     _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    echo "restarting apt-cacher-daemon"
+    sudo systemctl restart apt-cacher-ng
+    if [ $? -ne 0 ]; then return -4; fi
+
+    echo "done :-)"
 }
 
 function robo_config_aptcacher_server_restore() {
@@ -46,4 +53,11 @@ function robo_config_aptcacher_server_restore() {
     FILENAME_CONFIG="/etc/apt-cacher-ng/acng.conf"
 
     _config_file_restore "$FILENAME_CONFIG" "backup-once"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    echo "restarting apt-cacher-daemon"
+    sudo systemctl restart apt-cacher-ng
+    if [ $? -ne 0 ]; then return -3; fi
+
+    echo "done :-)"
 }
