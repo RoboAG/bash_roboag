@@ -16,7 +16,7 @@ export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
 
 
 
-#***************************[check mode of operation]*************************
+#***************************[set mode of operation]***************************
 # 2019 09 10
 
 # unset all possible config states
@@ -41,86 +41,7 @@ fi
 
 
 
-#***************************[server config]***********************************
-# 2019 01 05
-
-# setup server paths
-export _ROBO_SERVER_PATH_DATA="/mnt/data/"
-export _ROBO_SERVER_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag/"
-export _ROBO_SERVER_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax/"
-
-
-if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
-
-    # setup hard-drives
-    export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
-    export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
-
-    # setup repo directory
-    export ROBO_PATH_REPOS="${ROBO_PATH_ROBOAG}Repos/"
-
-    # override standard-directories
-    export REPO_ROBO_PATH="${ROBO_PATH_REPOS}WinAVR/"
-        # robolib
-        # pololu
-
-        export REPO_ROBOSAX_AVR_PATH="${REPO_ROBO_PATH}RoboSAX/"
-            # licht robosax
-
-
-    temp="${ROBO_PATH_REPOS}Eagle/"
-        export REPO_ROBO_EAGLE_PATH="${temp}"
-            # config
-            # keplerboard
-            # xbee
-            # logic
-            # vtgMon
-
-        export REPO_ROBOSAX_EAGLE_PATH="${temp}RoboSAX/"
-            # licht tht
-            # anzeige tht
-
-        export REPO_PROJECTS_EAGLE_PATH="${temp}Peter/"
-            # dmx_driver
-
-    export REPO_ROBOAG_PATH="${ROBO_PATH_REPOS}Projekte/"
-        # display
-        # gluecksrad
-        # 3pi
-
-        export REPO_ROBOSAX_PROJECT_PATH="${REPO_ROBOAG_PATH}RoboSAX/"
-            # ledbox
-
-        export REPO_HARDWARE_PATH="${REPO_ROBOAG_PATH}Peter/"
-            # home-audio
-            # opa
-            # dimmer
-
-    export REPO_CPP_PATH="${ROBO_PATH_REPOS}C++/Peter/"
-            # avr_downloader and xbee_tool
-
-    export REPO_ROS_PATH="${ROBO_PATH_REPOS}ROS/"
-        # ros-tools-pa
-            # parameter
-            # pcdfilter
-            # octomap
-            # nearfield_map
-            # odometry
-        # ros-sensors-pa
-            # radar
-
-    temp="${ROBO_PATH_REPOS}PHP/"
-    export REPO_ROBOAG_PHP_PATH="${temp}"
-        # filebrowser
-
-    export REPO_ROBOSAX_PHP_PATH="${temp}"
-        # Punkte RoboSAX
-
-    export REPO_DOC_PATH="${ROBO_PATH_REPOS}doc/"
-            # documentation of servers
-fi
-
-#***************************[mode check]**************************************
+#***************************[check mode of operation]*************************
 # 2019 11 20
 
 function _robo_system_need_server() {
@@ -208,3 +129,84 @@ function _robo_system_need_client() {
         fi
     fi
 }
+
+
+
+#***************************[server config]***********************************
+# 2019 01 05
+
+# setup server paths
+export _ROBO_SERVER_PATH_DATA="/mnt/data/"
+export _ROBO_SERVER_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag/"
+export _ROBO_SERVER_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax/"
+
+
+if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
+
+    # setup hard-drives
+    export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
+    export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
+
+    # setup repo directory
+    export ROBO_PATH_REPOS="${ROBO_PATH_ROBOAG}Repos/"
+
+    # override standard-directories
+    export REPO_ROBO_PATH="${ROBO_PATH_REPOS}WinAVR/"
+        # robolib
+        # pololu
+
+        export REPO_ROBOSAX_AVR_PATH="${REPO_ROBO_PATH}RoboSAX/"
+            # licht robosax
+
+
+    temp="${ROBO_PATH_REPOS}Eagle/"
+        export REPO_ROBO_EAGLE_PATH="${temp}"
+            # config
+            # keplerboard
+            # xbee
+            # logic
+            # vtgMon
+
+        export REPO_ROBOSAX_EAGLE_PATH="${temp}RoboSAX/"
+            # licht tht
+            # anzeige tht
+
+        export REPO_PROJECTS_EAGLE_PATH="${temp}Peter/"
+            # dmx_driver
+
+    export REPO_ROBOAG_PATH="${ROBO_PATH_REPOS}Projekte/"
+        # display
+        # gluecksrad
+        # 3pi
+
+        export REPO_ROBOSAX_PROJECT_PATH="${REPO_ROBOAG_PATH}RoboSAX/"
+            # ledbox
+
+        export REPO_HARDWARE_PATH="${REPO_ROBOAG_PATH}Peter/"
+            # home-audio
+            # opa
+            # dimmer
+
+    export REPO_CPP_PATH="${ROBO_PATH_REPOS}C++/Peter/"
+            # avr_downloader and xbee_tool
+
+    export REPO_ROS_PATH="${ROBO_PATH_REPOS}ROS/"
+        # ros-tools-pa
+            # parameter
+            # pcdfilter
+            # octomap
+            # nearfield_map
+            # odometry
+        # ros-sensors-pa
+            # radar
+
+    temp="${ROBO_PATH_REPOS}PHP/"
+    export REPO_ROBOAG_PHP_PATH="${temp}"
+        # filebrowser
+
+    export REPO_ROBOSAX_PHP_PATH="${temp}"
+        # Punkte RoboSAX
+
+    export REPO_DOC_PATH="${ROBO_PATH_REPOS}doc/"
+            # documentation of servers
+fi
