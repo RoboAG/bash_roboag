@@ -2,7 +2,7 @@
 
 
 #***************************[all]*********************************************
-# 2019 09 26
+# 2019 11 20
 
 function robo_help_all() {
 
@@ -35,7 +35,7 @@ function robo_help_all() {
     echo -n "  "; echo "robo_help  #no help"
     echo -n "  "; $FUNCNAME -h
     echo ""
-    echo -n "  "; robo_help_install_server -h
+    echo -n "  "; robo_help_install -h
     echo -n "  "; echo "robo_help_config_workspace  #no help"
     echo -n "  "; robo_help_setup -h
     echo ""
@@ -76,8 +76,7 @@ function robo_help() {
     echo "help functions"
     echo -n "  "; echo "$FUNCNAME                   #no help"
     echo -n "  "; robo_help_all -h
-    echo -n "  "; robo_help_install_client -h
-    echo -n "  "; robo_help_install_server -h
+    echo -n "  "; robo_help_install -h
     echo -n "  "; echo "robo_help_config_workspace  #no help"
     echo -n "  "; robo_help_setup -h
     echo ""
