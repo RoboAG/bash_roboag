@@ -119,3 +119,92 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export REPO_DOC_PATH="${ROBO_PATH_REPOS}doc/"
             # documentation of servers
 fi
+
+#***************************[mode check]**************************************
+# 2019 11 20
+
+function _robo_system_need_server() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME <function-name>"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 1 parameter"
+        echo "     #1: name of calling function"
+        echo "This function checks if server-mode is active."
+        echo "Elsewhile the user will be asked, before continueing."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+    # check parameter
+    if [ "$1" == "" ]; then
+        echo -n "$FUNCNAME: Parameter Error - "
+        echo "name of calling function must be set."
+        return -2
+    fi
+
+    if [ "$ROBO_CONFIG_IS_SERVER" == "" ]; then
+        echo "$1: You are not in server-mode!"
+        echo -n "  Do you want to continue ? (No/yes) "
+        read answer
+
+        if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
+            [ "$answer" != "yes" ]; then
+            echo "$1: Aborted."
+            return -3
+        fi
+    fi
+}
+
+function _robo_system_need_client() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME <function-name>"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 1 parameter"
+        echo "     #1: name of calling function"
+        echo "This function checks if client-mode is active."
+        echo "Elsewhile the user will be asked, before continueing."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+    # check parameter
+    if [ "$1" == "" ]; then
+        echo -n "$FUNCNAME: Parameter Error - "
+        echo "name of calling function must be set."
+        return -2
+    fi
+
+    if [ "$ROBO_CONFIG_IS_CLIENT" == "" ]; then
+        echo "$1: You are not in client-mode!"
+        echo -n "  Do you want to continue ? (No/yes) "
+        read answer
+
+        if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
+            [ "$answer" != "yes" ]; then
+            echo "$1: Aborted."
+            return -3
+        fi
+    fi
+}

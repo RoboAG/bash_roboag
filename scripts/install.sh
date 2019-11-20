@@ -8,7 +8,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2019 09 10
+# 2019 11 20
 
 function robo_system_install() {
 
@@ -42,17 +42,8 @@ function robo_system_install() {
         if [ "$1" == "server" ]; then
             server_flag="1"
 
-            if [ "$ROBO_CONFIG_IS_SERVER" == "" ]; then
-                echo "$FUNCNAME: You are not in server-mode!"
-                echo -n "  Do you want to continue ? (No/yes) "
-                read answer
-
-                if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
-                  [ "$answer" != "yes" ]; then
-                    echo "$FUNCNAME: Aborted."
-                    return
-                fi
-            fi
+            _robo_system_need_server "$FUNCNAME"
+            if [ $? -ne 0 ]; then return; fi
         elif [ "$1" != "" ]; then
             echo "$FUNCNAME: Parameter Error."
             $FUNCNAME --help
