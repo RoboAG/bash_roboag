@@ -1,7 +1,13 @@
 # Installation instructions
 
 ## Client config
-... content will follow ...
+[download link](https://xubuntu.org/download#lts)
+
+
+### upcoming version
+[Ubuntu Server 18.04.3 LTS](http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/) is planned for new clients.
+
+For step-by-step installation instructions see [help_install_client.sh](../scripts/help_install_client.sh).
 
 ### older version
 Older maschines are still running on Xubuntu 14.04.3 LTS.
