@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 09 26
+# 2019 11 20
 
 function robo_help_setup() {
 
@@ -17,9 +17,6 @@ function robo_help_setup() {
         echo "         Leave option empty to run for \"client\"."
         echo "           \"client\"     Client of RoboAG"
         echo "           \"server\"     Server of RoboAG (and RoboSAX)"
-        echo "           \"laptop\"     Peters Laptop (same as client)"
-        echo "           \"togo\"       Peters ToGo-Server"
-        echo "           \"peter\"      Peters Home-Server"
 
         return
     fi
@@ -38,14 +35,8 @@ function robo_help_setup() {
         if [ "$1" == "client" ]; then
             # nothing to do :-)
             dummy=1
-        elif [ "$1" == "roboag" ]; then
-            system_flag="roboag"
-        elif [ "$1" == "laptop" ]; then
-            system_flag="client"
-        elif [ "$1" == "peter" ]; then
-            system_flag="peter"
-        elif [ "$1" == "togo" ]; then
-            system_flag="togo"
+        elif [ "$1" == "server" ]; then
+            system_flag="server"
         else
             echo "$FUNCNAME: Parameter Error."
             $FUNCNAME --help
