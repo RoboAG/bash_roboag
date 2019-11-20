@@ -23,7 +23,7 @@ checkout additionals repositories (e.g. robolib)
     ...
     repo_help_overview #list of all referenced repositories
 
-see also [help_config_workspace.sh](scripts/help_config_workspace.sh).
+see also [help_config_workspace.sh](scripts/help/help_config_workspace.sh).
 
 [![Build Status](https://travis-ci.org/RoboAG/bash_roboag.svg?branch=master)](https://travis-ci.org/RoboAG/bash_roboag)
 

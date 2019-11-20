@@ -7,7 +7,7 @@
 ### upcoming version
 [Ubuntu Server 18.04.3 LTS](http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/) is planned for new clients.
 
-For step-by-step installation instructions see [help_install_client.sh](../scripts/help_install_client.sh).
+For step-by-step installation instructions see [help_install_client.sh](../scripts/help/help_install_client.sh).
 
 ### older version
 Older maschines are still running on Xubuntu 14.04.3 LTS.
@@ -16,7 +16,7 @@ Older maschines are still running on Xubuntu 14.04.3 LTS.
 
 [download link](https://www.ubuntu.com/download/server)
 
-For step-by-step installation instructions see [help_install_server.sh](../scripts/help_install_server.sh).
+For step-by-step installation instructions see [help_install_server.sh](../scripts/help/help_install_server.sh).
 
 ### upcoming version
 Ubuntu Server 18.04.1 LTS is planned for new servers.

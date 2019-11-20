@@ -11,6 +11,7 @@ fi
 
 export SOURCED_BASH_MASTER_ROBOAG=1
 
+
 #***************************[paths and files]*********************************
 # 2018 12 11
 
@@ -27,13 +28,12 @@ else
       cd "${ROBO_PATH_SCRIPT}../../" && pwd )/"
 fi
 
+
 #***************************[help]********************************************
-# 2019 09 26
+# 2019 11 20
 
 . ${ROBO_PATH_SCRIPT}scripts/help.sh
-. ${ROBO_PATH_SCRIPT}scripts/help_setup.sh
-. ${ROBO_PATH_SCRIPT}scripts/help_install_server.sh
-. ${ROBO_PATH_SCRIPT}scripts/help_config_workspace.sh
+. ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
 
 
 #***************************[repository]**************************************
