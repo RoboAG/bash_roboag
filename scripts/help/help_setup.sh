@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 11 20
+# 2019 11 21
 
 function robo_help_setup() {
 
@@ -56,7 +56,7 @@ function robo_help_setup() {
     echo "2. updated sources (this may take a while)"
     echo "    $ config_source_list_add_multiverse"
     if [ "$system_flag" != "server" ]; then
-        echo "    $ robo_config_aptcacher"
+        echo "    $ robo_config_aptcacher   (if not in standalone-mode)"
     fi
     echo "    $ config_update_system"
     echo "    $ sudo reboot"
@@ -69,7 +69,12 @@ function robo_help_setup() {
 
     if [ "$system_flag" == "server" ]; then
         echo ""
-        echo "3. setup apt-cacher-ng"
+        echo "3. setup network"
+        echo "    $ robo_config_interfaces_server"
+        echo "    $ sudo reboot"
+        echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "4. setup apt-cacher-ng"
         echo "    $ robo_config_aptcacher_server"
         echo "    $ robo_config_aptcacher"
         echo "    $ config_update_system"
