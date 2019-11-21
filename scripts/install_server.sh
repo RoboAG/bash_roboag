@@ -99,9 +99,8 @@ function robo_config_interfaces_server() {
     _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "create-config"
     if [ $? -ne 0 ]; then return -5; fi
 
-    echo "restarting netplan daemon"
-    sudo netplan apply
-    if [ $? -ne 0 ]; then return -6; fi
+    echo "After updating the settings, the server should be REBOOTED."
+    echo "  $ sudo reboot"
 
     echo "done :-)"
 }
@@ -116,12 +115,11 @@ function robo_config_interfaces_server_restore() {
     # Undo the configuration
     FILENAME_CONFIG="/etc/netplan/01-roboag-setup-interfaces.yaml"
 
-    _config_file_restore "$FILENAME_CONFIG" "backup-once"
+    _config_file_restore "$FILENAME_CONFIG" "create-config"
     if [ $? -ne 0 ]; then return -2; fi
 
-    echo "restarting netplan daemon"
-    sudo netplan apply
-    if [ $? -ne 0 ]; then return -3; fi
+    echo "After updating the settings, the server should be REBOOTED."
+    echo "  $ sudo reboot"
 
     echo "done :-)"
 }
