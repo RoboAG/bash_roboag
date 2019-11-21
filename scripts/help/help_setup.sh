@@ -54,7 +54,10 @@ function robo_help_setup() {
 
     echo ""
     echo "2. updated sources (this may take a while)"
-    echo "    $ config_source_list_to_multiverse"
+    echo "    $ config_source_list_add_multiverse"
+    if [ "$system_flag" != "server" ]; then
+        echo "    $ robo_config_aptcacher"
+    fi
     echo "    $ config_update_system"
     echo "    $ sudo reboot"
     if [ "$system_flag" == "client" ]; then
@@ -63,6 +66,15 @@ function robo_help_setup() {
         echo "    $ robo_system_install server"
     fi
     echo -e "\n<enter>\n"; read dummy
+
+    if [ "$system_flag" == "server" ]; then
+        echo ""
+        echo "3. setup apt-cacher-ng"
+        echo "    $ robo_config_aptcacher_server"
+        echo "    $ robo_config_aptcacher"
+        echo "    $ config_update_system"
+        echo -e "\n<enter>\n"; read dummy
+    fi
 
     echo "... ToDo ..."
     echo -e "\n<enter>\n"; read dummy

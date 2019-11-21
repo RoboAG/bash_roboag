@@ -99,3 +99,23 @@ function robo_system_install() {
     if [ $? -ne 0 ]; then return -2; fi
     echo "done :-)"
 }
+
+
+#***************************[apt-cacher-ng]***********************************
+# 2019 11 20
+
+function robo_config_aptcacher() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "sets the basic config of the apt-cacher-ng daemon."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    config_source_list_aptcacher_set "$ROBO_SERVER_IP"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    echo "done :-)"
+}
+
+alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
+alias robo_config_aptcacher_check="config_source_list_aptcacher_check"
