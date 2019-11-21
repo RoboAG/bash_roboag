@@ -108,7 +108,7 @@ function robo_config_aptcacher() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "sets the basic config of the apt-cacher-ng daemon."
+      "updates all source lists to use the apt-cacher-ng running on server."
     if [ $? -ne 0 ]; then return -1; fi
 
     config_source_list_aptcacher_set "$ROBO_SERVER_IP"
