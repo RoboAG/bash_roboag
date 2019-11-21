@@ -133,6 +133,17 @@ function _robo_system_need_client() {
 
 
 #***************************[server config]***********************************
+# 2019 11 20
+
+export _ROBO_SERVER_IP="192.168.2.20"
+
+if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
+    export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
+else
+    export ROBO_SERVER_IP="localhost"
+fi
+
+#***************************[repo paths]**************************************
 # 2019 01 05
 
 # setup server paths
