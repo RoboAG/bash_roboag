@@ -61,8 +61,12 @@ fi
 . ${ROBO_PATH_SCRIPT}scripts/install_server.sh
 
 
-#***************************[simple bash scripts]*****************************
-# 2018 11 30
+#***************************[other master scripts]***************************
+# 2019 12 01
+
+if [ -d "${REPO_BASH_MASTER_SERVER[0]}" ]; then
+    . ${REPO_BASH_MASTER_SERVER[0]}bashrc.sh
+fi
 
 if [ -d "${REPO_BASH_MASTER_BASHONLY[0]}" ]; then
     . ${REPO_BASH_MASTER_BASHONLY[0]}bashrc.sh
