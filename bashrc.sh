@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[check if already sourced]************************
-# 2018 11 30
+# 2019 12 01
 
 if [ "$SOURCED_BASH_MASTER_ROBOAG" != "" ]; then
 
@@ -9,7 +9,13 @@ if [ "$SOURCED_BASH_MASTER_ROBOAG" != "" ]; then
     exit
 fi
 
-export SOURCED_BASH_MASTER_ROBOAG=1
+if [ "$SOURCED_BASH_LAST" == "" ]; then
+    export SOURCED_BASH_LAST=1
+else
+    export SOURCED_BASH_LAST="$(expr "$SOURCED_BASH_LAST" + 1)"
+fi
+
+export SOURCED_BASH_MASTER_ROBOAG="$SOURCED_BASH_LAST"
 
 
 #***************************[paths and files]*********************************
