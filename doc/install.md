@@ -5,7 +5,7 @@
 
 
 ### upcoming version
-[Ubuntu Server 18.04.3 LTS](http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/) is planned for new clients.
+[Xubuntu 18.04.3 LTS](http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/) is planned for new clients.
 
 For step-by-step installation instructions see [help_install.sh](../scripts/help/help_install.sh).
 
