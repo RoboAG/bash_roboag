@@ -4,6 +4,9 @@ script:
   - cp checkout.sh ~/workspace/
   - cd ~/workspace/ && ./checkout.sh --yes
   - source ~/workspace/bash/master/roboag/bashrc.sh && repo_clone_all --yes
+  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_update
+  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_install
+  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_install server
 
 notifications:
   email:
