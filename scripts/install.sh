@@ -8,7 +8,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2019 11 20
+# 2020 04 21
 
 function robo_system_install() {
 
@@ -80,6 +80,11 @@ function robo_system_install() {
 
             vlc
             " "" --yes
+        if [ $? -ne 0 ]; then return -2; fi
+
+        # install vs code
+        config_install_vscode
+        if [ $? -ne 0 ]; then return -3; fi
     else
         _config_install_list "
             exfat-fuse exfat-utils
@@ -94,9 +99,9 @@ function robo_system_install() {
             mariadb-server
             php php-mysql phpmyadmin
             " "" --yes
+        if [ $? -ne 0 ]; then return -2; fi
     fi
 
-    if [ $? -ne 0 ]; then return -2; fi
     echo "done :-)"
 }
 
