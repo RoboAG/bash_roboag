@@ -5,9 +5,9 @@ script:
   - cd ~/workspace/ && ./checkout.sh --yes
   - source ~/workspace/bash/master/roboag/bashrc.sh
   - repo_clone_all --yes
-  - export SOURCED_BASH_MASTER_ROBOAG=""
+  - export SOURCED_BASH_MASTER_ROBOAG="" && export | grep -i source
   - touch ~/workspace/bash/master/roboag/config/is_server.txt
-  - source ~/workspace/bash/master/roboag/bashrc.sh
+  - source ~/workspace/bash/master/roboag/bashrc.sh && export | grep -i source
   - robo_system_update
   - robo_system_install
   - robo_system_install server
