@@ -3,10 +3,14 @@ script:
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
   - cd ~/workspace/ && ./checkout.sh --yes
-  - source ~/workspace/bash/master/roboag/bashrc.sh && repo_clone_all --yes
-  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_update
-  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_install
-  - source ~/workspace/bash/master/roboag/bashrc.sh && robo_system_install server
+  - source ~/workspace/bash/master/roboag/bashrc.sh
+  - repo_clone_all --yes
+  - export SOURCED_BASH_MASTER_ROBOAG=""
+  - touch ~/workspace/bash/master/roboag/config/is_server.txt
+  - source ~/workspace/bash/master/roboag/bashrc.sh
+  - robo_system_update
+  - robo_system_install
+  - robo_system_install server
 
 notifications:
   email:
