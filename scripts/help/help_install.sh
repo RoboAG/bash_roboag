@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 11 20
+# 2020 04 21
 
 function robo_help_install() {
 
@@ -50,15 +50,21 @@ function robo_help_install() {
     echo ""
     echo "### Install Client ###"
     echo ""
-    echo "Operating System: Xubuntu 18.04.3 LTS"
+    echo "Operating System: Lubuntu 18.04.4 LTS"
     echo ""
 
     echo "0. Source"
     echo "  Internet:"
-    echo "    http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/"
+    echo "    http://cdimage.ubuntu.com/lubuntu/releases/18.04/release/"
     echo -e "\n<enter>\n"; read dummy
 
     #ToDo
+    echo "... todo ..."
+    echo -e "\n<enter>\n"; read dummy
 
+    echo "x. Source"
+    echo "  Maybe consider installing nextcloud client."
+    echo "    $ config_install_nextcloud"
+    echo -e "\n<enter>\n"; read dummy
 }
 
