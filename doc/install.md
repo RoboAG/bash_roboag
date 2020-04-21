@@ -1,13 +1,15 @@
 # Installation instructions
 
 ## Client config
-[download link](https://xubuntu.org/download#lts)
-
+[download link](https://lubuntu.me/downloads/)
 
 ### upcoming version
-[Xubuntu 18.04.3 LTS](http://cdimage.ubuntu.com/xubuntu/releases/18.04/release/) is planned for new clients.
+[Lubuntu 18.04.4 LTS](https://cdimage.ubuntu.com/lubuntu/releases/18.04/release/) is planned for new clients.
 
-For step-by-step installation instructions see [help_install.sh](../scripts/help/help_install.sh).
+For step-by-step installation instructions see
+[these images](install_client_img.md) and call:
+
+    $ robo_help_install.sh
 
 ### older version
 Older maschines are still running on Xubuntu 14.04.3 LTS.
@@ -16,12 +18,13 @@ Older maschines are still running on Xubuntu 14.04.3 LTS.
 
 [download link](https://www.ubuntu.com/download/server)
 
-For step-by-step installation instructions see [help_install_server.sh](../scripts/help/help_install_server.sh).
-
 ### upcoming version
 Ubuntu Server 18.04.1 LTS is planned for new servers.
 
-See also these [images](img/server_install).
+For step-by-step installation instructions see
+[these images](install_server_img.md) and call:
+
+    $ robo_help_install_server.sh
 
 ### current version
 Ubuntu Server 16.04.3 LTS.
