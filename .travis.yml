@@ -1,4 +1,5 @@
 script:
+  - sudo apt remove mysql-server || echo "ignore errors"
   - shopt -s expand_aliases
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
