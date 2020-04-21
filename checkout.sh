@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.0.5                                                              #
-# Date   : 30.11.18                                                           #
+# Version: 1.1.0                                                              #
+# Date   : 21.04.20                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -63,7 +63,18 @@ if [ "${ROBO_PATH_WORKSPACE}" != "${ROBO_PATH_HOME}workspace/" ]; then
     fi
 fi
 
+# check if git is installed
+git_status="$(dpkg-query --show --showformat='${db:Status-Abbrev}' git)"
+if [ "${git_status:0:2}" != "ii" ]; then
+    echo ""
+    echo "### git does not seem to be installed"
+    echo "please call: $ apt get install git"
+    return -1
+    exit   -1
+fi
 
+
+# checking out this repo
 echo ""
 echo "### checking out the project"
 if [ -d "${PATH_THIS}" ]; then
@@ -72,6 +83,12 @@ if [ -d "${PATH_THIS}" ]; then
     exit
 fi
 git clone "${URL_GIT_THIS}" "${PATH_THIS}"
+
+if [ $? -ne 0 ]; then
+    echo "### There have been errors! ###"
+    return -1
+    exit   -1
+fi
 
 
 echo ""
@@ -93,10 +110,10 @@ if [ $? -ne 0 ]; then
     echo "### There have been errors! ###"
     return -1
     exit   -1
-else
-    echo ""
-    echo "### deleting this script"
-    rm "${NAME_CHECKOUT_SCRIPT}"
-
-    echo "all done :-)"
 fi
+
+echo ""
+echo "### deleting this script"
+rm "${NAME_CHECKOUT_SCRIPT}"
+
+echo "all done :-)"
