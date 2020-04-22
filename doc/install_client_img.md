@@ -1,10 +1,10 @@
-# Installation instructions for client
+# Installationsanweisung für die Clients
 
-Please do also consider calling:
+Gegebenenfalls auch die Hilfe in den RoboAG-Skripten nutzen:
 
     $ robo_help_install_client.sh
 
-# Images
+# Bilder
 ## Sprache
 <img src="img/client_install/001_sprache.png"          width="300">
 
