@@ -1,5 +1,4 @@
 script:
-  - sudo apt remove mysql-server || echo "ignore errors"
   - shopt -s expand_aliases
   - mkdir -p ~/workspace
   - cp checkout.sh ~/workspace/
@@ -7,7 +6,8 @@ script:
   - source ~/workspace/bash/master/roboag/bashrc.sh
   - repo_clone_all --yes
   - source ~/workspace/bash/config/bashrc.sh
-  - robo_system_update
+  - robo_system_update || echo "ignore errors"
+  - sudo apt remove mysql-server
   - robo_system_install
   - unset SOURCED_BASH_MASTER_ROBOAG && export
   - touch ~/workspace/bash/master/roboag/config/is_server.txt
