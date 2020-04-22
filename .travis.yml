@@ -6,8 +6,7 @@ script:
   - source ~/workspace/bash/master/roboag/bashrc.sh
   - repo_clone_all --yes
   - source ~/workspace/bash/config/bashrc.sh
-  - sudo apt-mark hold mysql-server
-  - robo_system_update
+  - #robo_system_update
   - #robo_system_install
   - #unset SOURCED_BASH_MASTER_ROBOAG && export
   - #touch ~/workspace/bash/master/roboag/config/is_server.txt
