@@ -26,7 +26,7 @@ Please do also consider calling:
 <img src="img/client_install/008_zeitzone.png"         width="300">
 
 ## Benutzer
-<img src="img/client_install/009_benutzer.png"         width="300" align="left">
+<img src="img/client_install/009_benutzer.png"         width="300">
 
 ## Neustarten
 <img src="img/client_install/010_neustart.png"         width="300">
