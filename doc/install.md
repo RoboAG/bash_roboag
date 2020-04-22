@@ -7,7 +7,7 @@
 [Lubuntu 18.04.4 LTS](https://cdimage.ubuntu.com/lubuntu/releases/18.04/release/) is planned for new clients.
 
 For step-by-step installation instructions see
-[these images](install_client_img.md) and call:
+[these images](img/client_install/README.md) and call:
 
     $ robo_help_install.sh
 
@@ -22,7 +22,7 @@ Older maschines are still running on Xubuntu 14.04.3 LTS.
 Ubuntu Server 18.04.1 LTS is planned for new servers.
 
 For step-by-step installation instructions see
-[these images](install_server_img.md) and call:
+[these images](img/server_install/README.md) and call:
 
     $ robo_help_install_server.sh
 
