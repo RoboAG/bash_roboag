@@ -8,7 +8,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2020 04 21
+# 2020 04 22
 
 function robo_system_install() {
 
@@ -58,6 +58,7 @@ function robo_system_install() {
 
             synaptic
             cifs-utils
+            net-tools
             ntp
 
             regexxer pwgen
