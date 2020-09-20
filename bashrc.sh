@@ -74,9 +74,9 @@ fi
 
 
 #***************************[robolib]*****************************************
-# 2018 01 11
+# 2020 09 20
 
-if [ "${REPO_ROBO_LIB[0]}" != "" ] && \
-  [ -d "${REPO_ROBO_LIB[0]}" ]; then
-    . ${REPO_ROBO_LIB[0]}scripts/bashrc.sh
+if [ "${REPO_ROBOAG_LIB[0]}" != "" ] && \
+  [ -d "${REPO_ROBOAG_LIB[0]}" ]; then
+    . ${REPO_ROBOAG_LIB[0]}scripts/bashrc.sh
 fi

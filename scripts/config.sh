@@ -144,7 +144,7 @@ else
 fi
 
 #***************************[repo paths]**************************************
-# 2019 01 05
+# 2020 09 20
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
@@ -159,19 +159,20 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
 
     # setup repo directory
-    export ROBO_PATH_REPOS="${ROBO_PATH_ROBOAG}Repos/"
+    export ="${ROBO_PATH_ROBOAG}Repos/"
 
     # override standard-directories
-    export REPO_ROBO_PATH="${ROBO_PATH_REPOS}WinAVR/"
+    export REPO_ROBOAG_PATH="${ROBO_PATH_REPOS}WinAVR/"
         # robolib
         # pololu
 
-        export REPO_ROBOSAX_AVR_PATH="${REPO_ROBO_PATH}RoboSAX/"
-            # licht robosax
+        export REPO_ROBOSAX_AVR_PATH="${REPO_ROBOAG_PATH}RoboSAX/"
+            # spielfeld
+            # omnibot
 
 
     temp="${ROBO_PATH_REPOS}Eagle/"
-        export REPO_ROBO_EAGLE_PATH="${temp}"
+        export REPO_ROBOAG_EAGLE_PATH="${temp}"
             # config
             # keplerboard
             # xbee
@@ -179,21 +180,25 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # vtgMon
 
         export REPO_ROBOSAX_EAGLE_PATH="${temp}RoboSAX/"
-            # licht tht
-            # anzeige tht
+            # spielfeld
+            # licht
+            # anzeige
 
         export REPO_PROJECTS_EAGLE_PATH="${temp}Peter/"
             # dmx_driver
 
-    export REPO_ROBOAG_PATH="${ROBO_PATH_REPOS}Projekte/"
+    export REPO_ROBOAG_PROJECTS_PATH="${ROBO_PATH_REPOS}Projekte/"
         # display
         # gluecksrad
         # 3pi
+        # roboter
 
-        export REPO_ROBOSAX_PROJECT_PATH="${REPO_ROBOAG_PATH}RoboSAX/"
+        export REPO_ROBOSAX_PROJECT_PATH="${REPO_ROBOAG_PROJECTS_PATH}RoboSAX/"
+            # spielfeld
             # ledbox
 
-        export REPO_HARDWARE_PATH="${REPO_ROBOAG_PATH}Peter/"
+        export REPO_HARDWARE_PATH="${REPO_ROBOAG_PROJECTS_PATH}Peter/"
+            # anhaenger
             # home-audio
             # opa
             # dimmer
@@ -207,7 +212,6 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             # pcdfilter
             # octomap
             # nearfield_map
-            # odometry
         # ros-sensors-pa
             # radar
 
@@ -217,7 +221,11 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
 
     export REPO_ROBOSAX_PHP_PATH="${temp}"
         # Punkte RoboSAX
+        # Punkte RoboSAX (old version)
 
     export REPO_DOC_PATH="${ROBO_PATH_REPOS}doc/"
-            # documentation of servers
+            # online server
+            # local server
+            # robolib
+            # punkte
 fi
