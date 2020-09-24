@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[network interfaces]******************************
-# 2019 11 21
+# 2020 09 24
 
 function robo_config_interfaces_server() {
 
@@ -27,7 +27,7 @@ function robo_config_interfaces_server() {
     fi
     temp="$(ls "$PATH_CONFIG" | grep -i "roboag")"
     if [ "$(echo "$temp" | wc -w)" -gt 0 ]; then
-        echo "File \"$temp\" does not exist"
+        echo "File \"$temp\" exist"
         echo "Is netplan already configured ?"
         return -4
     fi
