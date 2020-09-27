@@ -18,8 +18,7 @@ checkout additionals repositories (e.g. robolib)
 
     # reopen terminal before continuing
     repo_clone_bash
-    git_clone_robo_lib
-    git_clone_robo_pololu
+    repo_clone_roboag
     ...
     repo_help_overview #list of all referenced repositories
 
@@ -28,4 +27,4 @@ see also [help_config_workspace.sh](scripts/help/help_config_workspace.sh).
 [![Build Status](https://travis-ci.org/RoboAG/bash_roboag.svg?branch=master)](https://travis-ci.org/RoboAG/bash_roboag)
 
 ## Installation
-For install instructions see [doc/install](doc/install.md).
+For install instructions see [doc_install repo](https://github.com/RoboAG/doc_install) (german).
