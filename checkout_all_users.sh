@@ -65,7 +65,9 @@ if [ "${git_status}" != "ii " ]; then
 fi
 
 # create path
-mkdir -p "$ROBO_PATH_WORKSPACE"
+sudo mkdir -p "$ROBO_PATH_WORKSPACE" && \
+  sudo chown $USER "$ROBO_PATH_WORKSPACE"
+chmod 755 "$ROBO_PATH_WORKSPACE"
 
 # checking out this repo
 echo ""
