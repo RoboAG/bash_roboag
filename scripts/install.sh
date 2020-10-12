@@ -8,19 +8,19 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2020 04 22
+# 2020 10 12
 
 function robo_system_install() {
 
     # print help
     if [ "$1" == "-h" ]; then
-        echo "$FUNCNAME [<flag>]"
+        echo "$FUNCNAME [<system>]"
 
         return
     fi
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
-        echo "    [#1:]flag for installed packages"
+        echo "    [#1:]system for installed packages"
         echo "         \"\" regular packages (default)"
         echo "         \"server\" additional packages for server"
         echo "This function installs all packages needed."
