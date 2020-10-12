@@ -1,10 +1,10 @@
 #!/bin/bash
 
-
 #***************************[update]******************************************
 # 2019 09 10
 
 alias robo_system_update="config_update_system"
+
 
 
 #***************************[install]*****************************************
@@ -42,7 +42,7 @@ function robo_system_install() {
         if [ "$1" == "server" ]; then
             server_flag="1"
 
-            _robo_system_need_server "$FUNCNAME"
+            _robo_config_need_server "$FUNCNAME"
             if [ $? -ne 0 ]; then return; fi
         elif [ "$1" != "" ]; then
             echo "$FUNCNAME: Parameter Error."
@@ -105,23 +105,3 @@ function robo_system_install() {
 
     echo "done :-)"
 }
-
-
-#***************************[apt-cacher-ng]***********************************
-# 2019 11 20
-
-function robo_config_aptcacher() {
-
-    # print help and check for user agreement
-    _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "updates all source lists to use the apt-cacher-ng running on server."
-    if [ $? -ne 0 ]; then return -1; fi
-
-    config_source_list_aptcacher_set "$ROBO_SERVER_IP"
-    if [ $? -ne 0 ]; then return -2; fi
-
-    echo "done :-)"
-}
-
-alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
-alias robo_config_aptcacher_check="config_source_list_aptcacher_check"

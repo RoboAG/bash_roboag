@@ -1,9 +1,19 @@
 #!/bin/bash
 
-#***************************[network interfaces]******************************
-# 2020 09 24
+#***************************[apt-cacher-ng]***********************************
+# 2020 10 12
 
-function robo_config_interfaces_server() {
+alias robo_setup_server_aptcacher="server_config_aptcacher \
+  ${_ROBO_SERVER_IP}"
+
+alias robo_setup_server_aptcacher_restore="server_config_aptcacher_restore"
+
+
+
+#***************************[network interfaces]******************************
+# 2020 10 12
+
+function robo_setup_server_interfaces() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
@@ -11,7 +21,7 @@ function robo_config_interfaces_server() {
     if [ $? -ne 0 ]; then return -1; fi
 
     # check current mode
-    _robo_system_need_server "$FUNCNAME"
+    _robo_config_need_server "$FUNCNAME"
     if [ $? -ne 0 ]; then return -2; fi
 
     # Do the configuration
@@ -105,7 +115,7 @@ function robo_config_interfaces_server() {
     echo "done :-)"
 }
 
-function robo_config_interfaces_server_restore() {
+function robo_setup_server_interfaces_restore() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
@@ -123,12 +133,3 @@ function robo_config_interfaces_server_restore() {
 
     echo "done :-)"
 }
-
-
-#***************************[apt-cacher-ng]***********************************
-# 2019 11 01
-
-alias robo_config_aptcacher_server="server_config_aptcacher \
-  ${_ROBO_SERVER_IP}"
-
-alias robo_config_aptcacher_server_restore="server_config_aptcacher_restore"

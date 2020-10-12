@@ -43,7 +43,7 @@ fi
 
 
 #***************************[repository]**************************************
-# 2020 10 11
+# 2020 10 12
 
 . ${ROBO_PATH_SCRIPT}scripts/repository.sh
 
@@ -53,16 +53,19 @@ if [ -d "${REPO_BASH_REPO[0]}" ]; then
 fi
 
 . ${ROBO_PATH_SCRIPT}scripts/config.sh
+. ${ROBO_PATH_SCRIPT}scripts/config_server.sh
 
 
-#***************************[install]*****************************************
-# 2019 11 20
+#***************************[install & setup]*********************************
+# 2020 10 12
 
-. ${ROBO_PATH_SCRIPT}scripts/install.sh
-. ${ROBO_PATH_SCRIPT}scripts/install_server.sh
+. ${ROBO_PATH_SCRIPT}scripts/system.sh
+
+#. ${ROBO_PATH_SCRIPT}scripts/setup.sh
+. ${ROBO_PATH_SCRIPT}scripts/setup_server.sh
 
 
-#***************************[other master scripts]***************************
+#***************************[other master scripts]****************************
 # 2019 12 01
 
 if [ -d "${REPO_BASH_MASTER_SERVER[0]}" ]; then

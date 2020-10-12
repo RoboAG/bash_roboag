@@ -31,8 +31,6 @@ fi
 
 
 
-
-
 #***************************[set mode of operation]***************************
 # 2019 09 10
 
@@ -59,9 +57,9 @@ fi
 
 
 #***************************[check mode of operation]*************************
-# 2019 11 20
+# 2020 10 12
 
-function _robo_system_need_server() {
+function _robo_config_need_server() {
 
     # print help
     if [ "$1" == "-h" ]; then
@@ -104,7 +102,7 @@ function _robo_system_need_server() {
     fi
 }
 
-function _robo_system_need_client() {
+function _robo_config_need_client() {
 
     # print help
     if [ "$1" == "-h" ]; then
@@ -149,31 +147,21 @@ function _robo_system_need_client() {
 
 
 
-#***************************[server config]***********************************
+#***************************[apt-cacher-ng]***********************************
 # 2019 11 20
 
-export _ROBO_SERVER_IP="192.168.2.20"
+function robo_config_aptcacher() {
 
-if [ "$ROBO_CONFIG_IS_SERVER" == "" ]; then
-    export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
-else
-    export ROBO_SERVER_IP="localhost"
-fi
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "updates all source lists to use the apt-cacher-ng running on server."
+    if [ $? -ne 0 ]; then return -1; fi
 
+    config_source_list_aptcacher_set "$ROBO_SERVER_IP"
+    if [ $? -ne 0 ]; then return -2; fi
 
+    echo "done :-)"
+}
 
-#***************************[server paths]************************************
-# 2020 09 24
-
-# setup server paths
-export _ROBO_SERVER_PATH_DATA="/mnt/data/"
-export _ROBO_SERVER_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag/"
-export _ROBO_SERVER_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax/"
-
-
-if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
-
-    # setup hard-drives
-    export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
-    export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
-fi
+alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
+alias robo_config_aptcacher_check="config_source_list_aptcacher_check"
