@@ -5,7 +5,7 @@
 
 # ROBO_PATH_WORKSPACE
 
-# note: repo files must be sourced after this script
+# note: repo files must be sourced AFTER this script
 
 
 
@@ -18,16 +18,21 @@ export REPO_ROOT_GITHUB_URL="https://github.com/peterweissig/"
 
 
 #***************************[bash]********************************************
-# 2018 01 08
+# 2020 10 11
 
 # paths
-# note: this is already set in file bash/repo/list.sh
-export REPO_BASH_PATH="${ROBO_PATH_WORKSPACE}bash/"
+# note: this is equivalent to setup in bash/repo/list.sh
+export ROBO_BASH_PATH="${ROBO_PATH_WORKSPACE}bash/"
 
 # repos
-# note: this is already set in file bash/repo/list.sh
-export REPO_BASH_REPO=("${REPO_BASH_PATH}repo/" \
-  "${REPO_ROOT_GITHUB_URL}bash_repo.git")
+# note: this is equivalent to setup in bash/repo/list.sh
+if [ "$REPO_BASH_REPO" == "" ]; then
+    export REPO_BASH_REPO=("${ROBO_BASH_PATH}repo/" \
+    "${REPO_ROOT_GITHUB_URL}bash_repo.git")
+
+    alias git_clone_bash_repo="git clone ${REPO_BASH_REPO[1]} \
+      ${REPO_BASH_REPO[0]}"
+fi
 
 
 
