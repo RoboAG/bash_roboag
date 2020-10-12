@@ -1,18 +1,35 @@
 #!/bin/bash
 
 #***************************[needed external variables]***********************
-# 2018 04 01
+# 2020 10 11
 
 # ROBO_PATH_SCRIPTS
 
-# note: repo files must be sourced after this script
+# note: repo files must be sourced BEFORE this script
 
 
 
-#***************************[path]********************************************
-# 2018 03 01
+#***************************[paths and files]*********************************
+# 2020 10 11
 
-export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
+if [ "$ROBO_PATH_CONFIG" == "" ]; then
+    # check if an alternative path exists
+    if [ "$REPO_BASH_DATA_PATH" != "" ] && \
+      [ -d "$REPO_BASH_DATA_PATH" ]; then
+        export ROBO_PATH_CONFIG="${REPO_BASH_DATA_PATH}roboag/"
+    else
+        export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
+    fi
+
+    # check if config folder exists
+    if [ ! -d "$ROBO_PATH_CONFIG" ]; then
+        echo "creating config folder for \"roboag\""
+        echo "    ($ROBO_PATH_CONFIG)"
+        mkdir -p "$ROBO_PATH_CONFIG"
+    fi
+fi
+
+
 
 
 

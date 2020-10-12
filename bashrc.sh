@@ -43,15 +43,16 @@ fi
 
 
 #***************************[repository]**************************************
-# 2018 11 30
+# 2020 10 11
 
-. ${ROBO_PATH_SCRIPT}scripts/config.sh
 . ${ROBO_PATH_SCRIPT}scripts/repository.sh
 
 if [ -d "${REPO_BASH_REPO[0]}" ]; then
     export REPO_PATH_WORKSPACE="${ROBO_PATH_WORKSPACE}"
     . ${REPO_BASH_REPO[0]}bashrc.sh
 fi
+
+. ${ROBO_PATH_SCRIPT}scripts/config.sh
 
 
 #***************************[install]*****************************************
