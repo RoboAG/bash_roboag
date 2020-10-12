@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 09 27
+# 2020 10 12
 
 function robo_help_install() {
 
@@ -173,6 +173,6 @@ function robo_help_install() {
     echo "done :-)"
     echo ""
     echo "call next script for help regarding setup:"
-    echo "    $ robo_help_setup"
+    echo "    $ robo_help_setup_workspace"
 }
 

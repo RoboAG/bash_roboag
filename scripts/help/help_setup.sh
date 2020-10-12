@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 11 21
+# 2020 10 12
 
 function robo_help_setup() {
 
@@ -13,7 +13,7 @@ function robo_help_setup() {
     fi
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
-        echo "    [#1:]system for which install instructions will be shown"
+        echo "    [#1:]system for which setup instructions will be shown"
         echo "         Leave option empty to run for \"client\"."
         echo "           \"client\"     Client of RoboAG"
         echo "           \"server\"     Server of RoboAG (and RoboSAX)"
@@ -45,7 +45,7 @@ function robo_help_setup() {
     fi
 
     echo ""
-    echo "### Configure computer ###"
+    echo "### Setup computer ###"
     echo ""
     echo "1. simple configurations"
     echo "    $ config_bash_search"
@@ -53,12 +53,12 @@ function robo_help_setup() {
     echo -e "\n<enter>\n"; read dummy
 
     echo ""
-    echo "2. updated sources (this may take a while)"
+    echo "2. update sources (this may take a while)"
     echo "    $ config_source_list_add_multiverse"
     if [ "$system_flag" != "server" ]; then
         echo "    $ robo_config_aptcacher   (if not in standalone-mode)"
     fi
-    echo "    $ config_update_system"
+    echo "    $ robo_system_update"
     echo "    $ sudo reboot"
     if [ "$system_flag" == "client" ]; then
         echo "    $ robo_system_install"
@@ -70,14 +70,14 @@ function robo_help_setup() {
     if [ "$system_flag" == "server" ]; then
         echo ""
         echo "3. setup network"
-        echo "    $ robo_config_interfaces_server"
+        echo "    $ robo_setup_server_interfaces"
         echo "    $ sudo reboot"
         echo -e "\n<enter>\n"; read dummy
         echo ""
         echo "4. setup apt-cacher-ng"
-        echo "    $ robo_config_aptcacher_server"
+        echo "    $ robo_setup_server_aptcacher"
         echo "    $ robo_config_aptcacher"
-        echo "    $ config_update_system"
+        echo "    $ robo_system_update"
         echo -e "\n<enter>\n"; read dummy
     fi
 

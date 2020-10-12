@@ -1,8 +1,7 @@
 #!/bin/bash
 
-
 #***************************[all]*********************************************
-# 2019 11 20
+# 2020 10 12
 
 function robo_help_all() {
 
@@ -36,7 +35,7 @@ function robo_help_all() {
     echo -n "  "; $FUNCNAME -h
     echo ""
     echo -n "  "; robo_help_install -h
-    echo -n "  "; echo "robo_help_config_workspace  #no help"
+    echo -n "  "; echo "robo_help_setup_workspace   #no help"
     echo -n "  "; robo_help_setup -h
     echo ""
     if [ "$SOURCED_BASH_CONFIG" != "" ]; then
@@ -56,6 +55,7 @@ function robo_help_all() {
     fi
     echo ""
     echo "repository functions"
+    echo -n "  "; echo "robo_repo_overview          #no help"
     echo -n "  "; echo "robo_repo_status            #no help"
     echo -n "  "; echo "robo_repo_update            #no help"
     echo ""
@@ -65,8 +65,10 @@ function robo_help_all() {
     echo ""
 }
 
+
+
 #***************************[help]********************************************
-# 2019 11 20
+# 2020 10 12
 
 function robo_help() {
 
@@ -77,10 +79,11 @@ function robo_help() {
     echo -n "  "; echo "$FUNCNAME                   #no help"
     echo -n "  "; robo_help_all -h
     echo -n "  "; robo_help_install -h
-    echo -n "  "; echo "robo_help_config_workspace  #no help"
+    echo -n "  "; echo "robo_help_setup_workspace   #no help"
     echo -n "  "; robo_help_setup -h
     echo ""
     echo "repository functions"
+    echo -n "  "; echo "robo_repo_overview          #no help"
     echo -n "  "; echo "robo_repo_status            #no help"
     echo -n "  "; echo "robo_repo_update            #no help"
     echo ""

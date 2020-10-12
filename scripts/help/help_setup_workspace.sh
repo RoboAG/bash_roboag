@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 09 10
+# 2020 10 12
 
-function robo_help_config_workspace() {
+function robo_help_setup_workspace() {
 
     echo ""
     echo "### Config RoboAG Workspace ###"
@@ -58,7 +58,7 @@ function robo_help_config_workspace() {
     echo "                         $ git_clone_... (e.g. git_clone_robo_lib)"
     echo ""
     echo "  For an overview and some hints see:"
-    echo "    $ repo_help_overview"
+    echo "    $ robo_repo_overview"
     echo -e "\n<enter>\n"; read dummy
 
 

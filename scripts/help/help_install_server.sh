@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2019 01 11
+# 2020 10 12
 
 function robo_help_install_server() {
 
@@ -258,7 +258,7 @@ function robo_help_install_server() {
     echo "9. Profil setup (9/11)"
     echo "  Enter the username and password ..."
     if [ "$system_flag" == "roboag" ]; then
-        echo "  Your name             : Guru"
+        echo "  Your name             : Guru der RoboAG"
         echo "  Your server's name    : server"
         echo "  Pick a username       : guru"
     elif [ "$system_flag" == "laptop" ]; then
@@ -321,9 +321,12 @@ function robo_help_install_server() {
     echo "  $ sudo reboot"
     echo -e "\n<enter>\n"; read dummy
 
-    echo "14. Config"
-    echo "  for further configuration and setup see"
-    echo "  $ robo_help_config ${system_flag}"
+    if [ "$system_flag" == "roboag" ] || [ "$system_flag" == "peter" ]; then
+        echo "14. Config"
+        echo "  for further configuration and setup see"
+        echo "  $ robo_help_setup_workspace"
+        echo "  $ robo_help_setup server"
+    fi
 
     echo "done :-)"
 }
