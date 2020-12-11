@@ -47,4 +47,9 @@ see also [help_config_workspace.sh](scripts/help/help_config_workspace.sh).
 
 
 ## Installation
+install git client
+
+    sudo apt install git
+
+
 For install instructions see [doc_install repo](https://github.com/RoboAG/doc_install) (german).
