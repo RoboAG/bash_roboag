@@ -35,8 +35,8 @@ echo ""
 
 
 # export paths
-export ROBO_PATH_WORKSPACE="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
-export ROBO_PATH_HOME="$(cd && pwd )/"
+export ROBO_PATH_WORKSPACE="$(realpath "$(dirname "${BASH_SOURCE}")" )/"
+export ROBO_PATH_HOME="$(cd && realpath . )/"
 
 
 # check paths

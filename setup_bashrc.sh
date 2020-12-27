@@ -18,7 +18,7 @@ if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
 else
 
     # get local directory
-    SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE}" )" && pwd )/"
+    SCRIPTDIR="$(realpath "$(dirname "${BASH_SOURCE}")" )/"
 
     BASHRC_SOURCE=". ${SCRIPTDIR}bashrc.sh"
     if grep -Fq "${BASHRC_SOURCE}" ~/.bashrc; then

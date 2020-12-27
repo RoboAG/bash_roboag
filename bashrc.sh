@@ -19,19 +19,19 @@ export SOURCED_BASH_MASTER_ROBOAG="$SOURCED_BASH_LAST"
 
 
 #***************************[paths and files]*********************************
-# 2018 12 11
+# 2020 12 27
 
-export ROBO_PATH_SCRIPT="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
+export ROBO_PATH_SCRIPT="$(realpath "$(dirname "${BASH_SOURCE}")" )/"
 parent_path="$(basename "$(dirname "$ROBO_PATH_SCRIPT")")"
 if [ "$parent_path" == "master" ]; then
     export ROBO_PATH_WORKSPACE="$( \
-      cd "${ROBO_PATH_SCRIPT}../../../" && pwd )/"
+      realpath "${ROBO_PATH_SCRIPT}../../.." )/"
 else
     if [ "$parent_path" != "bash" ]; then
         echo "roboag scripts: unknown file structure!"
     fi
     export ROBO_PATH_WORKSPACE="$( \
-      cd "${ROBO_PATH_SCRIPT}../../" && pwd )/"
+      realpath "${ROBO_PATH_SCRIPT}../.." )/"
 fi
 
 
