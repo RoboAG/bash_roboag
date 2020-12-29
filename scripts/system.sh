@@ -8,7 +8,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2020 10 12
+# 2020 12 29
 
 function robo_system_install() {
 
@@ -51,6 +51,7 @@ function robo_system_install() {
         fi
     fi
 
+    # select between server and client
     if [ "$server_flag" -eq 0 ]; then
         # basic install
         _config_install_list "
@@ -72,7 +73,7 @@ function robo_system_install() {
             g++ cmake
             python
 
-            librecad eagle inkscape dia
+            librecad inkscape dia
 
             zim doxygen
 
@@ -82,6 +83,13 @@ function robo_system_install() {
             vlc
             " "" --yes
         if [ $? -ne 0 ]; then return -2; fi
+
+        # check for eagle
+        if apt show eagle 2>> /dev/null; then
+            _config_install_list "eagle"
+        else
+            echo "eagle is not available"
+        fi
 
         # install vs code
         config_install_vscode
