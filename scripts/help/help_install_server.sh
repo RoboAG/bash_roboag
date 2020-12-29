@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 10 12
+# 2020 12 29
 
 function robo_help_install_server() {
 
@@ -313,10 +313,10 @@ function robo_help_install_server() {
     echo "13. Update"
     echo "  <wait some time for final installations>"
     echo "  log into server"
-    echo "  $ sudo apt-get update"
-    echo "  $ sudo apt-get upgrade && sudo apt-get dist-upgrade"
+    echo "  $ sudo apt update"
+    echo "  $ sudo apt upgrade && sudo apt dist-upgrade"
     echo "  <wait some time for the updates to be done>"
-    echo "  $ sudo apt-get install ubuntu-desktop"
+    echo "  $ sudo apt install ubuntu-desktop"
     echo "  <wait some time for the installation to be done>"
     echo "  $ sudo reboot"
     echo -e "\n<enter>\n"; read dummy
