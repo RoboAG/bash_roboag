@@ -43,7 +43,7 @@ checkout additionals repositories (e.g. robolib)
     ...
     repo_help_overview #list of all referenced repositories
 
-see also [help_config_workspace.sh](scripts/help/help_config_workspace.sh).
+see also [help_setup_workspace.sh](scripts/help/help_setup_workspace.sh).
 
 
 ## Installation
