@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 12 29
+# 2020 12 30
 
 alias robo_help_setup_workspace_shared="robo_help_setup_workspace shared"
 alias robo_help_setup_workspace_simple="robo_help_setup_workspace simple"
@@ -114,17 +114,25 @@ function robo_help_setup_workspace() {
         echo "1.b) Download scripts"
         filename="checkout.sh"
     else
-        echo "1.a Download scripts"
+        echo "1.a) Download scripts"
         filename="checkout_all_users.sh"
     fi
     url_part1="https://raw.githubusercontent.com/RoboAG/"
     url_part2="bash_roboag/master/"
     echo "  $ wget -nv \"${url_part1}${url_part2}${filename}\""
     echo "  $ source ${filename}"
-    echo "    answer all question with \"yes\""
+    if [ "$mode_flag" == "simple" ]; then
+        echo "    answer all questions with \"yes\""
+    else
+        echo "    answer question with \"yes\""
+    fi
     echo -e "\n<enter>\n"; read dummy
     if [ "$mode_flag" != "simple" ]; then
-        echo "1.b) Config settings"
+        echo "1.b) Remove checkout script"
+        echo "  $ rm \"${filename}\""
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "1.c) Config settings"
         echo "  Config files, e.g. changed by scripts or nano_config(),"
         echo "  will be copied into the shared repositories - this can be a"
         echo "  SECURITY ISSUE. For our clients this is a feature :-)"
@@ -134,7 +142,18 @@ function robo_help_setup_workspace() {
     fi
 
 
-    echo "2. Set Mode of Computer"
+    echo "2. Source workspace"
+    echo "  If you accepted auto sourcing in step 1:"
+    echo "    Just close terminal and reopen it."
+    echo "  Otherwise, you need to source the downloaded scripts directly:"
+    echo "    $ source ${path_roboag}bashrc.sh"
+    echo "  Or you can setup auto-sourcing later:"
+    echo "    $ source ${path_roboag}setup_bashrc.sh"
+    echo "    # remember to close and reopen terminal afterwards"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "3. Set Mode of Computer"
     echo "  a) Standalone client (no server available)"
     echo "    nothing todo"
     echo ""
@@ -152,19 +171,12 @@ function robo_help_setup_workspace() {
         echo "  likely b) or c) is your choice. Nevertheless, this files"
         echo "  might also be created later."
     fi
+    echo "  If changing your mode of operation, you need to re-source:"
+    echo "    close terminal and source workspace (see also step 2)"
+    echo ""
     echo -e "\n<enter>\n"; read dummy
 
-
-    echo "3.a) Source workspace"
-    echo "  If you accepted auto sourcing in step 1:"
-    echo "    Just close terminal and reopen it."
-    echo "  Otherwise, you need to source the downloaded scripts directly:"
-    echo "    $ source ${path_roboag}bashrc.sh"
-    echo "  Or you can setup auto-sourcing later:"
-    echo "    $ source ${path_roboag}setup_bashrc.sh"
-    echo -e "\n<enter>\n"; read dummy
-
-    echo "3.b) Download additional repositories"
+    echo "4. Download additional repositories"
     echo "  If in standalone-mode, download additional repositories."
     echo "  Get all repos        : $ repo_clone_all"
     echo "  Select specific repos: $ repo_clone_bash"

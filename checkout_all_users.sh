@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.1.3                                                              #
-# Date   : 29.12.20                                                           #
+# Version: 1.1.4                                                              #
+# Date   : 30.12.20                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -59,7 +59,7 @@ git_status="$(dpkg-query --show --showformat='${db:Status-Abbrev}' git)"
 if [ "${git_status}" != "ii " ]; then
     echo ""
     echo "### git does not seem to be installed"
-    echo "please call: $ apt install git"
+    echo "please run: $ apt install git"
     return -1
     exit   -1
 fi

@@ -129,17 +129,168 @@ function robo_help_install_server() {
     echo "  [x] Custom storage layout"
     echo -e "\n<enter>\n"; read dummy
 
-    echo "8.a) Speicherplatzkonfiguration"
-    echo "  ..."
-    echo "  TODO"
-    echo "  ..."
+    echo "7.a) Speicherplatzkonfiguration"
+    if [ "$system_flag" == "roboag" ]; then
+        echo "  240GB SSD:"
+        echo "    a) System"
+        echo "       Size (max. 222G)   : 50G"
+        echo "       Format             : ext4"
+        echo "       Mount              : /"
+        echo "    b) Swap"
+        echo "       Size (max. 172G)   : 10G"
+        echo "       Format             : swap"
+        echo "       Mount              : SWAP"
+        echo "    c) Home"
+        echo "       Size (max. 162G)   : 20G"
+        echo "       Format             : ext4"
+        echo "       Mount              : /home"
+        echo "    d) Data"
+        echo "       Size (max. 142G)   : 30G"
+        echo "       Format             : ext4"
+        echo "       Mount              : /mnt/data"
+        echo "    e) Backup"
+        echo "       Size (max. 112G)   :                 <leer lassen>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /mnt/backup"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "FILE SYSTEM SUMMARY"
+        echo "  /               50G  ext4   ..."
+        echo "  /boot/efi      512M  fat32  ..."
+        echo "  /home           20G  ext4   ..."
+        echo "  /mnt/data       30G  ext4   ..."
+        echo "  /mnt/backup    112G  ext4   ..."
+        echo "  SWAP            10G  swap   ..."
+    else
+        echo "  120GB SSD:"
+        echo "    a) System"
+        echo "       Size (max. 111G)   : 50G"
+        echo "       Format             : ext4"
+        echo "       Mount              : /"
+        echo "    b) Swap"
+        echo "       Size (max.  72G)   : 10G"
+        echo "       Format             : swap"
+        echo "       Mount              : SWAP"
+        echo "    c) Home"
+        echo "       Size (max.  62G)   :                 <leer lassen>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /home"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "  1TB HDD:"
+        echo "    a) Data"
+        echo "       Size (max. 931G)   : 750G        <ca. 75%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/data"
+        echo "    b) Share"
+        echo "       Size (max. 181G)   : 100G        <ca. 10%>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /media/share"
+        echo "    c) Internal"
+        echo "       Size (max.  81G)   :             <leave empty>"
+        echo "       Format             : ext4"
+        echo "       Mount              : /mnt/internal"
+        echo -e "\n<enter>\n"; read dummy
+
+        echo "FILE SYSTEM SUMMARY"
+        echo "  /               50G  ext4   ..."
+        echo "  /boot/efi      512M  fat32  ..."
+        echo "  /home           51G  ext4   ..."
+        echo "  /media/data    750G  ext4   ..."
+        echo "  /media/share   100G  ext4   ..."
+        echo "  /mnt/internal   81G  ext4   ..."
+        echo "  SWAP            10G  swap   ..."
+    fi
+    echo ""
+    echo "AVAILABLE DEVICES"
+    echo ""
+    echo "USED DEVICES"
+    echo "  ... <ähnlich zu file system summary>"
+
     echo -e "\n<enter>\n"; read dummy
+
+    echo "7.b) Bestätigung der destruktiven Aktionen"
+    echo "  Selecting Continue below will begin the Installation ..."
+    echo "  You will not be able to return ..."
+    echo "  Are you sure you want to continue ?"
+    echo "    [Nein      ]"
+    echo "   *[Fortfahren]*"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "8. Profileinrichtung"
+    echo "  Geben Sie den Benutzernamen und das Passwort ein ..."
+    if [ "$system_flag" == "roboag" ]; then
+        echo "  Ihr Name               : Guru der RoboAG"
+        echo "  Name Ihres Servers     : server"
+        echo "  Benutzernamen auswählen: guru"
+    else
+        echo "  Your name             : Peter       <beliebig>"
+        echo "  Your server's name    : blackbox    <beliebig>"
+        echo "  Pick a username       : peter       <beliebig>"
+    fi
+    echo "  Passwort auswählen    : xxx"
+    echo "  Passwort bestätigen   : xxx"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "9. SSH-Einrichtung"
+    echo "  Sie können auswählen das OpenSSH-Server-Paket zu installieren..."
+    echo "    [x] OpenSSH-Server installieren"
+    echo "    SSH-Identität importieren: [Nein]"
+    echo -e "\n<enter>\n"; read dummy
+
+    echo "10. Unterstützte Server-Snaps"
+    echo "  Dies sind beliebte Snaps in Serverumgebungen ..."
+    if [ "$system_flag" == "roboag" ]; then
+        echo "  [ ] ..."
+        echo "  <alle Optionen leer lassen>"
+    else
+        echo "  [ ] ..."
+        echo "  [x] minidlna-escoand"
+    fi
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "11. Installation des Grundsystems"
+    echo "  ..."
+    echo "  final system configuration"
+    echo "    ..."
+    echo "  downloading and installing security updates"
+    echo "    ..."
+    echo "  [Neustart]"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "12. Reboot"
+    echo "  <wait some time>"
+    echo "  Please remove the installation medium, then press ENTER:"
+    echo "  <do as written ;-)>"
+    echo -e "\n<enter>\n"; read dummy
+
+
+    echo "13. Update"
+    echo "  <wegen laufender Nachinstallationen eine Weile warten>"
+    echo "  <in den Server einloggen>"
+    echo "  $ sudo apt update"
+    echo "  $ sudo apt upgrade --yes && sudo apt dist-upgrade --yes"
+    echo "  <es kann eine Weile dauern bis die Updates durch sind>"
+    echo "  $ sudo apt install ubuntu-desktop"
+    echo "  <die Installation dauert meist sehr lange>"
+    echo "  $ sudo reboot"
+    echo -e "\n<enter>\n"; read dummy
+
+    if [ "$system_flag" == "roboag" ] || [ "$system_flag" == "peter" ]; then
+        echo "14. Config"
+        echo "  for further configuration and setup see"
+        echo "  $ robo_help_setup_workspace shared"
+        echo "  $ robo_help_setup server"
+    fi
 
     echo "done :-)"
 }
 
 #***************************[18.04]*******************************************
-# 2020 12 29
+# 2020 12 30
 
 function robo_help_install_server1804() {
 
@@ -332,9 +483,9 @@ function robo_help_install_server1804() {
         echo "  Your server's name    : server"
         echo "  Pick a username       : guru"
     else
-        echo "  Your name             : Peter (beliebig)"
+        echo "  Your name             : Peter     <beliebig>"
         echo "  Your server's name    : blackbox"
-        echo "  Pick a username       : peter (beliebig)"
+        echo "  Pick a username       : peter     <beliebig>"
     fi
     echo "  Choose a password     : xxx"
     echo "  Confirm your password : xxx"
@@ -381,7 +532,7 @@ function robo_help_install_server1804() {
 
     echo "14. Config"
     echo "  for further configuration and setup see"
-    echo "  $ robo_help_setup_workspace"
+    echo "  $ robo_help_setup_workspace shared"
     echo "  $ robo_help_setup server"
 
     echo "done :-)"
@@ -390,7 +541,7 @@ function robo_help_install_server1804() {
 
 
 #***************************[16.04]*******************************************
-# 2020 12 29
+# 2020 12 30
 
 function robo_help_install_server1604() {
 
@@ -503,7 +654,7 @@ function robo_help_install_server1604() {
     if [ "$system_flag" == "roboag" ]; then
         echo "  [Guru]"
     else
-        echo "  [Peter] (beliebig)"
+        echo "  [Peter]    <beliebig>"
     fi
     echo -e "\n<enter>\n"; read dummy
 
@@ -512,13 +663,13 @@ function robo_help_install_server1604() {
     if [ "$system_flag" == "roboag" ]; then
         echo "  [guru]"
     else
-        echo "  [peter] (beliebig)"
+        echo "  [peter]    <beliebig>"
     fi
     echo -e "\n<enter>\n"; read dummy
 
     echo "7.c) Benutzer und Passwörter einrichten"
     echo "  Wählen Sie ein Passwort für den neuen Benutzer:"
-    echo "  [xxx] (geheim)"
+    echo "  [xxx]    <geheim>"
     echo -e "\n<enter>\n"; read dummy
 
 
