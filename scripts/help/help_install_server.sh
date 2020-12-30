@@ -172,7 +172,7 @@ function robo_help_install_server() {
         echo "       Format             : swap"
         echo "       Mount              : SWAP"
         echo "    c) Home"
-        echo "       Size (max.  62G)   :                 <leer lassen>"
+        echo "       Size (max.  62G)   :             <leer lassen>"
         echo "       Format             : ext4"
         echo "       Mount              : /home"
         echo -e "\n<enter>\n"; read dummy
@@ -187,7 +187,7 @@ function robo_help_install_server() {
         echo "       Format             : ext4"
         echo "       Mount              : /media/share"
         echo "    c) Internal"
-        echo "       Size (max.  81G)   :             <leave empty>"
+        echo "       Size (max.  81G)   :             <leer lassen>"
         echo "       Format             : ext4"
         echo "       Mount              : /mnt/internal"
         echo -e "\n<enter>\n"; read dummy
@@ -262,9 +262,9 @@ function robo_help_install_server() {
 
 
     echo "12. Reboot"
-    echo "  <wait some time>"
+    echo "  <etwas warten>"
     echo "  Please remove the installation medium, then press ENTER:"
-    echo "  <do as written ;-)>"
+    echo "  <Installationsmedium entfernen und enter drücken>"
     echo -e "\n<enter>\n"; read dummy
 
 
@@ -279,12 +279,11 @@ function robo_help_install_server() {
     echo "  $ sudo reboot"
     echo -e "\n<enter>\n"; read dummy
 
-    if [ "$system_flag" == "roboag" ] || [ "$system_flag" == "peter" ]; then
-        echo "14. Config"
-        echo "  for further configuration and setup see"
-        echo "  $ robo_help_setup_workspace shared"
-        echo "  $ robo_help_setup server"
-    fi
+    echo "14. Weiteres"
+    echo "  Für die weitere Einrichtung des Rechners sollten die folgenden"
+    echo "  Skripte auf den neuen Rechner genutzt werden:"
+    echo "    $ robo_help_setup_workspace shared"
+    echo "    $ robo_help_setup server"
 
     echo "done :-)"
 }
