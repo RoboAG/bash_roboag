@@ -148,7 +148,7 @@ function _robo_config_need_client() {
 
 
 #***************************[apt-cacher-ng]***********************************
-# 2019 11 20
+# 2020 12 31
 
 function robo_config_aptcacher() {
 
@@ -157,7 +157,7 @@ function robo_config_aptcacher() {
       "updates all source lists to use the apt-cacher-ng running on server."
     if [ $? -ne 0 ]; then return -1; fi
 
-    config_source_list_aptcacher_set "$ROBO_SERVER_IP"
+    config_source_list_aptcacher_set --https2http "$ROBO_SERVER_IP"
     if [ $? -ne 0 ]; then return -2; fi
 
     echo "done :-)"
