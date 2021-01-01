@@ -134,3 +134,129 @@ function robo_setup_server_interfaces_restore() {
 
     echo "done :-)"
 }
+
+
+
+#***************************[dnsmasq]*****************************************
+# 2021 01 01
+
+function robo_setup_server_dnsmasq() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "sets the config of the internal network (eth_intern).\
+      Additionally installs dnsmasq."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # Do the configuration
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
+
+    # check for network interfaces
+    interfaces="$(ip --brief link | grep -o "^[^ ]*")"
+    if [ "$(echo "$interfaces" | grep eth_intern)" == "" ]; then
+        echo "Missing interface eth_intern."
+        echo "Did you call robo_setup_server_interfaces ?"
+        return -3
+    fi
+
+    # check & install dnsmasq
+    _config_install_list "dnsmasq" quiet
+    if [ $? -ne 0 ]; then return -4; fi
+
+    # check for previous configurations
+    if [ ! -d "$PATH_CONFIG" ]; then
+        echo "Directory \"$PATH_CONFIG\" does not exist."
+        echo "Is dnsmasq correctly installed ?"
+        return -5
+    fi
+
+    # iterate over all config_files
+    changed=""
+    files="$(ls "$PATH_LOCAL")"
+    for file in $files; do
+        echo "checking ${PATH_CONFIG}${file}"
+        if [ ! -e "${PATH_CONFIG}${file}" ]; then
+            echo "    copy from ${PATH_LOCAL}$file"
+            sudo cp "${PATH_LOCAL}$file" "${PATH_CONFIG}${file}"
+            changed=1
+        else
+            temp="$(diff --brief "${PATH_LOCAL}$file" \
+              "${PATH_CONFIG}${file}")"
+            if [ "$temp" != "" ]; then
+                echo "    ... differs from ${PATH_LOCAL}$file ?"
+            elif [ -L "${PATH_CONFIG}${file}" ]; then
+                echo "    ... is a symlink ?"
+            fi
+        fi
+    done
+
+    # restart if necessary
+    if [ "$changed" != "" ]; then
+        echo "(re)starting service dnsmasq"
+        sudo systemctl restart dnsmasq
+    fi
+
+    # enabling dnsmasq, if running
+    if [ "$(systemctl is-active dnsmasq)" == "active" ] && \
+      [ "$(systemctl is-enabled dnsmasq)" == "disabled" ]; then
+        echo "enabling service dnsmasq"
+        sudo systemctl enable dnsmasq
+    fi
+
+    echo "done :-)"
+}
+
+function robo_setup_server_dnsmasq_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "restores the old behaviour of the internal network. \
+Additionally uninstalls dnsmasq."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # Undo the configuration
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
+
+    # stop & disable dnsmasq
+    if [ "$(systemctl is-active dnsmasq)" == "active" ]; then
+        echo "stopping service dnsmasq"
+        sudo systemctl stop dnsmasq
+    fi
+    if [ "$(systemctl is-enabled dnsmasq)" == "enabled" ]; then
+        echo "disabling service dnsmasq"
+        sudo systemctl disable dnsmasq
+    fi
+
+    # remove files
+    # iterate over all config_files
+    changed=""
+    files="$(ls "$PATH_LOCAL")"
+    for file in $files; do
+        echo "removing ${PATH_CONFIG}${file}"
+        if [ ! -e "${PATH_CONFIG}${file}" ]; then
+            echo "    ... already missing"
+        else
+            temp="$(diff --brief "${PATH_LOCAL}$file" \
+              "${PATH_CONFIG}${file}")"
+            if [ "$temp" != "" ]; then
+                echo "    ... differs from ${PATH_LOCAL}$file ?"
+            elif [ -L "${PATH_CONFIG}${file}" ]; then
+                echo "    ... is a symlink ?"
+            else
+                sudo rm "${PATH_CONFIG}${file}"
+            fi
+        fi
+    done
+
+    # uninstall dnsmasq
+    echo "uninstall dnsmasq"
+    sudo apt remove dnsmasq
+
+    echo "done :-)"
+}

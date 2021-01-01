@@ -94,6 +94,10 @@ function robo_help_setup() {
         echo "6. install client packages (this may take a while)"
         echo "    $ robo_system_install"
         echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "7. setup dnsmasq (dhcp+dns)"
+        echo "    $ robo_setup_server_dnsmasq"
+        echo -e "\n<enter>\n"; read dummy
     fi
 
     echo "... ToDo ..."
