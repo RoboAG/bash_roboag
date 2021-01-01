@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 10 12
+# 2021 01 01
 
 function robo_help_setup() {
 
@@ -45,10 +45,17 @@ function robo_help_setup() {
     fi
 
     echo ""
-    echo "### Setup computer ###"
+    if [ "$system_flag" != "server" ]; then
+        echo "### Setup CLIENT ###"
+    else
+        echo "### Setup SERVER ###"
+    fi
     echo ""
     echo "1. simple configurations"
     echo "    $ config_bash_search"
+    if [ "$system_flag" == "server" ]; then
+        echo "    $ config_bash_histsize"
+    fi
     echo "    $ config_clear_home"
     echo -e "\n<enter>\n"; read dummy
 
@@ -58,6 +65,10 @@ function robo_help_setup() {
     if [ "$system_flag" != "server" ]; then
         echo "    $ robo_config_aptcacher   (if not in standalone-mode)"
     fi
+    echo -e "\n<enter>\n"; read dummy
+
+    echo ""
+    echo "3. install packages (this may take a while)"
     echo "    $ robo_system_update"
     echo "    $ sudo reboot"
     if [ "$system_flag" == "client" ]; then
@@ -69,15 +80,19 @@ function robo_help_setup() {
 
     if [ "$system_flag" == "server" ]; then
         echo ""
-        echo "3. setup network"
+        echo "4. setup network"
         echo "    $ robo_setup_server_interfaces"
         echo "    $ sudo reboot"
         echo -e "\n<enter>\n"; read dummy
         echo ""
-        echo "4. setup apt-cacher-ng"
+        echo "5. setup apt-cacher-ng"
         echo "    $ robo_setup_server_aptcacher"
         echo "    $ robo_config_aptcacher"
         echo "    $ robo_system_update"
+        echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "6. install client packages (this may take a while)"
+        echo "    $ robo_system_install"
         echo -e "\n<enter>\n"; read dummy
     fi
 
