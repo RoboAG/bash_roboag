@@ -120,3 +120,62 @@ function robo_system_install() {
 
     echo "done :-)"
 }
+
+#***************************[check]******************************************
+# 2021 01 01
+
+function robo_system_wtf() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 0 parameters"
+        echo "This function checks several aspects of the configuration."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+
+        robo_setup_server_interfaces_check
+        robo_setup_server_dnsmasq_check
+
+    else
+        echo "... no client-specific checks yet"
+    fi
+
+    robo_system_check_internet
+}
+
+# 2021 01 01
+function robo_system_check_internet() {
+
+   # initial output
+    echo -n "internet ..."
+
+    # check for internet connection
+    ping -q -c 1 -w 2 "$1" 8.8.8.8 1>&- 2>&-
+    if [ $? -ne 0 ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  no internet connection"
+    fi;
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
