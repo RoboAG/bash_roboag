@@ -14,18 +14,24 @@ fi
 
 
 #***************************[server paths]************************************
-# 2020 09 24
+# 2021 01 01
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
-export _ROBO_SERVER_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag/"
-export _ROBO_SERVER_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax/"
+export _ROBO_SERVER_PATH_DATA2="/media/share/"
 
 
 if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
 
-    # setup hard-drives
-    export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_ROBOAG}"
-    export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_ROBOSAX}"
+    # check if data-folder exists
+    if [ -d "$_ROBO_SERVER_PATH_DATA" ]; then
+        export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA}roboag"
+        export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA}robosax"
+    elif [ -d "$_ROBO_SERVER_PATH_DATA2" ]; then
+        export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA2}roboag"
+        export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA2}robosax"
+    #else
+        # echo "missing main data path"
+    fi
 fi
 
