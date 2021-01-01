@@ -86,7 +86,7 @@ function robo_setup_server_interfaces() {
             print \"      dhcp4: no\"
             print \"      dhcp6: no\"
             print \"      optional: true\"
-            print \"      addresses: [${_ROBO_SERVER_IP}/24]\"
+            print \"      addresses: [${_ROBO_SERVER_IP_MASK2}]\"
             print \"      match:\"
             print \"        macaddress: ${mac_intern}\"
             print \"      set-name: eth_intern\"

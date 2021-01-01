@@ -147,15 +147,24 @@ function robo_system_wtf() {
     fi
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
-
         robo_setup_server_interfaces_check
         robo_setup_server_dnsmasq_check
-
     else
         echo "... no client-specific checks yet"
     fi
 
     robo_system_check_internet
+
+    # checks which need sudo rights
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        if sudo -n true 2> /dev/null; then
+            robo_config_server_internet_check
+        else
+            echo ""
+            echo "not executing the following checks:"
+            echo "  $ robo_config_server_internet_check"
+        fi
+    fi
 }
 
 # 2021 01 01
