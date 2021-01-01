@@ -168,3 +168,65 @@ function robo_config_server_internet_off() {
 
     echo "done :-)"
 }
+
+
+
+#***************************[dhcp]*******************************************
+# 2021 01 01
+
+function robo_config_server_dhcp_check() {
+
+    # Check the configuration
+    FILENAME_LEASES="/var/lib/misc/dnsmasq.leases"
+    FILENAME_DHCP="/etc/dnsmasq.d/dhcp_hosts.conf"
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "dhcp ... "
+
+    # check status of service
+    config_check_service dnsmasq "quiet" "enabled"
+    if [ $? -ne 0 ]; then error_flag=1; fi
+
+    # check if lease file is there
+    if [ ! -e "$FILENAME_LEASES" ]; then
+        error_flag=1
+        echo ""
+        echo "  missing file of leases"
+        echo -n "    (${FILENAME_LEASES})"
+    else
+        leases="$(cat "$FILENAME_LEASES")"
+        macs="$(echo $leases | awk '{print $2}')"
+    fi
+
+    # check if dhcp file is there
+    if [ ! -e "$FILENAME_DHCP" ]; then
+        error_flag=1
+        echo ""
+        echo "  missing file of dhcp definitions"
+        echo -n "    (${FILENAME_DHCP})"
+    else
+        dhcp="$(cat "$FILENAME_DHCP" | grep -v "#.*$")"
+    fi
+
+    # iterate over all macs
+    for mac in $macs; do
+        if echo "$dhcp" | grep "$mac" > /dev/null; then
+            continue;
+        fi
+
+        host="$(echo "$leases" | grep "$mac" | awk '{print $2 " " $3 " " $4}')"
+        error_flag=1;
+        echo ""
+        echo -n "  $host"
+    done
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}

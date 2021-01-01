@@ -149,6 +149,7 @@ function robo_system_wtf() {
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_interfaces_check
         robo_setup_server_dnsmasq_check
+        robo_config_server_dhcp_check
     else
         echo "... no client-specific checks yet"
     fi
