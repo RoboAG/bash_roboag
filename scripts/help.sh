@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[all]*********************************************
-# 2020 10 12
+# 2021 01 01
 
 function robo_help_all() {
 
@@ -35,7 +35,7 @@ function robo_help_all() {
     echo -n "  "; $FUNCNAME -h
     echo ""
     echo -n "  "; robo_help_install -h
-    echo -n "  "; echo "robo_help_setup_workspace   #no help"
+    echo -n "  "; robo_help_setup_workspace -h
     echo -n "  "; robo_help_setup -h
     echo ""
     if [ "$SOURCED_BASH_CONFIG" != "" ]; then
@@ -68,7 +68,7 @@ function robo_help_all() {
 
 
 #***************************[help]********************************************
-# 2020 10 12
+# 2021 01 01
 
 function robo_help() {
 
@@ -79,7 +79,7 @@ function robo_help() {
     echo -n "  "; echo "$FUNCNAME                   #no help"
     echo -n "  "; robo_help_all -h
     echo -n "  "; robo_help_install -h
-    echo -n "  "; echo "robo_help_setup_workspace   #no help"
+    echo -n "  "; robo_help_setup_workspace -h
     echo -n "  "; robo_help_setup -h
     echo ""
     echo "repository functions"
