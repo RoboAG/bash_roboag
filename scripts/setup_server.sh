@@ -116,6 +116,40 @@ function robo_setup_server_interfaces() {
     echo "done :-)"
 }
 
+function robo_setup_server_interfaces_check() {
+
+    # Check the configuration
+    FILENAME_CONFIG="/etc/netplan/01-roboag-setup-interfaces.yaml"
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "interfaces ... "
+
+    # check if eth_intern exists
+    interfaces="$(ip --brief link | grep -o "^[^ ]*")"
+    if [ "$(echo "$interfaces" | grep eth_intern)" == "" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  missing interface eth_intern"
+    fi
+
+    # check config file
+    if [ ! -e "${FILENAME_CONFIG}" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing config file ${PATH_CONFIG}"
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
+
 function robo_setup_server_interfaces_restore() {
 
     # print help and check for user agreement
