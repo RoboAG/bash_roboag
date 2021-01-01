@@ -11,7 +11,7 @@ alias robo_setup_server_aptcacher_restore="server_config_aptcacher_restore"
 
 
 #***************************[network interfaces]******************************
-# 2020 10 12
+# 2021 01 01
 
 function robo_setup_server_interfaces() {
 
@@ -63,7 +63,8 @@ function robo_setup_server_interfaces() {
     # setup external network
     while true; do
         echo ""
-        echo "Setup EXTERNAL network (skipped if empty; otherwise become eth_extern)"
+        echo -n "Setup EXTERNAL network "
+        echo "(skipped if empty; otherwise become eth_extern)"
         echo -n "Enter mac-address: "
         read mac
 
