@@ -162,10 +162,10 @@ function robo_system_wtf() {
 function robo_system_check_internet() {
 
    # initial output
-    echo -n "internet ..."
+    echo -n "internet ... "
 
     # check for internet connection
-    ping -q -c 1 -w 2 "$1" 8.8.8.8 1>&- 2>&-
+    ping -q -c 1 -w 2 8.8.8.8 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         error_flag=1;
         echo ""
