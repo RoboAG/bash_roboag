@@ -144,8 +144,8 @@ function robo_setup_server_dnsmasq() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "sets the config of the internal network (eth_intern).\
-      Additionally installs dnsmasq."
+      "sets the config of the internal network (eth_intern). \
+Additionally installs dnsmasq."
     if [ $? -ne 0 ]; then return -1; fi
 
     # check current mode
@@ -184,14 +184,6 @@ function robo_setup_server_dnsmasq() {
             echo "    copy from ${PATH_LOCAL}$file"
             sudo cp "${PATH_LOCAL}$file" "${PATH_CONFIG}${file}"
             changed=1
-        else
-            temp="$(diff --brief "${PATH_LOCAL}$file" \
-              "${PATH_CONFIG}${file}")"
-            if [ "$temp" != "" ]; then
-                echo "    ... differs from ${PATH_LOCAL}$file ?"
-            elif [ -L "${PATH_CONFIG}${file}" ]; then
-                echo "    ... is a symlink ?"
-            fi
         fi
     done
 
@@ -209,6 +201,52 @@ function robo_setup_server_dnsmasq() {
     fi
 
     echo "done :-)"
+}
+
+function robo_setup_server_dnsmasq_check() {
+
+    # Check the configuration
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "dnsmasq ... "
+
+    # check status of service
+    config_check_service dnsmasq "quiet" "enabled"
+    if [ $? -ne 0 ]; then error_flag=1; fi
+
+    # iterate over all config_files
+    files="$(ls "$PATH_LOCAL")"
+    for file in $files; do
+        if [ ! -e "${PATH_CONFIG}${file}" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  missing file ${PATH_CONFIG}${file}"
+        else
+            temp="$(diff --brief "${PATH_LOCAL}$file" \
+              "${PATH_CONFIG}${file}")"
+            if [ "$temp" != "" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  modified file ${PATH_CONFIG}${file}"
+            elif [ -L "${PATH_CONFIG}${file}" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  file ${PATH_CONFIG}${file} is a symlink"
+            fi
+        fi
+    done
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
 }
 
 function robo_setup_server_dnsmasq_restore() {
@@ -241,15 +279,15 @@ Additionally uninstalls dnsmasq."
         echo "removing ${PATH_CONFIG}${file}"
         if [ ! -e "${PATH_CONFIG}${file}" ]; then
             echo "    ... already missing"
+        elif [ -L "${PATH_CONFIG}${file}" ]; then
+            sudo rm "${PATH_CONFIG}${file}"
         else
             temp="$(diff --brief "${PATH_LOCAL}$file" \
               "${PATH_CONFIG}${file}")"
-            if [ "$temp" != "" ]; then
-                echo "    ... differs from ${PATH_LOCAL}$file ?"
-            elif [ -L "${PATH_CONFIG}${file}" ]; then
-                echo "    ... is a symlink ?"
-            else
+            if [ "$temp" == "" ]; then
                 sudo rm "${PATH_CONFIG}${file}"
+            else
+                echo "    ... modified file"
             fi
         fi
     done
