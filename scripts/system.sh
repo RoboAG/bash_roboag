@@ -161,6 +161,9 @@ function robo_system_wtf() {
 # 2021 01 01
 function robo_system_check_internet() {
 
+    # init variables
+    error_flag=0;
+
    # initial output
     echo -n "internet ... "
 
