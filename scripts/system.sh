@@ -8,7 +8,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2020 12 29
+# 2021 01 01
 
 function robo_system_install() {
 
@@ -110,8 +110,6 @@ function robo_system_install() {
             apt-cacher-ng
 
             samba samba-common
-
-            isc-dhcp-server
 
             apache2
             mariadb-server
