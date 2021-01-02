@@ -148,8 +148,8 @@ function _robo_config_need_client() {
 
 
 #***************************[apt-cacher-ng]***********************************
-# 2020 12 31
 
+# 2020 12 31
 function robo_config_aptcacher() {
 
     # print help and check for user agreement
@@ -163,5 +163,15 @@ function robo_config_aptcacher() {
     echo "done :-)"
 }
 
+# 2021 01 02
+function robo_config_aptcacher_check() {
+
+    echo "apt-cacher sources ... "
+    config_source_list_aptcacher_check "quiet"
+    if [ $? -eq 0 ]; then
+        echo "ok"
+    fi
+}
+
+# 2020 12 31
 alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
-alias robo_config_aptcacher_check="config_source_list_aptcacher_check"
