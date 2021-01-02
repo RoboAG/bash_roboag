@@ -131,7 +131,7 @@ function robo_setup_server_interfaces_check() {
     # check if eth_intern exists
     interfaces_intern="$(ip --brief link | grep "^eth_intern")"
     interfaces_carrier="$(ip link | grep -o "^[^ ]*" | grep NO-CARRIER)"
-    if [ "$interface_intern" == "" ]; then
+    if [ "$interfaces_intern" == "" ]; then
         error_flag=1;
         echo ""
         echo -n "  missing interface eth_intern"
