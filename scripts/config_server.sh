@@ -287,3 +287,97 @@ function robo_config_server_dhcp_list() {
         fi
     done
 }
+
+# 2021 01 02
+function robo_config_server_dhcp_add() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME <mac> <ip> [<name>]"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 2-3 parameters"
+        echo "     #1: mac adress"
+        echo "     #2: ip adress"
+        echo "    [#3:]hostname"
+        echo "This function registers the given client at the dhcp server."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    param_mac="$1"
+    param_ip="$2"
+    param_name="$3"
+
+    REGEX_MAC='^((([0-9a-fA-F]{2}):){5})([0-9a-fA-F]{2})$'
+    if [[ ! "$param_mac" =~ $REGEX_MAC ]]; then
+        echo "mac-address \"$param_mac\" is invalid"
+        return -2
+    fi
+    REGEX_IP='^((([0-9]{1,3})\.){3})([0-9]{1,3})$'
+    if [[ ! "$param_ip" =~ $REGEX_IP ]]; then
+        echo "ip-address \"$param_ip\" is invalid"
+        return -2
+    fi
+
+    # check for server
+    _robo_config_need_server "$FUNCNAME"
+
+    # Check the configuration
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    FILENAME_CONFIG="${PATH_CONFIG}dhcp_hosts.conf"
+
+    # check if mac or ip exist
+    dhcp="$(robo_config_server_dhcp_list verbose)"
+    if echo "$dhcp" | grep "$param_mac" > /dev/null; then
+        echo "$FUNCNAME: mac-address already exists."
+        return -3
+    fi
+    if echo "$dhcp" | grep "$param_ip" > /dev/null; then
+        echo "$FUNCNAME: ip-address already exists."
+        return -3
+    fi
+
+    # check if config-file needs to be created
+    if [ ! -f "$FILENAME_CONFIG" ]; then
+        if [ ! -d "$PATH_CONFIG" ]; then
+            echo "mkdir \"PATH_CONFIG\""
+            sudo mkdir -p "$PATH_CONFIG";
+        fi
+        echo "creating $FILENAME_CONFIG"
+        (
+            echo "# Setting up dhcp-adresses of local machines"
+            echo "#"
+            echo "# This file is modified by config-scripts."
+            echo "#   https://github.com/peterweissig/bash_config"
+            echo "#"
+            echo "# robo_config_server_dhcp_add"
+            echo "# robo_config_server_dhcp_list"
+            echo "# robo_config_server_dhcp_remove"
+            echo ""
+        ) | sudo tee "$FILENAME_CONFIG" > /dev/null
+    fi
+
+    # create entry for config file
+    if [ "$param_name" != "" ]; then
+        entry="dhcp-host=${param_mac},${param_name},${param_ip},12h"
+    else
+        entry="dhcp-host=${param_mac},${param_ip},12h"
+    fi
+
+    echo "$entry" | sudo tee -a "$FILENAME_CONFIG" > /dev/null
+
+    # store backup
+    config_file_backup "$FILENAME_CONFIG" "dhcp"
+
+    echo "done :-)"
+}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[all]*********************************************
-# 2021 01 01
+# 2021 01 02
 
 function robo_help_all() {
 
@@ -68,13 +68,14 @@ function robo_help_all() {
     echo -n "  "; robo_config_server_internet_on -h
     echo -n "  "; robo_config_server_internet_off -h
     echo -n "  "; robo_config_server_dhcp_list -h
+    echo -n "  "; robo_config_server_dhcp_add -h
     echo ""
 }
 
 
 
 #***************************[help]********************************************
-# 2021 01 01
+# 2021 01 02
 
 function robo_help() {
 
@@ -104,6 +105,7 @@ function robo_help() {
         echo -n "  "; robo_config_server_internet_on -h
         echo -n "  "; robo_config_server_internet_off -h
         echo -n "  "; robo_config_server_dhcp_list -h
+        echo -n "  "; robo_config_server_dhcp_add -h
         echo ""
     fi
 }
