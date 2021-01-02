@@ -129,13 +129,13 @@ function robo_setup_server_interfaces_check() {
     echo -n "interfaces ... "
 
     # check if eth_intern exists
-    interfaces="$(ip link | grep -o "^[^ ]*")"
-    interface_intern="$(echo "$interfaces" | grep "^eth_intern")"
+    interfaces_intern="$(ip --brief link | grep "^eth_intern")"
+    interfaces_carrier="$(ip link | grep -o "^[^ ]*" | grep NO-CARRIER)"
     if [ "$interface_intern" == "" ]; then
         error_flag=1;
         echo ""
         echo -n "  missing interface eth_intern"
-    elif [ "$(echo "$interface_intern" | grep NO-CARRIER)" == "" ]; then
+    elif [ "$interfaces_carrier" != "" ]; then
         error_flag=1;
         echo ""
         echo -n "  missing carrier on eth_intern"
