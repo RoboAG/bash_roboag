@@ -172,7 +172,7 @@ function robo_config_server_internet_off() {
 
 
 #***************************[dhcp]*******************************************
-# 2021 01 01
+# 2021 01 02
 
 function robo_config_server_dhcp_check() {
 
@@ -182,6 +182,9 @@ function robo_config_server_dhcp_check() {
 
     # init variables
     error_flag=0;
+    leases=""
+    dhcp=""
+    macs=""
 
     # initial output
     echo -n "dhcp ... "
@@ -208,7 +211,7 @@ function robo_config_server_dhcp_check() {
         echo "  missing file of dhcp definitions"
         echo -n "    (${FILENAME_DHCP})"
     else
-        dhcp="$(robo_config_server_dhcp_list)"
+        dhcp="$(robo_config_server_dhcp_list verbose)"
     fi
 
     # iterate over all macs
@@ -231,6 +234,7 @@ function robo_config_server_dhcp_check() {
     fi
 }
 
+# 2021 01 01
 function robo_config_server_dhcp_list() {
 
     # print help
