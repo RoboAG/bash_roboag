@@ -64,6 +64,11 @@ function robo_help_all() {
     echo -n "  "; robo_system_install -h
     echo -n "  "; robo_system_wtf -h
     echo ""
+    echo "server functions"
+    echo -n "  "; robo_config_server_internet_on -h
+    echo -n "  "; robo_config_server_internet_off -h
+    echo -n "  "; robo_config_server_dhcp_list -h
+    echo ""
 }
 
 
@@ -93,4 +98,12 @@ function robo_help() {
     echo -n "  "; robo_system_install -h
     echo -n "  "; robo_system_wtf -h
     echo ""
+
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "server functions"
+        echo -n "  "; robo_config_server_internet_on -h
+        echo -n "  "; robo_config_server_internet_off -h
+        echo -n "  "; robo_config_server_dhcp_list -h
+        echo ""
+    fi
 }
