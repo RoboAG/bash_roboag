@@ -122,7 +122,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 01
+# 2021 01 02
 
 function robo_system_wtf() {
 
@@ -150,8 +150,12 @@ function robo_system_wtf() {
         robo_setup_server_interfaces_check
         robo_setup_server_dnsmasq_check
         robo_config_server_dhcp_check
-    else
+    elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
         echo "... no client-specific checks yet"
+    fi
+
+    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
+        config_source_list_aptcacher_check
     fi
 
     robo_system_check_internet
