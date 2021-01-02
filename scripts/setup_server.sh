@@ -116,6 +116,7 @@ function robo_setup_server_interfaces() {
     echo "done :-)"
 }
 
+# 2021 01 02
 function robo_setup_server_interfaces_check() {
 
     # Check the configuration
@@ -128,11 +129,16 @@ function robo_setup_server_interfaces_check() {
     echo -n "interfaces ... "
 
     # check if eth_intern exists
-    interfaces="$(ip --brief link | grep -o "^[^ ]*")"
-    if [ "$(echo "$interfaces" | grep eth_intern)" == "" ]; then
+    interfaces="$(ip link | grep -o "^[^ ]*")"
+    interface_intern="$(echo "$interfaces" | grep "^eth_intern")"
+    if [ "$interface_intern" == "" ]; then
         error_flag=1;
         echo ""
         echo -n "  missing interface eth_intern"
+    elif [ "$(echo "$interface_intern" | grep NO-CARRIER)" == "" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  missing carrier on eth_intern"
     fi
 
     # check config file
@@ -150,6 +156,7 @@ function robo_setup_server_interfaces_check() {
     fi
 }
 
+# 2021 01 01
 function robo_setup_server_interfaces_restore() {
 
     # print help and check for user agreement
@@ -237,6 +244,7 @@ Additionally installs dnsmasq."
     echo "done :-)"
 }
 
+# 2021 01 01
 function robo_setup_server_dnsmasq_check() {
 
     # Check the configuration
@@ -283,6 +291,7 @@ function robo_setup_server_dnsmasq_check() {
     fi
 }
 
+# 2021 01 01
 function robo_setup_server_dnsmasq_restore() {
 
     # print help and check for user agreement
