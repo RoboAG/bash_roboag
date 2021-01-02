@@ -166,7 +166,7 @@ function robo_config_aptcacher() {
 # 2021 01 02
 function robo_config_aptcacher_check() {
 
-    echo "apt-cacher sources ... "
+    echo -n "apt-cacher sources ... "
     config_source_list_aptcacher_check "quiet"
     if [ $? -eq 0 ]; then
         echo "ok"

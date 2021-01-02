@@ -155,7 +155,7 @@ function robo_system_wtf() {
     fi
 
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
-        config_source_list_aptcacher_check
+        robo_config_aptcacher_check
     fi
 
     robo_system_check_internet
