@@ -31,5 +31,6 @@ else
         echo ""                                        >> ~/.bashrc
         echo "# $(date +"%Y %m %d") sourcing roboag:"  >> ~/.bashrc
         echo "$BASHRC_SOURCE"                          >> ~/.bashrc
+        echo "robo_help_daily"                         >> ~/.bashrc
     fi
 fi
