@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[all]*********************************************
-# 2021 01 02
+# 2021 01 03
 
 function robo_help_all() {
 
@@ -38,6 +38,12 @@ function robo_help_all() {
     echo -n "  "; robo_help_setup_workspace -h
     echo -n "  "; robo_help_setup -h
     echo ""
+    if [ "$SOURCED_BASH_REPO" != "" ]; then
+        echo -n "  "; echo "repo_help                   #no help"
+    fi
+    if [ "$SOURCED_BASH_MASTER_SERVER" != "" ]; then
+        echo -n "  "; echo "server_help                 #no help"
+    fi
     if [ "$SOURCED_BASH_CONFIG" != "" ]; then
         echo -n "  "; echo "config_help                 #no help"
     fi
@@ -49,9 +55,6 @@ function robo_help_all() {
     fi
     if [ "$SOURCED_BASH_NETWORK" != "" ]; then
         echo -n "  "; echo "network_help                #no help"
-    fi
-    if [ "$SOURCED_BASH_REPO" != "" ]; then
-        echo -n "  "; echo "repo_help                   #no help"
     fi
     echo ""
     echo "repository functions"
