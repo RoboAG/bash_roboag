@@ -150,7 +150,8 @@ function robo_system_wtf() {
         robo_setup_server_interfaces_check
         robo_setup_server_dnsmasq_check
         robo_config_server_dhcp_check
-        robo_setup_server_aptcacher_check
+        #robo_setup_server_aptcacher_check # alias didn't work :-(
+        server_config_aptcacher_check
     elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
         echo "... no client-specific checks yet"
     fi
