@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #***************************[apt-cacher-ng]***********************************
-# 2020 10 12
+# 2021 01 03
 
 alias robo_setup_server_aptcacher="server_config_aptcacher \
   ${_ROBO_SERVER_IP}"
-
+alias robo_setup_server_aptcacher_check="server_config_aptcacher_check"
 alias robo_setup_server_aptcacher_restore="server_config_aptcacher_restore"
 
 
