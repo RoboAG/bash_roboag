@@ -18,6 +18,7 @@ fi
 export SOURCED_BASH_MASTER_ROBOAG="$SOURCED_BASH_LAST"
 
 
+
 #***************************[paths and files]*********************************
 # 2020 12 27
 
@@ -35,11 +36,13 @@ else
 fi
 
 
+
 #***************************[help]********************************************
 # 2019 11 20
 
 . ${ROBO_PATH_SCRIPT}scripts/help.sh
 . ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
+
 
 
 #***************************[repository]**************************************
@@ -56,13 +59,15 @@ fi
 . ${ROBO_PATH_SCRIPT}scripts/config_server.sh
 
 
-#***************************[install & setup]*********************************
-# 2020 10 12
 
-. ${ROBO_PATH_SCRIPT}scripts/system.sh
+#***************************[install & setup]*********************************
+# 2021 01 03
 
 #. ${ROBO_PATH_SCRIPT}scripts/setup.sh
 . ${ROBO_PATH_SCRIPT}scripts/setup_server.sh
+
+. ${ROBO_PATH_SCRIPT}scripts/system.sh
+
 
 
 #***************************[other master scripts]****************************
@@ -75,6 +80,7 @@ fi
 if [ -d "${REPO_BASH_MASTER_BASHONLY[0]}" ]; then
     . ${REPO_BASH_MASTER_BASHONLY[0]}bashrc.sh
 fi
+
 
 
 #***************************[robolib]*****************************************
