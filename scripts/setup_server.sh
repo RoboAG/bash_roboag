@@ -342,3 +342,248 @@ Additionally uninstalls dnsmasq."
 
     echo "done :-)"
 }
+
+#***************************[samba]*******************************************
+# 2021 01 03
+
+function robo_setup_server_samba() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "sets the config of samba-server on internal network (eth_intern)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # check if paths to shares are set correctly
+    if [ "$ROBO_PATH_ROBOAG" == "" ]; then
+        echo "Variable ROBO_PATH_ROBOAG is not set."
+        return -3
+    fi
+    if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
+        echo "Directory $ROBO_PATH_ROBOAG does not exist."
+        return -3
+    fi
+    if [ "$ROBO_PATH_ROBOSAX" == "" ]; then
+        echo "Variable ROBO_PATH_ROBOSAX is not set."
+        return -3
+    fi
+    if [ ! -d "$ROBO_PATH_ROBOSAX" ]; then
+        echo "Directory $ROBO_PATH_ROBOSAX does not exist."
+        return -3
+    fi
+
+    # check internal network interface
+    echo -n "checking "
+    robo_setup_server_interfaces_check
+    if [ $? -ne 0 ]; then return -3; fi
+
+    ## check & install samba server
+    #_config_install_list "samba" quiet
+    #if [ $? -ne 0 ]; then return -4; fi
+
+    # Do the configuration
+    FILENAME_CONFIG="/etc/samba/smb.conf"
+
+    # check if config file exists
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        echo "File \"$FILENAME_CONFIG\" does not exist."
+        echo "Is the samba server correctly installed ?"
+        return -5
+    fi
+
+    # init awk string
+    AWK_STRING="$(_robo_setup_server_samba_getawk)"
+    if [ $? -ne 0 ]; then return -6; fi
+
+    # apply awk string
+    _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+    if [ $? -ne 0 ]; then return -7; fi
+
+    echo "(re)starting service smbd"
+    sudo systemctl restart smbd
+
+    # enabling smbd, if running
+    if [ "$(systemctl is-active smbd)" == "active" ] && \
+      [ "$(systemctl is-enabled smbd)" == "disabled" ]; then
+        echo "enabling service smbd"
+        sudo systemctl enable smbd
+    fi
+
+    echo ""
+    echo "Details can be shown here:"
+    echo "  $ testparm --suppress-prompt"
+    echo ""
+
+    echo "done :-)"
+}
+
+# 2021 01 03
+function robo_setup_server_samba_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "samba server ... "
+
+    # check status of service
+    config_check_service smbd "quiet" "enabled"
+    if [ $? -ne 0 ]; then error_flag=1; fi
+
+    # check for shares
+    AWK_STRING="$(_robo_setup_server_samba_getawk)"
+    if [ $? -ne 0 ]; then
+        error_flag=1
+        echo ""
+        echo -n "  error from _robo_setup_server_samba_getawk"
+    fi
+
+    FILENAME_CONFIG="/etc/samba/smb.conf"
+    content="$(cat "$FILENAME_CONFIG")"
+    error_subflag=0;
+
+    if [ "$(echo "$content" | grep "\[roboag\]")" == "" ]; then
+        error_subflag=1;
+        error_flag=1
+        echo ""
+        echo -n "  missing share [roboag]"
+    fi
+    if [ "$(echo "$content" | grep "\[robosax\]")" == "" ]; then
+        error_subflag=1;
+        error_flag=1
+        echo ""
+        echo -n "  missing share [robosax]"
+    fi
+
+    # check awk-script
+    if [ $error_subflag -eq 0 ]; then
+        result="$(echo "$content" | awk "$AWK_STRING")"
+        if [ "$result" != "$content" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  missing config"
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
+
+# 2021 01 03
+function robo_setup_server_samba_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "restores the old behaviour of the samba server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # stop & disable samba deamon
+    if [ "$(systemctl is-active smbd)" == "active" ]; then
+        echo "stopping service smbd"
+        sudo systemctl stop smbd
+    fi
+    if [ "$(systemctl is-enabled smbd)" == "enabled" ]; then
+        echo "disabling service smbd"
+        sudo systemctl disable smbd
+    fi
+
+    # Undo the configuration
+    FILENAME_CONFIG="/etc/samba/smb.conf"
+
+
+    _config_file_restore "$FILENAME_CONFIG" "backup-once"
+
+    echo "done :-)"
+}
+
+function _robo_setup_server_samba_getawk() {
+
+    FILENAME_CONFIG="/etc/samba/smb.conf"
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "This function returns the awk-script needed to modify the"
+        echo "sambe config file $FILENAME_CONFIG."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check if config file exists
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        echo "$FUNCNAME: Error"
+        echo "File \"$FILENAME_CONFIG\" does not exist."
+        return -2
+    fi
+
+    # init awk string
+    echo "
+        # server name
+        \$0 ~ /^[^;#]*server string = %h/ {
+          print \"# [EDIT]: \",\$0
+          \$0 = \"   server string = Samba-Share der RoboAG\"
+        }
+
+        # interface
+        \$0 ~ /interfaces =/ && \$0 ~ /^;/ {
+          print \"# [EDIT]: \",\$0
+          \$0 = \"   interfaces = 127.0.0.0/8 eth_intern\"
+        }
+        \$0 ~ /bind interfaces only =/ && \$0 ~ /^;/ {
+          print \"# [EDIT]: \",\$0
+          \$0 = \"   bind interfaces only = yes\"
+        }
+
+        { print \$0 }
+    "
+
+    # check if share "roboag" and "robosax" exists
+    content="$(cat "$FILENAME_CONFIG")"
+
+    if [ "$(echo "$content" | grep "\[roboag\]")" == "" ]; then
+        echo "
+            # Add RoboAG-Share (internal)
+            END {
+                print \"\"
+                print \"[roboag]\"
+                print \"  path = $ROBO_PATH_ROBOAG\"
+                print \"  comment = Interne Freigabe der RoboAG\"
+                print \"  writeable = yes\"
+                print \"\"
+            }
+        "
+    fi
+    if [ "$(echo "$content" | grep "\[robosax\]")" == "" ]; then
+        echo "
+            # Add RoboSAX-Share (public)
+            END {
+                print \"\"
+                print \"[robosax]\"
+                print \"  path = $ROBO_PATH_ROBOSAX\"
+                print \"  comment = Freigabe des RoboSAX\"
+                print \"  guest ok = yes\"
+                print \"  writeable = no\"
+                print \"\"
+            }
+        "
+    fi
+}

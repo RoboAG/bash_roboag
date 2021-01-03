@@ -23,6 +23,7 @@ function robo_help_daily() {
         echo ""
         echo "  $ sudo systemctl restart dnsmasq       # dns & dhcp"
         echo "  $ sudo systemctl restart apt-cacher-ng # apt-cacher"
+        echo "  $ sudo systemctl restart smbd          # samba shares"
         echo ""
     fi
 

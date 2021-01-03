@@ -98,6 +98,10 @@ function robo_help_setup() {
         echo "setup dnsmasq (dhcp+dns)"
         echo "    $ robo_setup_server_dnsmasq"
         echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "setup samba (file shares)"
+        echo "    $ robo_setup_server_samba"
+        echo -e "\n<enter>\n"; read dummy
     fi
 
     echo ""
