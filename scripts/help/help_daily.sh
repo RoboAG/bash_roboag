@@ -16,6 +16,16 @@ function robo_help_daily() {
     fi
     echo ""
 
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "server deamons"
+        echo "  $ robo_system_wtf"
+        echo "  $ service --status-all"
+        echo ""
+        echo "  $ sudo systemctl restart dnsmasq       # dns & dhcp"
+        echo "  $ sudo systemctl restart apt-cacher-ng # apt-cacher"
+        echo ""
+    fi
+
     echo "help"
     echo "  $ robo_help           # overview"
     echo "  $ robo_help_daily     # this script"
