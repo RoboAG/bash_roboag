@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 01
+# 2021 01 03
 
 function robo_help_setup() {
 
@@ -51,7 +51,7 @@ function robo_help_setup() {
         echo "### Setup SERVER ###"
     fi
     echo ""
-    echo "1. simple configurations"
+    echo "simple configurations"
     echo "    $ config_bash_search"
     if [ "$system_flag" == "server" ]; then
         echo "    $ config_bash_histsize"
@@ -60,7 +60,7 @@ function robo_help_setup() {
     echo -e "\n<enter>\n"; read dummy
 
     echo ""
-    echo "2. update sources (this may take a while)"
+    echo "update sources (this may take a while)"
     echo "    $ config_source_list_add_multiverse"
     if [ "$system_flag" != "server" ]; then
         echo "    $ robo_config_aptcacher   (if not in standalone-mode)"
@@ -68,7 +68,7 @@ function robo_help_setup() {
     echo -e "\n<enter>\n"; read dummy
 
     echo ""
-    echo "3. install packages (this may take a while)"
+    echo "install packages (this may take a while)"
     echo "    $ robo_system_update"
     echo "    $ sudo reboot"
     if [ "$system_flag" == "client" ]; then
@@ -80,27 +80,33 @@ function robo_help_setup() {
 
     if [ "$system_flag" == "server" ]; then
         echo ""
-        echo "4. setup network"
+        echo "setup network"
         echo "    $ robo_setup_server_interfaces"
         echo "    $ sudo reboot"
         echo -e "\n<enter>\n"; read dummy
         echo ""
-        echo "5. setup apt-cacher-ng"
+        echo "setup apt-cacher-ng"
         echo "    $ robo_setup_server_aptcacher"
         echo "    $ robo_config_aptcacher"
         echo "    $ robo_system_update"
         echo -e "\n<enter>\n"; read dummy
         echo ""
-        echo "6. install client packages (this may take a while)"
+        echo "install client packages (this may take a while)"
         echo "    $ robo_system_install"
         echo -e "\n<enter>\n"; read dummy
         echo ""
-        echo "7. setup dnsmasq (dhcp+dns)"
+        echo "setup dnsmasq (dhcp+dns)"
         echo "    $ robo_setup_server_dnsmasq"
         echo -e "\n<enter>\n"; read dummy
     fi
 
+    echo ""
     echo "... ToDo ..."
+    echo -e "\n<enter>\n"; read dummy
+
+    echo ""
+    echo "check system"
+    echo "    $ robo_system_wtf"
     echo -e "\n<enter>\n"; read dummy
 
     echo "done :-)"
