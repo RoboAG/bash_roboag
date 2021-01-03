@@ -37,6 +37,7 @@ function robo_help_all() {
     echo -n "  "; robo_help_install -h
     echo -n "  "; robo_help_setup_workspace -h
     echo -n "  "; robo_help_setup -h
+    echo -n "  "; echo "robo_help_daily             #no help"
     echo ""
     if [ "$SOURCED_BASH_REPO" != "" ]; then
         echo -n "  "; echo "repo_help                   #no help"
@@ -78,7 +79,7 @@ function robo_help_all() {
 
 
 #***************************[help]********************************************
-# 2021 01 02
+# 2021 01 03
 
 function robo_help() {
 
@@ -91,6 +92,7 @@ function robo_help() {
     echo -n "  "; robo_help_install -h
     echo -n "  "; robo_help_setup_workspace -h
     echo -n "  "; robo_help_setup -h
+    echo -n "  "; echo "robo_help_daily             #no help"
     echo ""
     echo "repository functions"
     echo -n "  "; echo "robo_repo_overview          #no help"
