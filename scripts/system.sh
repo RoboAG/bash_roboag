@@ -152,7 +152,7 @@ function robo_system_wtf() {
         robo_config_server_dhcp_check
         robo_setup_server_aptcacher_check
     elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
-        echo "... no client-specific checks yet"
+        robo_system_check_server
     fi
 
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
@@ -188,6 +188,31 @@ function robo_system_check_internet() {
         error_flag=1;
         echo ""
         echo -n "  no internet connection"
+    fi;
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
+
+# 2021 01 03
+function robo_system_check_server() {
+
+    # init variables
+    error_flag=0;
+
+   # initial output
+    echo -n "roboag server ... "
+
+    # check for internet connection
+    ping -q -c 1 -w 2 ${_ROBO_SERVER_IP} > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  no ping"
     fi;
 
     # final result
