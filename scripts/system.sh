@@ -148,18 +148,24 @@ function robo_system_wtf() {
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_interfaces_check
-        robo_setup_server_dnsmasq_check
-        robo_config_server_dhcp_check
-        robo_setup_server_aptcacher_check
-    elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+    fi
+    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
         robo_system_check_server
     fi
+    robo_system_check_internet
 
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        robo_setup_server_dnsmasq_check
+        robo_config_server_dhcp_check
+
+        robo_setup_server_samba_check
+
+        robo_setup_server_aptcacher_check
+    fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
         robo_config_aptcacher_check
     fi
 
-    robo_system_check_internet
 
     # checks which need sudo rights
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
