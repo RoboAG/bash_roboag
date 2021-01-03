@@ -116,7 +116,7 @@ function robo_setup_server_interfaces() {
     echo "done :-)"
 }
 
-# 2021 01 02
+# 2021 01 03
 function robo_setup_server_interfaces_check() {
 
     # Check the configuration
@@ -145,7 +145,7 @@ function robo_setup_server_interfaces_check() {
     if [ ! -e "${FILENAME_CONFIG}" ]; then
         error_flag=1
         echo ""
-        echo -n "  missing config file ${PATH_CONFIG}"
+        echo -n "  missing config file ${FILENAME_CONFIG}"
     fi
 
     # final result
