@@ -11,7 +11,7 @@ alias robo_setup_server_aptcacher_restore="server_config_aptcacher_restore"
 
 
 #***************************[network interfaces]******************************
-# 2021 01 01
+# 2021 01 03
 
 function robo_setup_server_interfaces() {
 
@@ -110,8 +110,10 @@ function robo_setup_server_interfaces() {
     _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "create-config"
     if [ $? -ne 0 ]; then return -5; fi
 
+    echo ""
     echo "After updating the settings, the server should be REBOOTED."
     echo "  $ sudo reboot"
+    echo ""
 
     echo "done :-)"
 }
@@ -156,7 +158,7 @@ function robo_setup_server_interfaces_check() {
     fi
 }
 
-# 2021 01 01
+# 2021 01 03
 function robo_setup_server_interfaces_restore() {
 
     # print help and check for user agreement
@@ -170,8 +172,10 @@ function robo_setup_server_interfaces_restore() {
     _config_file_restore "$FILENAME_CONFIG" "create-config"
     if [ $? -ne 0 ]; then return -2; fi
 
+    echo ""
     echo "After updating the settings, the server should be REBOOTED."
     echo "  $ sudo reboot"
+    echo ""
 
     echo "done :-)"
 }
