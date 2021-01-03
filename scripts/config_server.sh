@@ -445,7 +445,7 @@ function _robo_config_server_dhcp_create_hostfile() {
             echo "# Setting up dhcp-adresses of local machines"
             echo "#"
             echo "# This file is modified by config-scripts."
-            echo "#   https://github.com/peterweissig/bash_config"
+            echo "#   https://github.com/RoboAG/bash_roboag"
             echo "#"
             echo "# robo_config_server_dhcp_add"
             echo "# robo_config_server_dhcp_list"
