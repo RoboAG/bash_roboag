@@ -314,9 +314,9 @@ function robo_config_server_dhcp_add() {
         return -1
     fi
 
-    param_mac="$1"
+    param_mac="${1,,}"
     param_ip="$2"
-    param_name="$3"
+    param_name="${3,,}"
 
     REGEX_MAC='^((([0-9a-fA-F]{2}):){5})([0-9a-fA-F]{2})$'
     if [[ ! "$param_mac" =~ $REGEX_MAC ]]; then
@@ -339,11 +339,11 @@ function robo_config_server_dhcp_add() {
     # check if mac or ip exist
     dhcp="$(robo_config_server_dhcp_list verbose)"
     if echo "$dhcp" | grep "$param_mac" > /dev/null; then
-        echo "$FUNCNAME: mac-address already exists."
+        echo "$FUNCNAME: mac $param_mac already exists."
         return -3
     fi
     if echo "$dhcp" | grep "$param_ip" > /dev/null; then
-        echo "$FUNCNAME: ip-address already exists."
+        echo "$FUNCNAME: ip $param_ip already exists."
         return -3
     fi
 
