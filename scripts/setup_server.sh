@@ -183,7 +183,7 @@ function robo_setup_server_interfaces_restore() {
 
 
 #***************************[dnsmasq]*****************************************
-# 2021 01 01
+# 2021 01 03
 
 function robo_setup_server_dnsmasq() {
 
@@ -201,19 +201,16 @@ Additionally installs dnsmasq."
     PATH_CONFIG="/etc/dnsmasq.d/"
     PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
 
-    # check for network interfaces
-    interfaces="$(ip --brief link | grep -o "^[^ ]*")"
-    if [ "$(echo "$interfaces" | grep eth_intern)" == "" ]; then
-        echo "Missing interface eth_intern."
-        echo "Did you call robo_setup_server_interfaces ?"
-        return -3
-    fi
+    # check internal network interface
+    echo -n "checking "
+    robo_setup_server_interfaces_check
+    if [ $? -ne 0 ]; then return -3; fi
 
     # check & install dnsmasq
     _config_install_list "dnsmasq" quiet
     if [ $? -ne 0 ]; then return -4; fi
 
-    # check for previous configurations
+    # check if config path exists
     if [ ! -d "$PATH_CONFIG" ]; then
         echo "Directory \"$PATH_CONFIG\" does not exist."
         echo "Is dnsmasq correctly installed ?"
