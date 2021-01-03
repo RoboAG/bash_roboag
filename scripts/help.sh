@@ -73,6 +73,7 @@ function robo_help_all() {
     echo -n "  "; robo_config_server_internet_off -h
     echo -n "  "; robo_config_server_dhcp_list -h
     echo -n "  "; robo_config_server_dhcp_add -h
+    echo -n "  "; robo_config_server_dhcp_edit -h
     echo ""
 }
 
@@ -111,6 +112,7 @@ function robo_help() {
         echo -n "  "; robo_config_server_internet_off -h
         echo -n "  "; robo_config_server_dhcp_list -h
         echo -n "  "; robo_config_server_dhcp_add -h
+        echo -n "  "; robo_config_server_dhcp_edit -h
         echo ""
     fi
 }

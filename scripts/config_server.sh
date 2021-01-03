@@ -288,7 +288,7 @@ function robo_config_server_dhcp_list() {
     done
 }
 
-# 2021 01 02
+# 2021 01 03
 function robo_config_server_dhcp_add() {
 
     # print help
@@ -348,24 +348,8 @@ function robo_config_server_dhcp_add() {
     fi
 
     # check if config-file needs to be created
-    if [ ! -f "$FILENAME_CONFIG" ]; then
-        if [ ! -d "$PATH_CONFIG" ]; then
-            echo "mkdir \"PATH_CONFIG\""
-            sudo mkdir -p "$PATH_CONFIG";
-        fi
-        echo "creating $FILENAME_CONFIG"
-        (
-            echo "# Setting up dhcp-adresses of local machines"
-            echo "#"
-            echo "# This file is modified by config-scripts."
-            echo "#   https://github.com/peterweissig/bash_config"
-            echo "#"
-            echo "# robo_config_server_dhcp_add"
-            echo "# robo_config_server_dhcp_list"
-            echo "# robo_config_server_dhcp_remove"
-            echo ""
-        ) | sudo tee "$FILENAME_CONFIG" > /dev/null
-    fi
+    _robo_config_server_dhcp_create_hostfile
+    if [ $? -ne 0 ]; then return -4; fi
 
     # create entry for config file
     if [ "$param_name" != "" ]; then
@@ -380,4 +364,93 @@ function robo_config_server_dhcp_add() {
     config_file_backup "$FILENAME_CONFIG" "dhcp"
 
     echo "done :-)"
+}
+
+# 2021 01 03
+function robo_config_server_dhcp_edit() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "This function edits host list of the dhcp server."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check for server
+    _robo_config_need_server "$FUNCNAME"
+
+    # Check the configuration
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    FILENAME_CONFIG="${PATH_CONFIG}dhcp_hosts.conf"
+
+    # check if config-file needs to be created
+    _robo_config_server_dhcp_create_hostfile
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # edit file (and store backups)
+    _config_file_modify_full "$FILENAME_CONFIG" "dhcp" "" "normal" ""
+}
+
+# 2021 01 03
+function _robo_config_server_dhcp_create_hostfile() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "This function creates the host list of the dhcp server,"
+        echo "if necessary"
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    PATH_CONFIG="/etc/dnsmasq.d/"
+    FILENAME_CONFIG="${PATH_CONFIG}dhcp_hosts.conf"
+
+    # check if config-file needs to be created
+    if [ ! -d "$PATH_CONFIG" ]; then
+        echo "$FUNCNAME: Error"
+        echo "Directory \"PATH_CONFIG\" does not exist."
+        echo "Is dnsmasq installed ?"
+        return -2
+    fi
+
+    if [ ! -f "$FILENAME_CONFIG" ]; then
+        echo "creating $FILENAME_CONFIG"
+        (
+            echo "# Setting up dhcp-adresses of local machines"
+            echo "#"
+            echo "# This file is modified by config-scripts."
+            echo "#   https://github.com/peterweissig/bash_config"
+            echo "#"
+            echo "# robo_config_server_dhcp_add"
+            echo "# robo_config_server_dhcp_list"
+            echo "# robo_config_server_dhcp_edit"
+            echo ""
+        ) | sudo tee "$FILENAME_CONFIG" > /dev/null
+    fi
 }
