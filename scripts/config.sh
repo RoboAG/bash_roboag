@@ -31,7 +31,7 @@ fi
 
 
 
-#***************************[set mode of operation]***************************
+#***************************[mode of operation]*******************************
 # 2019 09 10
 
 # unset all possible config states
@@ -57,8 +57,8 @@ fi
 
 
 #***************************[check mode of operation]*************************
-# 2020 10 12
 
+# 2020 10 12
 function _robo_config_need_server() {
 
     # print help
@@ -102,6 +102,7 @@ function _robo_config_need_server() {
     fi
 }
 
+# 2020 10 12
 function _robo_config_need_client() {
 
     # print help
@@ -163,13 +164,16 @@ function robo_config_aptcacher() {
     echo "done :-)"
 }
 
-# 2021 01 02
+# 2021 01 03
 function robo_config_aptcacher_check() {
 
     echo -n "apt-cacher sources ... "
     config_source_list_aptcacher_check "quiet"
     if [ $? -eq 0 ]; then
         echo "ok"
+    else
+        echo ""
+        echo "  --> robo_config_aptcacher"
     fi
 }
 
