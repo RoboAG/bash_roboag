@@ -184,7 +184,7 @@ alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
 
 #***************************[user]********************************************
 
-# 2021 01 03
+# 2021 01 04
 function robo_config_user() {
 
     # print help and check for user agreement
@@ -198,8 +198,8 @@ function robo_config_user() {
 
 
     # check user roboag
-    groups="$(id roboag 2> /dev/null)"
-    if [ $? -ne 0 ]; then
+    getent_roboag="$(getent passwd roboag)"
+    if [ "$getent_roboag" == "" ]; then
         # create user roboag
         if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             sudo adduser --no-create-home \
@@ -227,10 +227,32 @@ function robo_config_user() {
         fi
     done
 
+    # update permissions of users home
+    current_mode="$(stat -c "%a" "$HOME")"
+    if [ $? -ne 0 ] || [ "$current_mode" != "700" ]; then
+        echo "changing permissions for $HOME"
+        echo "  (from $current_mode to 700)"
+        chmod 700 "$HOME"
+    fi
+
+    # update permissions of roboags home
+    if [ "$getent_roboag" != "" ]; then
+        home_roboag="$(echo "$getent_roboag" | \
+        awk --field-separator=: "{print \$6 }")"
+        if [ -d "$home_roboag" ]; then
+            current_mode="$(stat -c "%a" "$home_roboag")"
+            if [ $? -ne 0 ] || [ "$current_mode" != "770" ]; then
+                echo "changing permissions for $home_roboag"
+                echo "  (from $current_mode to 770)"
+                sudo chmod 770 "$home_roboag"
+            fi
+        fi
+    fi
+
     echo "done :-)"
 }
 
-# 2021 01 03
+# 2021 01 04
 function robo_config_user_check() {
 
     # init variables
@@ -243,10 +265,10 @@ function robo_config_user_check() {
     echo -n "users & groups ... "
 
     # check user roboag
-    id roboag > /dev/null 2> /dev/null
-    if [ $? -eq 0 ]; then
+    getent_roboag="$(getent passwd roboag)"
+    if [ "$getent_roboag" != "" ]; then
         user_roboag="1"
-        groups_guru="$groups_guru roboag"
+        groups_guru="${groups_guru} roboag"
     fi
 
     # check groups of current user
@@ -260,7 +282,6 @@ function robo_config_user_check() {
     done
 
     # check user roboag and it's groups
-
     if [ "$user_roboag" == "" ]; then
         error_flag=1
         echo ""
@@ -276,6 +297,28 @@ function robo_config_user_check() {
         done
     fi
 
+    # update permissions of users home
+    current_mode="$(stat -c "%a" "$HOME")"
+    if [ $? -ne 0 ] || [ "$current_mode" != "700" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  mode of $HOME is not 700"
+    fi
+
+    # update permissions of roboags home
+    if [ "$getent_roboag" != "" ]; then
+        home_roboag="$(echo "$getent_roboag" | \
+        awk --field-separator=: "{print \$6 }")"
+        if [ -d "$home_roboag" ]; then
+            current_mode="$(stat -c "%a" "$home_roboag")"
+            if [ $? -ne 0 ] || [ "$current_mode" != "770" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  mode of $home_roboag is not 770"
+            fi
+        fi
+    fi
+
     if [ $error_flag -eq 0 ]; then
         echo "ok"
     else
@@ -284,7 +327,7 @@ function robo_config_user_check() {
     fi
 }
 
-# 2021 01 03
+# 2021 01 04
 function robo_config_user_restore() {
 
     # print help and check for user agreement
@@ -295,8 +338,7 @@ function robo_config_user_restore() {
     user_roboag=""
 
     # check user roboag
-    groups="$(id roboag 2> /dev/null)"
-    if [ $? -ne 0 ]; then
+    if [ "$(getent passwd roboag)" == "" ]; then
         echo "user roboag does not exist"
     else
         # check samba db
@@ -311,12 +353,11 @@ function robo_config_user_restore() {
     fi
 
     # check group roboag
-    groups="$(cat /etc/group | grep -o "^[^:]*")"
-    if [ $? -ne 0 ]; then
-        echo "group roboag does not exist (anymore)"
-    else
+    if [ "$(getent group roboag)" == "" ]; then
         # remove user
         sudo delgroup roboag
+    else
+        echo "group roboag does not exist (anymore)"
     fi
 
     echo "done :-)"
