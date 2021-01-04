@@ -193,16 +193,13 @@ function robo_config_user() {
 
     # init variables
     user_roboag=""
-    groups_guru="sudo plugdev dialout"
+    groups_guru="sudo plugdev dialout roboag"
     groups_roboag="plugdev dialout"
 
 
     # check user roboag
     groups="$(id roboag 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        user_roboag="1"
-        groups_guru="$groups_guru roboag"
-    else
+    if [ $? -ne 0 ]; then
         # create user roboag
         if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             sudo adduser --no-create-home \
@@ -285,4 +282,41 @@ function robo_config_user_check() {
         echo ""
         echo "  --> robo_config_user"
     fi
+}
+
+# 2021 01 03
+function robo_config_user_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes user/group roboag."
+
+    # init variables
+    user_roboag=""
+
+    # check user roboag
+    groups="$(id roboag 2> /dev/null)"
+    if [ $? -ne 0 ]; then
+        echo "user roboag does not exist"
+    else
+        # check samba db
+        if [ "$(sudo pdbedit -L -v | grep roboag)" != "" ]; then
+            echo "Error: samba user roboag still exists!"
+            return -1
+        fi
+
+        # remove user
+        sudo deluser --remove-home roboag
+    fi
+
+    # check group roboag
+    groups="$(cat /etc/group | grep -o "^[^:]*")"
+    if [ $? -ne 0 ]; then
+        echo "group roboag does not exist (anymore)"
+    else
+        # remove user
+        sudo delgroup roboag
+    fi
+
+    echo "done :-)"
 }
