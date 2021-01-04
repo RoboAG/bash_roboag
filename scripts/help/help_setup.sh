@@ -14,7 +14,7 @@ function robo_help_setup() {
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
         echo "    [#1:]system for which setup instructions will be shown"
-        echo "         Leave option empty to run for \"client\"."
+        echo "           \"standalone\" Standalone"
         echo "           \"client\"     Client of RoboAG"
         echo "           \"server\"     Server of RoboAG (and RoboSAX)"
 
@@ -29,18 +29,25 @@ function robo_help_setup() {
     fi
 
     # check first parameter (system-flag)
-    system_flag="client"
+    system_flag=""
     if [ $# -gt 0 ]; then
         #check for current versions
         if [ "$1" == "client" ]; then
-            # nothing to do :-)
-            dummy=1
+            system_flag="client"
         elif [ "$1" == "server" ]; then
             system_flag="server"
+        elif [ "$1" == "standalone" ]; then
+            system_flag=""
         else
             echo "$FUNCNAME: Parameter Error."
             $FUNCNAME --help
             return -1
+        fi
+    else
+        if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
+            system_flag="server"
+        elif [ "$ROBO_CONFIG_IS_CLIENT" != "" ]; then
+            system_flag="client"
         fi
     fi
 
@@ -60,10 +67,10 @@ function robo_help_setup() {
     echo -e "\n<enter>\n"; read dummy
 
     echo ""
-    echo "update sources (this may take a while)"
+    echo "update sources"
     echo "    $ config_source_list_add_multiverse"
-    if [ "$system_flag" != "server" ]; then
-        echo "    $ robo_config_aptcacher   (if not in standalone-mode)"
+    if [ "$system_flag" == "client" ]; then
+        echo "    $ robo_config_aptcacher"
     fi
     echo -e "\n<enter>\n"; read dummy
 
@@ -71,7 +78,7 @@ function robo_help_setup() {
     echo "install packages (this may take a while)"
     echo "    $ robo_system_update"
     echo "    $ sudo reboot"
-    if [ "$system_flag" == "client" ]; then
+    if [ "$system_flag" != "server" ]; then
         echo "    $ robo_system_install"
     else
         echo "    $ robo_system_install server"
