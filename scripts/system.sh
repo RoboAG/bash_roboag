@@ -146,6 +146,12 @@ function robo_system_wtf() {
         return -1
     fi
 
+    # user & groups
+    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
+        robo_config_user_check
+    fi
+
+    # network
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_interfaces_check
     fi
@@ -154,6 +160,7 @@ function robo_system_wtf() {
     fi
     robo_system_check_internet
 
+    # services/deamons
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_dnsmasq_check
         robo_config_server_dhcp_check

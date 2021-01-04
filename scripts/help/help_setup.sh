@@ -66,6 +66,13 @@ function robo_help_setup() {
     echo "    $ config_clear_home"
     echo -e "\n<enter>\n"; read dummy
 
+    if [ "$system_flag" != "" ]; then
+        echo ""
+        echo "user & groups"
+        echo "    $ robo_config_user"
+        echo -e "\n<enter>\n"; read dummy
+    fi
+
     echo ""
     echo "update sources"
     echo "    $ config_source_list_add_multiverse"

@@ -179,3 +179,110 @@ function robo_config_aptcacher_check() {
 
 # 2020 12 31
 alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
+
+
+
+#***************************[user]********************************************
+
+# 2021 01 03
+function robo_config_user() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "add user roboag and add users to groups."
+
+    # init variables
+    user_roboag=""
+    groups_guru="sudo plugdev dialout"
+    groups_roboag="plugdev dialout"
+
+
+    # check user roboag
+    groups="$(id roboag 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        user_roboag="1"
+        groups_guru="$groups_guru roboag"
+    else
+        # create user roboag
+        if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
+            sudo adduser --no-create-home \
+            --disabled-password --disabled-login \
+            --gecos "RoboAG" --uid 2000  roboag
+        else
+            sudo adduser --gecos "RoboAG" --uid 2000  roboag
+        fi
+        if [ $? -ne 0 ]; then return -1; fi
+    fi
+
+    # add roboag to groups
+    groups="$(id roboag 2> /dev/null)"
+    for group in $groups_roboag; do
+        if [ "$(echo $groups | grep "$group")" == "" ]; then
+            sudo addgroup roboag "$group"
+        fi
+    done
+
+    # add current user to groups
+    groups="$(id 2> /dev/null)"
+    for group in $groups_guru; do
+        if [ "$(echo $groups | grep "$group")" == "" ]; then
+            sudo addgroup "$USER" "$group"
+        fi
+    done
+
+    echo "done :-)"
+}
+
+# 2021 01 03
+function robo_config_user_check() {
+
+    # init variables
+    error_flag=0;
+    user_roboag=""
+    groups_guru="sudo plugdev dialout"
+    groups_roboag="plugdev dialout"
+
+    # initial output
+    echo -n "users & groups ... "
+
+    # check user roboag
+    id roboag > /dev/null 2> /dev/null
+    if [ $? -eq 0 ]; then
+        user_roboag="1"
+        groups_guru="$groups_guru roboag"
+    fi
+
+    # check groups of current user
+    groups="$(id)"
+    for group in $groups_guru; do
+        if [ "$(echo $groups | grep "$group")" == "" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  $USER is not in $group"
+        fi
+    done
+
+    # check user roboag and it's groups
+
+    if [ "$user_roboag" == "" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  roboag does not exist"
+    else
+        groups="$(id roboag 2> /dev/null)"
+        for group in $groups_roboag; do
+            if [ "$(echo $groups | grep "$group")" == "" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  roboag is not in $group"
+            fi
+        done
+    fi
+
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_config_user"
+    fi
+}
