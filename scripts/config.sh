@@ -300,8 +300,9 @@ function robo_config_user_restore() {
         echo "user roboag does not exist"
     else
         # check samba db
-        if [ "$(sudo pdbedit -L -v | grep roboag)" != "" ]; then
+        if [ "$(sudo pdbedit -L | grep roboag)" != "" ]; then
             echo "Error: samba user roboag still exists!"
+            echo "  --> robo_setup_server_smbuser_restore"
             return -1
         fi
 
