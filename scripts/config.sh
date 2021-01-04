@@ -215,7 +215,7 @@ function robo_config_user() {
     fi
 
     # add roboag to groups
-    groups="$(id roboag 2> /dev/null)"
+    groups="$(cat /etc/group | grep ":.*roboag" | grep -o "^[^:]*")"
     for group in $groups_roboag; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
             sudo addgroup roboag "$group"
@@ -223,7 +223,7 @@ function robo_config_user() {
     done
 
     # add current user to groups
-    groups="$(id 2> /dev/null)"
+    groups="$(cat /etc/group | grep ":.*$USER" | grep -o "^[^:]*")"
     for group in $groups_guru; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
             sudo addgroup "$USER" "$group"
@@ -253,7 +253,7 @@ function robo_config_user_check() {
     fi
 
     # check groups of current user
-    groups="$(id)"
+    groups="$(cat /etc/group | grep ":.*$USER" | grep -o "^[^:]*")"
     for group in $groups_guru; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
             error_flag=1
@@ -269,9 +269,9 @@ function robo_config_user_check() {
         echo ""
         echo -n "  roboag does not exist"
     else
-        groups="$(id roboag 2> /dev/null)"
+        groups="$(cat /etc/group | grep ":.*roboag" | grep -o "^[^:]*")"
         for group in $groups_roboag; do
-            if [ "$(echo $groups | grep "$group")" == "" ]; then
+            if [ "$(echo "$groups" | grep "$group")" == "" ]; then
                 error_flag=1
                 echo ""
                 echo -n "  roboag is not in $group"
