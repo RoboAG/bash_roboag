@@ -177,10 +177,12 @@ function robo_system_wtf() {
     # checks which need sudo rights
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         if sudo -n true 2> /dev/null; then
+            robo_setup_server_smbuser_check
             robo_config_server_internet_check
         else
             echo ""
             echo "not executing the following checks:"
+            echo "  $ robo_setup_server_smbuser_check"
             echo "  $ robo_config_server_internet_check"
         fi
     fi

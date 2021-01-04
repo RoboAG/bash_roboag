@@ -587,3 +587,77 @@ function _robo_setup_server_samba_getawk() {
         "
     fi
 }
+
+
+
+
+#***************************[samba user]**************************************
+# 2021 01 03
+
+function robo_setup_server_smbuser() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "adds roboag as samba user."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # check if samba user already exists
+    if [ "$(sudo pdbedit -L | grep roboag)" != "" ]; then
+        echo "Error: samba user roboag allready exists!"
+        return -3
+    fi
+
+    # check if regular user exists
+    groups="$(id roboag 2> /dev/null)"
+    if [ $? -ne 0 ]; then
+        echo "regular user roboag does not exist"
+        return -4
+    fi
+
+    # create user
+    sudo smbpasswd -a roboag
+
+    echo "done :-)"
+}
+
+# 2021 01 03
+function robo_setup_server_smbuser_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "samba user ... "
+
+    # check if samba user already exists
+    if [ "$(sudo pdbedit -L | grep roboag)" == "" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  roboag does not exist"
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_setup_server_smbuser"
+    fi
+}
+
+# 2021 01 03
+function robo_setup_server_smbuser_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes user roboag from samba server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    sudo smbpasswd -x roboag
+
+    echo "done :-)"
+}

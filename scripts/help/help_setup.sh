@@ -115,6 +115,7 @@ function robo_help_setup() {
         echo ""
         echo "setup samba (file shares)"
         echo "    $ robo_setup_server_samba"
+        echo "    $ robo_setup_server_smbuser"
         echo -e "\n<enter>\n"; read dummy
     fi
 
