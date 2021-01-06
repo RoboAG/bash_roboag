@@ -122,7 +122,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 03
+# 2021 01 05
 
 function robo_system_wtf() {
 
@@ -166,7 +166,12 @@ function robo_system_wtf() {
         robo_config_server_dhcp_check
 
         robo_setup_server_samba_check
+    fi
+    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
+        robo_config_samba_check
+    fi
 
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_aptcacher_check
     fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then

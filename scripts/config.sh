@@ -31,6 +31,33 @@ fi
 
 
 
+#***************************[samba paths]*************************************
+# 2019 11 20
+
+export _ROBO_SHARE_ROBOAG="/media/roboag/"
+export _ROBO_SHARE_ROBOAG2="/media/roboag_smb/"
+#export _ROBO_SHARE_ROBOAG3="/opt/roboag/data/roboag_smb/"
+export _ROBO_SHARE_ROBOSAX="/media/robosax/"
+export _ROBO_SHARE_ROBOSAX2="/media/robosax_smb/"
+#export _ROBO_SHARE_ROBOSAX3="/opt/roboag/data/robosax_smb/"
+
+if [ "$ROBO_SHARE_ROBOAG" == "" ]; then
+    if [ -d "_ROBO_SHARE_ROBOAG2" ]; then
+        export ROBO_SHARE_ROBOAG="$_ROBO_SHARE_ROBOAG2"
+    else
+        export ROBO_SHARE_ROBOAG="$_ROBO_SHARE_ROBOAG"
+    fi
+fi
+if [ "$ROBO_SHARE_ROBOSAX" == "" ]; then
+    if [ -d "_ROBO_SHARE_ROBOSAX2" ]; then
+        export ROBO_SHARE_ROBOSAX="$_ROBO_SHARE_ROBOSAX2"
+    else
+        export ROBO_SHARE_ROBOSAX="$_ROBO_SHARE_ROBOSAX"
+    fi
+fi
+
+
+
 #***************************[mode of operation]*******************************
 # 2019 09 10
 
@@ -361,4 +388,80 @@ function robo_config_user_restore() {
     fi
 
     echo "done :-)"
+}
+
+
+
+#***************************[samba]*******************************************
+
+# 2021 01 05
+function robo_config_samba_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "samba share ... "
+
+    # check mount points
+    if [ ! -d "$ROBO_SHARE_ROBOAG" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  mountpoint roboag does not exist"
+    else
+        if [ -d "/opt/roboag/" ]; then
+            smb_path="/opt/roboag/data/"
+        else
+            smb_path="$HOME"
+        fi
+        smb_file="${smb_path}.smbcredentials"
+
+        if [ ! -f "$smb_file" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  roboag's credential file does not exist"
+        else
+            if [ "$(stat -c "%U" "$smb_file")" != "root" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  roboag's credential file not owned by root"
+            fi
+            if [ "$(stat -c "%a" "$smb_file")" != "600" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  roboag's credential file's mode is not 600"
+            fi
+        fi
+        if [ "(cat /etc/fstab | grep "$ROBO_SHARE_ROBOAG")" == "" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  roboag not defined in fstab"
+        elif ! findmnt --noheadings "$ROBO_SHARE_ROBOAG" > /dev/null; then
+            error_flag=1
+            echo ""
+            echo -n "  roboag not mounted"
+        fi
+    fi
+    if [ ! -d "$ROBO_SHARE_ROBOSAX" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  mountpoint robosax does not exist"
+    else
+        if [ "(cat /etc/fstab | grep "$ROBO_SHARE_ROBOSAX")" == "" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  robosax not defined in fstab"
+        elif ! findmnt --noheadings "$ROBO_SHARE_ROBOSAX" > /dev/null; then
+            error_flag=1
+            echo ""
+            echo -n "  robosax not mounted"
+        fi
+    fi
+
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> ToDo robo_config_samba"
+    fi
 }
