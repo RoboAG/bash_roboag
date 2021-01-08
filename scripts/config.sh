@@ -395,10 +395,11 @@ function robo_config_user_restore() {
 
 #***************************[samba]*******************************************
 
-# 2021 01 05
+# 2021 01 07
 function robo_config_samba_check() {
 
     # init variables
+    FILENAME_CONFIG="/etc/fstab"
     error_flag=0;
 
     # initial output
@@ -433,7 +434,8 @@ function robo_config_samba_check() {
                 echo -n "  roboag's credential file's mode is not 600"
             fi
         fi
-        if [ "(cat /etc/fstab | grep "$ROBO_SHARE_ROBOAG")" == "" ]; then
+        temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOAG:0: -1}")"
+        if [ "$temp" == "" ]; then
             error_flag=1
             echo ""
             echo -n "  roboag not defined in fstab"
@@ -448,7 +450,8 @@ function robo_config_samba_check() {
         echo ""
         echo -n "  mountpoint robosax does not exist"
     else
-        if [ "(cat /etc/fstab | grep "$ROBO_SHARE_ROBOSAX")" == "" ]; then
+        temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOSAX:0: -1}")"
+        if [ "$temp" == "" ]; then
             error_flag=1
             echo ""
             echo -n "  robosax not defined in fstab"
