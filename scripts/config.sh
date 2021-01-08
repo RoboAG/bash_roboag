@@ -396,6 +396,123 @@ function robo_config_user_restore() {
 #***************************[samba]*******************************************
 
 # 2021 01 07
+function robo_config_samba() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "add samba shares from roboag-server (roboag & robosax)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check mount points
+    if [ ! -d "$ROBO_SHARE_ROBOAG" ]; then
+        echo "creating mointpoint for roboag"
+        echo "  mkdir $ROBO_SHARE_ROBOAG"
+        sudo mkdir -p "$ROBO_SHARE_ROBOAG"
+    fi
+    if [ ! -d "$ROBO_SHARE_ROBOSAX" ]; then
+        echo "creating mointpoint for robosax"
+        echo "  mkdir $ROBO_SHARE_ROBOSAX"
+        sudo mkdir -p "$ROBO_SHARE_ROBOSAX"
+    fi
+
+    # check credential file
+    if [ -d "/opt/roboag/" ]; then
+        smb_path="/opt/roboag/data/"
+    else
+        smb_path="$HOME"
+    fi
+    smb_file="${smb_path}.smbcredentials"
+    if [ ! -f "$smb_file" ]; then
+        echo "creating credential file for roboag"
+        while true; do
+            echo -n "  please type password: (not shown)"
+            read -s password
+            echo ""
+            if [ "$password" == "" ]; then
+                echo "    password should not be empty"
+                continue;
+            fi
+            temp="$(_file_name_clean_string "$password")"
+            if [ $? -ne 0 ] || [ "$password" != "$temp" ]; then
+                echo "    password should not contain whitespaces or äüöß"
+                echo "    only allow are (a-z, A-Z, 0-9, _.,;*+=#~())"
+                unset temp password
+                continue
+            fi
+            unset temp
+            break
+        done
+        (
+            echo "username=roboag"
+            echo "password=$password"
+        ) | sudo tee "$smb_file" > /dev/null
+        sudo chmod 600 "$smb_file"
+        unset password
+    fi
+
+    if [ "$(stat -c "%U" "$smb_file")" != "root" ]; then
+        echo "changing owner of credential file to root"
+        sudo chown root:root "$smb_file"
+    fi
+    if [ "$(stat -c "%a" "$smb_file")" != "600" ]; then
+        echo "changing mode of credential file to 600"
+        sudo chmod 600 "$smb_file"
+    fi
+
+    # check fstab
+    FILENAME_CONFIG="/etc/fstab"
+    AWK_STRING="
+        # do not change current content of file
+        { print \$0 }
+
+        # Add RoboAG-Shares to $FILENAME_CONFIG
+        END {
+            print \"\"
+            print \"# roboag shares on server\"
+    "
+    need_roboag=0
+    temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOAG:0: -1}")"
+    if [ "$temp" == "" ]; then
+        need_roboag=1
+        temp="            "
+        temp+="print \"//${ROBO_SERVER_IP}/roboag    "
+        temp+="${ROBO_SHARE_ROBOAG:0: -1}    "
+        temp+="cifs   "
+        temp+="user,rw,credentials=$smb_file   "
+        temp+=$'0   0"\n'
+        AWK_STRING+="$temp"
+    fi
+    need_robosax=0
+    temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOSAX:0: -1}")"
+    if [ "$temp" == "" ]; then
+        need_robosax=1
+        temp="            "
+        temp+="print \"//${ROBO_SERVER_IP}/robosax   "
+        temp+="${ROBO_SHARE_ROBOSAX:0: -1}   "
+        temp+="cifs   "
+        temp+="users,guest   "
+        temp+=$'0   0"\n'
+        AWK_STRING+="$temp"
+    fi
+    AWK_STRING+="
+        }
+    "
+
+    if [ $need_roboag -eq 1 ] || [ $need_robosax -eq 1 ]; then
+        echo "modifying $FILENAME_CONFIG"
+
+        # apply awk string
+        _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+        if [ $? -ne 0 ]; then return -2; fi
+
+        echo "running $ mount -a"
+        sudo mount -a
+    fi
+
+    echo "done :-)"
+}
+
+# 2021 01 07
 function robo_config_samba_check() {
 
     # init variables
@@ -466,6 +583,69 @@ function robo_config_samba_check() {
         echo "ok"
     else
         echo ""
-        echo "  --> ToDo robo_config_samba"
+        echo "  --> robo_config_samba"
     fi
+}
+
+# 2021 01 07
+function robo_config_samba_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes the samba shares from server and restores fstab."
+    if [ $? -ne 0 ]; then return -1; fi
+
+
+    FILENAME_CONFIG="/etc/fstab"
+
+    # removing share roboag
+    if [ -d "$ROBO_SHARE_ROBOAG" ]; then
+        if findmnt --noheadings "$ROBO_SHARE_ROBOAG" > /dev/null; then
+            echo "unmount roboag"
+            sudo umount "$ROBO_SHARE_ROBOAG"
+        fi
+        echo "removing mountpoint roboag"
+        sudo rmdir "$ROBO_SHARE_ROBOAG"
+    fi
+
+    # removing credential file
+    if [ -d "/opt/roboag/" ]; then
+        smb_path="/opt/roboag/data/"
+    else
+        smb_path="$HOME"
+    fi
+    smb_file="${smb_path}.smbcredentials"
+    if [ -f "$smb_file" ]; then
+        error_flag=1
+        echo "removing roboag's credential file "
+        sudo rm "$smb_file"
+    fi
+
+    # removing share robosax
+    if [ -d "$ROBO_SHARE_ROBOSAX" ]; then
+        if findmnt --noheadings "$ROBO_SHARE_ROBOSAX" > /dev/null; then
+            echo "unmount robosax"
+            sudo umount "$ROBO_SHARE_ROBOSAX"
+        fi
+        echo "removing mountpoint robosax"
+        sudo rmdir "$ROBO_SHARE_ROBOSAX"
+    fi
+
+    # check fstab
+    FILENAME_CONFIG="/etc/fstab"
+    has_roboag=0
+    temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOAG:0: -1}")"
+    if [ "$temp" != "" ]; then has_roboag=1; fi
+
+    has_robosax=0
+    temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOSAX:0: -1}")"
+    if [ "$temp" != "" ]; then has_robosax=1; fi
+
+    if [ $has_roboag -eq 1 ] || [ $has_robosax -eq 1 ]; then
+        _config_file_restore "$FILENAME_CONFIG" "backup-once"
+        if [ $? -ne 0 ]; then return -2; fi
+        sudo mount -a
+    fi
+
+    echo "done :-)"
 }

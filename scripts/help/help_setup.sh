@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 03
+# 2021 01 07
 
 function robo_help_setup() {
 
@@ -112,12 +112,16 @@ function robo_help_setup() {
         echo "setup dnsmasq (dhcp+dns)"
         echo "    $ robo_setup_server_dnsmasq"
         echo -e "\n<enter>\n"; read dummy
-        echo ""
-        echo "setup samba (file shares)"
+    fi
+
+    echo ""
+    echo "setup samba (file shares)"
+    if [ "$system_flag" == "server" ]; then
         echo "    $ robo_setup_server_samba"
         echo "    $ robo_setup_server_smbuser"
-        echo -e "\n<enter>\n"; read dummy
     fi
+    echo "    $ robo_config_samba"
+    echo -e "\n<enter>\n"; read dummy
 
     echo ""
     echo "... ToDo ..."
