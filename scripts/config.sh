@@ -211,18 +211,18 @@ alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
 
 #***************************[user]********************************************
 
-# 2021 01 04
+# 2021 01 07
 function robo_config_user() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
       "add user roboag and add users to groups."
+    if [ $? -ne 0 ]; then return -1; fi
 
     # init variables
     user_roboag=""
     groups_guru="sudo plugdev dialout roboag"
     groups_roboag="plugdev dialout"
-
 
     # check user roboag
     getent_roboag="$(getent passwd roboag)"
@@ -354,12 +354,13 @@ function robo_config_user_check() {
     fi
 }
 
-# 2021 01 04
+# 2021 01 07
 function robo_config_user_restore() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
       "removes user/group roboag."
+    if [ $? -ne 0 ]; then return -1; fi
 
     # init variables
     user_roboag=""
