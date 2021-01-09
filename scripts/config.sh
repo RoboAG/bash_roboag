@@ -395,7 +395,7 @@ function robo_config_user_restore() {
 
 #***************************[samba]*******************************************
 
-# 2021 01 07
+# 2021 01 09
 function robo_config_samba() {
 
     # print help and check for user agreement
@@ -424,6 +424,10 @@ function robo_config_samba() {
     smb_file="${smb_path}.smbcredentials"
     if [ ! -f "$smb_file" ]; then
         echo "creating credential file for roboag"
+        if [ ! -d "${smb_path}" ]; then
+            echo "  mkdir ${smb_path}"
+            sudo mkdir -p "${smb_path}"
+        fi
         while true; do
             echo -n "  please type password: (not shown)"
             read -s password
