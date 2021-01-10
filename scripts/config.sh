@@ -561,7 +561,9 @@ function robo_config_samba_check() {
             echo ""
             echo -n "  roboag not defined in fstab"
         elif ! findmnt --noheadings "$ROBO_SHARE_ROBOAG" > /dev/null; then
-            error_flag=1
+            if [ $error_flag -eq 0 ]; then
+                error_flag=2
+            fi
             echo ""
             echo -n "  roboag not mounted"
         fi
@@ -577,7 +579,9 @@ function robo_config_samba_check() {
             echo ""
             echo -n "  robosax not defined in fstab"
         elif ! findmnt --noheadings "$ROBO_SHARE_ROBOSAX" > /dev/null; then
-            error_flag=1
+            if [ $error_flag -eq 0 ]; then
+                error_flag=2
+            fi
             echo ""
             echo -n "  robosax not mounted"
         fi
@@ -585,9 +589,12 @@ function robo_config_samba_check() {
 
     if [ $error_flag -eq 0 ]; then
         echo "ok"
-    else
+    elif [ $error_flag -eq 1 ]; then
         echo ""
         echo "  --> robo_config_samba"
+    else
+        echo ""
+        echo "  --> sudo mount -a"
     fi
 }
 
