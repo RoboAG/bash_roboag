@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 07
+# 2021 01 09
 
 function robo_help_setup() {
 
@@ -123,9 +123,13 @@ function robo_help_setup() {
     echo "    $ robo_config_samba"
     echo -e "\n<enter>\n"; read dummy
 
-    echo ""
-    echo "... ToDo ..."
-    echo -e "\n<enter>\n"; read dummy
+    if [ "$system_flag" == "client" ]; then
+        echo ""
+        echo "update repos"
+        echo "    $ robo_repo_update"
+        echo "    $ robo_repo_clone_from_server"
+        echo -e "\n<enter>\n"; read dummy
+    fi
 
     echo ""
     echo "check system"

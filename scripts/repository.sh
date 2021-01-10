@@ -37,10 +37,104 @@ fi
 
 
 #***************************[global update and stat]**************************
-# 2018 01 05
+# 2021 01 09
 
-alias robo_repo_update="repo_pull_all"
 alias robo_repo_status="repo_status_all"
+alias robo_repo_update_from_web="repo_pull_all"
+
+function robo_repo_update_from_server() {
+
+    _robo_config_need_client "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # find all repos
+    readarray -t repos <<< "$(file_search --only-dirs \
+      .git "$ROBO_PATH_WORKSPACE")"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    length_ws="${#ROBO_PATH_WORKSPACE}"
+
+    # iterate over repos
+    for i in ${!repos[@]}; do
+        repo="${repos[$i]}"
+        if [ "$repo" == "" ]; then continue; fi
+
+        repo="$(dirname "${repo}")/"
+        if [ "${repo:0:$length_ws}" != "$ROBO_PATH_WORKSPACE" ]; then
+            continue
+        fi
+        repo_name="$(basename "$repo")"
+        repo_short="${repo:$length_ws}"
+        repo_path="${ROBO_SHARE_ROBOAG}Repos/${repo_short}"
+        if [ ! -d "$repo_path" ]; then
+            echo "unknown repository ${repo}"
+            continue
+        fi
+
+        echo "###g ${repo_name}@server ###"
+        (cd "$repo" && git pull --tags "file://${repo_path}")
+    done
+
+    echo "done :-)"
+}
+
+function robo_repo_update() {
+
+    if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+        robo_repo_update_from_server
+    else
+        robo_repo_update_from_web
+    fi
+}
+
+function robo_repo_clone_from_server() {
+
+    _robo_config_need_client "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    path_workspace="${ROBO_SHARE_ROBOAG}Repos/"
+
+    # find all repos
+    echo "reading repo list ..."
+    readarray -t repos <<< "$(file_search --only-dirs \
+      .git "${path_workspace}")"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    length_ws="${#path_workspace}"
+
+    # iterate over repos
+    for i in ${!repos[@]}; do
+        repo="${repos[$i]}"
+        if [ "$repo" == "" ]; then continue; fi
+
+        repo="$(dirname "${repo}")/"
+        if [ "${repo:0:$length_ws}" != "$path_workspace" ]; then
+            continue
+        fi
+        repo_name="$(basename "$repo")"
+        repo_short="${repo:$length_ws}"
+        repo_path="${ROBO_PATH_WORKSPACE}${repo_short}"
+        if [ -d "$repo_path" ]; then
+            continue
+        fi
+
+        echo "###g ${repo_name}@server ###"
+        repo_parent="$(dirname "$repo_path")"
+        if [ ! -d "$repo_parent" ]; then
+            echo "  mkdir $repo_parent"
+            mkdir -p "$repo_parent"
+        fi
+        (
+            echo "  copy $repo_short"
+            cp -a "$repo" "$repo_path" && \
+            cd "$repo_path" && \
+            echo "  git checkout" && \
+            git checkout --quiet .
+        )
+    done
+
+    echo "done :-)"
+}
 
 
 
