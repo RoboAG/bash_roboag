@@ -186,7 +186,7 @@ function robo_setup_server_interfaces_restore() {
 
 
 #***************************[dnsmasq]*****************************************
-# 2021 01 03
+# 2021 01 10
 
 function robo_setup_server_dnsmasq() {
 
@@ -210,7 +210,7 @@ Additionally installs dnsmasq."
     if [ $? -ne 0 ]; then return -3; fi
 
     # check & install dnsmasq
-    _config_install_list "dnsmasq" quiet
+    _config_install_list "dnsmasq resolveconf" quiet
     if [ $? -ne 0 ]; then return -4; fi
 
     # check if config path exists
@@ -232,23 +232,35 @@ Additionally installs dnsmasq."
         fi
     done
 
-    # restart if necessary
-    if [ "$changed" != "" ]; then
+    # restart & enable dnsmasq, if necessary
+    if [ "$changed" != "" ] || \
+      [ "$(systemctl is-active dnsmasq)" != "active" ]; then
         echo "(re)starting service dnsmasq"
         sudo systemctl restart dnsmasq
+        if [ $? -ne 0 ]; then return -6; fi
     fi
-
-    # enabling dnsmasq, if running
     if [ "$(systemctl is-active dnsmasq)" == "active" ] && \
       [ "$(systemctl is-enabled dnsmasq)" == "disabled" ]; then
         echo "enabling service dnsmasq"
         sudo systemctl enable dnsmasq
+        if [ $? -ne 0 ]; then return -7; fi
+    fi
+
+    # restart & enable systemd-resolved, if necessary
+    if [ "$(systemctl is-active systemd-resolved)" != "active" ]; then
+        echo "starting service systemd-resolved"
+        sudo systemctl restart systemd-resolved
+    fi
+    if [ "$(systemctl is-active systemd-resolved)" == "active" ] && \
+      [ "$(systemctl is-enabled systemd-resolved)" == "disabled" ]; then
+        echo "enabling service systemd-resolved"
+        sudo systemctl enable systemd-resolved
     fi
 
     echo "done :-)"
 }
 
-# 2021 01 01
+# 2021 01 11
 function robo_setup_server_dnsmasq_check() {
 
     # Check the configuration
@@ -263,6 +275,8 @@ function robo_setup_server_dnsmasq_check() {
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
+    if [ $? -ne 0 ]; then error_flag=1; fi
+    config_check_service systemd-resolved "quiet" "enabled"
     if [ $? -ne 0 ]; then error_flag=1; fi
 
     # iterate over all config_files
@@ -292,6 +306,7 @@ function robo_setup_server_dnsmasq_check() {
         echo "ok"
     else
         echo ""
+        echo "  --> robo_setup_server_dnsmasq"
     fi
 }
 
