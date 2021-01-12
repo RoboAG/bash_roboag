@@ -122,7 +122,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 05
+# 2021 01 12
 
 function robo_system_wtf() {
 
@@ -144,6 +144,16 @@ function robo_system_wtf() {
         echo "$FUNCNAME: Parameter Error."
         $FUNCNAME --help
         return -1
+    fi
+
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "### check SERVER ###"
+    elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+        echo "### check CLIENT ###"
+    elif [ "$ROBO_CONFIG_STANDALONE" == "1" ]; then
+        echo "### check STANDALONE ###"
+    else
+        echo "### who are you ? ###"
     fi
 
     # user & groups
