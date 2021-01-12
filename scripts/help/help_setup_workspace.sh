@@ -158,10 +158,10 @@ function robo_help_setup_workspace() {
     echo "    nothing todo"
     echo ""
     echo "  b) Client within RoboAG (connection to RoboAG server)"
-    echo "    $ touch \${ROBO_PATH_CONFIG}is_client.txt"
+    echo "    $ robo_config_mode_set client"
     echo ""
     echo "  c) RoboAG server"
-    echo "    $ touch \${ROBO_PATH_CONFIG}is_server.txt"
+    echo "    $ robo_config_mode_set server"
     echo ""
     if [ "$mode_flag" == "simple" ]; then
         echo "  You are following instructions for simple usage, most"
@@ -171,8 +171,6 @@ function robo_help_setup_workspace() {
         echo "  likely b) or c) is your choice. Nevertheless, this files"
         echo "  might also be created later."
     fi
-    echo "  If changing your mode of operation, you need to re-source:"
-    echo "    close terminal and source workspace (see also step 2)"
     echo ""
     echo -e "\n<enter>\n"; read dummy
 

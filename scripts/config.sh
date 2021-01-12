@@ -59,27 +59,150 @@ fi
 
 
 #***************************[mode of operation]*******************************
-# 2019 09 10
+# 2021 01 12
 
-# unset all possible config states
-unset ROBO_CONFIG_IS_SERVER
-unset ROBO_CONFIG_IS_CLIENT
-unset ROBO_CONFIG_STANDALONE
+function _robo_config_mode_get() {
 
-# Is in server-mode ?
-if [ "$(ls $ROBO_PATH_CONFIG  | grep -i is_server | wc -w)" -gt 0 ]; then
-    export ROBO_CONFIG_IS_SERVER="1"
-else
+    # unset all possible config states
+    unset ROBO_CONFIG_IS_SERVER
+    unset ROBO_CONFIG_IS_CLIENT
+    unset ROBO_CONFIG_STANDALONE
 
-    # Is in client-mode ?
-    if [ "$(ls $ROBO_PATH_CONFIG  | grep -i is_client | wc -w)" -gt 0 ]; then
-        export ROBO_CONFIG_IS_CLIENT="1"
+    # Is in server-mode ?
+    temp=
+    if [ "$(ls "$ROBO_PATH_CONFIG"  | grep -i is_server)" != "" ]; then
+        export ROBO_CONFIG_IS_SERVER="1"
     else
 
-        # Standalone-Mode!
-        export ROBO_CONFIG_STANDALONE="1"
+        # Is in client-mode ?
+        if [ "$(ls "$ROBO_PATH_CONFIG"  | grep -i is_client)" != "" ]; then
+            export ROBO_CONFIG_IS_CLIENT="1"
+        else
+
+            # Standalone-Mode!
+            export ROBO_CONFIG_STANDALONE="1"
+        fi
     fi
-fi
+}
+
+function robo_config_mode_get() {
+
+    _robo_config_mode_get
+
+    echo -n "current mode: "
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "server"
+    elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+        echo "client"
+    elif [ "$ROBO_CONFIG_STANDALONE" == "1" ]; then
+        echo "standalone"
+    else
+        echo "?"
+    fi
+}
+
+function robo_config_mode_set() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME <mode>"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 1 parameter"
+        echo "     #1: new mode of computer"
+        echo "           \"client\"  client     mode"
+        echo "           \"server\"  server     mode"
+        echo "           \"\"        standalone mode"
+        echo "Switching mode of current system."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check first parameter (mode)
+    mode_flag=""
+    if [ $# -gt 0 ]; then
+        if [ "$1" == "client" ]; then
+            mode_flag="client"
+        elif [ "$1" == "server" ]; then
+            mode_flag="server"
+        elif [ "$1" == "" ]; then
+            mode_flag="standalone"
+        else
+            echo "$FUNCNAME: Unknown parameter \"$1\"."
+            $FUNCNAME --help
+            return -1
+        fi
+    fi
+
+    # check first parameter (mode)
+    current_flag=""
+    if [ $# -gt 0 ]; then
+        if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+            current_flag="server"
+        elif [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+            current_flag="client"
+        elif [ "$ROBO_CONFIG_STANDALONE" == "1" ]; then
+            current_flag="standalone"
+        else
+            current_flag="unknown"
+        fi
+    fi
+
+    _config_simple_parameter_check "$FUNCNAME" "" \
+      "Switching mode of system from $current_flag to ${mode_flag^^}."
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # create config files
+    if [ "$mode_flag" == "client" ] && \
+      [ "$(ls "$ROBO_PATH_CONFIG"  | grep -i is_client)" == "" ]; then
+        echo "creating ${ROBO_PATH_CONFIG}is_client.txt"
+        touch "${ROBO_PATH_CONFIG}is_client.txt"
+    elif [ "$mode_flag" == "server" ] && \
+      [ "$(ls "$ROBO_PATH_CONFIG"  | grep -i is_server)" == "" ]; then
+        echo "creating ${ROBO_PATH_CONFIG}is_server.txt"
+        touch "${ROBO_PATH_CONFIG}is_server.txt"
+    fi
+
+    # remove old config files
+    if [ "$mode_flag" != "client" ]; then
+        files="$(ls "$ROBO_PATH_CONFIG"  | grep -i is_client)"
+        if [ "$files" != "" ]; then
+            for file in $files; do
+                if [ -e "${ROBO_PATH_CONFIG}${file}" ]; then
+                    echo "rm ${ROBO_PATH_CONFIG}${file}"
+                    rm "${ROBO_PATH_CONFIG}${file}"
+                fi
+            done
+        fi
+    fi
+    if [ "$mode_flag" != "server" ]; then
+        files="$(ls "$ROBO_PATH_CONFIG"  | grep -i is_server)"
+        if [ "$files" != "" ]; then
+            for file in $files; do
+                if [ -e "${ROBO_PATH_CONFIG}${file}" ]; then
+                    echo "rm ${ROBO_PATH_CONFIG}${file}"
+                    rm "${ROBO_PATH_CONFIG}${file}"
+                fi
+            done
+        fi
+    fi
+
+    # check current mode
+    _robo_config_mode_get
+
+    echo "done :-)"
+}
+
+_robo_config_mode_get
 
 
 
