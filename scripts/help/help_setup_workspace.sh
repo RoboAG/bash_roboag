@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 12 30
+# 2021 01 12
 
 alias robo_help_setup_workspace_shared="robo_help_setup_workspace shared"
 alias robo_help_setup_workspace_simple="robo_help_setup_workspace simple"
@@ -60,7 +60,7 @@ function robo_help_setup_workspace() {
         echo "needs sudo rights."
         echo "This is the default setup for our CLIENTS and SERVERS."
         echo ""
-        echo "See also: $ robo_help_setup_workspace shared"
+        echo "See also: $ robo_help_setup_workspace_shared"
         echo ""
 
         echo "In SIMPLE mode the repositories are stored in a user-defined"
@@ -69,7 +69,7 @@ function robo_help_setup_workspace() {
         echo "user. This is good for TESTING our scripts or in case you are"
         echo "having a SINGLE-USER-system working with our repositories."
         echo ""
-        echo "See also: $ robo_help_setup_workspace simple"
+        echo "See also: $ robo_help_setup_workspace_simple"
         echo ""
 
         return
@@ -188,6 +188,10 @@ function robo_help_setup_workspace() {
     echo "    $ robo_repo_overview"
     echo -e "\n<enter>\n"; read dummy
 
+
+    echo "Further setup instructions can be found here:"
+    echo "  $ robo_help_setup"
+    echo ""
 
     echo "done :-)"
 }
