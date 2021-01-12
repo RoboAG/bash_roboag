@@ -11,7 +11,7 @@ alias robo_setup_server_aptcacher_restore="server_config_aptcacher_restore"
 
 
 #***************************[network interfaces]******************************
-# 2021 01 03
+# 2021 01 12
 
 function robo_setup_server_interfaces() {
 
@@ -80,7 +80,10 @@ function robo_setup_server_interfaces() {
         END {
             print \"network:\"
             print \"  version: 2\"
-            print \"  renderer: networkd\"
+            # networkd is faster on startup, but dnsmasq will have problems ...
+            # therefore, using NetworkManager as renderer!
+            #print \"  renderer: networkd\"
+            print \"  renderer: NetworkManager\"
             print \"  ethernets:\"
             print \"    eth_intern:\"
             print \"      dhcp4: no\"
