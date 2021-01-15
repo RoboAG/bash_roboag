@@ -639,7 +639,7 @@ function robo_config_samba() {
     echo "done :-)"
 }
 
-# 2021 01 07
+# 2021 01 14
 function robo_config_samba_check() {
 
     # init variables
@@ -712,12 +712,12 @@ function robo_config_samba_check() {
 
     if [ $error_flag -eq 0 ]; then
         echo "ok"
-    elif [ $error_flag -eq 1 ]; then
-        echo ""
-        echo "  --> robo_config_samba"
-    else
+    elif [ $error_flag -eq 2 ]; then
         echo ""
         echo "  --> sudo mount -a"
+    else
+        echo ""
+        echo "  --> robo_config_samba"
     fi
 }
 
