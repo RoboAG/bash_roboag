@@ -260,7 +260,7 @@ Additionally installs dnsmasq."
     echo "done :-)"
 }
 
-# 2021 01 11
+# 2021 01 14
 function robo_setup_server_dnsmasq_check() {
 
     # Check the configuration
@@ -268,16 +268,19 @@ function robo_setup_server_dnsmasq_check() {
     PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
 
     # init variables
-    error_flag=0;
+    error_flag_temp=0; # error_flag is used in config_check_service
 
     # initial output
     echo -n "dnsmasq ... "
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag=1; fi
+    if [ $? -ne 0 ]; then error_flag_temp=2; fi
     config_check_service systemd-resolved "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag=1; fi
+    if [ $? -ne 0 ]; then error_flag_temp=1; fi
+
+    # init variables
+    error_flag="$error_flag_temp";
 
     # iterate over all config_files
     files="$(ls "$PATH_LOCAL")"
@@ -304,6 +307,9 @@ function robo_setup_server_dnsmasq_check() {
     # final result
     if [ $error_flag -eq 0 ]; then
         echo "ok"
+    elif [ $error_flag -eq 2 ]; then
+        echo ""
+        echo "  --> sudo systemctl restart dnsmasq"
     else
         echo ""
         echo "  --> robo_setup_server_dnsmasq"

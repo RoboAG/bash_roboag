@@ -172,7 +172,7 @@ function robo_config_server_internet_off() {
 
 
 #***************************[dhcp]*******************************************
-# 2021 01 02
+# 2021 01 14
 
 function robo_config_server_dhcp_check() {
 
@@ -181,7 +181,7 @@ function robo_config_server_dhcp_check() {
     FILENAME_DHCP="/etc/dnsmasq.d/dhcp_hosts.conf"
 
     # init variables
-    error_flag=0;
+    error_flag_temp=0; # error_flag is used in config_check_service
     leases=""
     dhcp=""
     macs=""
@@ -191,7 +191,10 @@ function robo_config_server_dhcp_check() {
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag=1; fi
+    if [ $? -ne 0 ]; then error_flag_temp=2; fi
+
+    # init variables
+    error_flag="$error_flag_temp";
 
     # check if lease file is there
     if [ ! -e "$FILENAME_LEASES" ]; then
@@ -229,6 +232,9 @@ function robo_config_server_dhcp_check() {
     # final result
     if [ $error_flag -eq 0 ]; then
         echo "ok"
+    elif [ $error_flag -eq 2 ]; then
+        echo ""
+        echo "  --> sudo systemctl restart dnsmasq"
     else
         echo ""
     fi
