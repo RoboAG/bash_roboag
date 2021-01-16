@@ -269,15 +269,16 @@ function robo_config_server_dhcp_show() {
 
     # check for verbose output
     if [ "$1" != "" ]; then
-        AWK_STRING='
-            if( $4 != "")
+        AWK_STRING='{
+            if ( $4 != "")
                 { print $4 }
-            else if($3 != "")
+            else if ($3 != "")
                 { print $3}
             else
-                { printf "\n"}';
+                { printf "\n"}
+        }';
     else
-        AWK_STRING='{ print "  " $1 "  " $3 " " $4}';
+        AWK_STRING='{ print "  " $2 " " $3 " " $4}';
     fi
 
     # check for server
