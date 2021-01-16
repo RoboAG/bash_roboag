@@ -419,7 +419,7 @@ function robo_config_user() {
     echo "done :-)"
 }
 
-# 2021 01 15
+# 2021 01 16
 function robo_config_user_check() {
 
     # init variables
@@ -494,7 +494,7 @@ function robo_config_user_check() {
     fi
 }
 
-# 2021 01 07
+# 2021 01 16
 function robo_config_user_restore() {
 
     # print help and check for user agreement
