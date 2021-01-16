@@ -203,14 +203,14 @@ function robo_system_wtf() {
     fi
 }
 
-# 2021 01 05
+# 2021 01 15
 function robo_system_check_internet() {
 
     # init variables
     error_flag=0;
 
    # initial output
-    echo -n "internet ... "
+    echo -n "internet          ... "
 
     # check for internet connection
     if ! network_ping 8.8.8.8 &> /dev/null; then
@@ -227,14 +227,14 @@ function robo_system_check_internet() {
     fi
 }
 
-# 2021 01 05
+# 2021 01 15
 function robo_system_check_server() {
 
     # init variables
     error_flag=0;
 
    # initial output
-    echo -n "roboag server ... "
+    echo -n "roboag server     ... "
 
     # check for internet connection
     if ! network_ping "${_ROBO_SERVER_IP}" &> /dev/null; then

@@ -121,7 +121,7 @@ function robo_setup_server_interfaces() {
     echo "done :-)"
 }
 
-# 2021 01 03
+# 2021 01 15
 function robo_setup_server_interfaces_check() {
 
     # Check the configuration
@@ -131,7 +131,7 @@ function robo_setup_server_interfaces_check() {
     error_flag=0;
 
     # initial output
-    echo -n "interfaces ... "
+    echo -n "server interfaces ... "
 
     # check if eth_intern exists
     interfaces_intern="$(ip --brief link | grep "^eth_intern")"
@@ -260,7 +260,7 @@ Additionally installs dnsmasq."
     echo "done :-)"
 }
 
-# 2021 01 14
+# 2021 01 15
 function robo_setup_server_dnsmasq_check() {
 
     # Check the configuration
@@ -271,7 +271,7 @@ function robo_setup_server_dnsmasq_check() {
     error_flag_temp=0; # error_flag is used in config_check_service
 
     # initial output
-    echo -n "dnsmasq ... "
+    echo -n "dnsmasq on server ... "
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
@@ -444,14 +444,14 @@ function robo_setup_server_samba() {
     echo "done :-)"
 }
 
-# 2021 01 03
+# 2021 01 15
 function robo_setup_server_samba_check() {
 
     # init variables
     error_flag=0;
 
     # initial output
-    echo -n "samba server ... "
+    echo -n "samba server      ... "
 
     # check status of service
     config_check_service smbd "quiet" "enabled"
@@ -648,14 +648,14 @@ function robo_setup_server_smbuser() {
     echo "done :-)"
 }
 
-# 2021 01 03
+# 2021 01 15
 function robo_setup_server_smbuser_check() {
 
     # init variables
     error_flag=0;
 
     # initial output
-    echo -n "samba user ... "
+    echo -n "samba user        ... "
 
     # check if samba user already exists
     if [ "$(sudo pdbedit -L | grep roboag)" == "" ]; then

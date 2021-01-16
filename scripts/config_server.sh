@@ -40,8 +40,8 @@ fi
 
 
 #***************************[internet sharing]*******************************
-# 2021 01 01
 
+# 2021 01 01
 function robo_config_server_internet_on() {
 
     # print help
@@ -96,6 +96,7 @@ function robo_config_server_internet_on() {
     echo "done :-)"
 }
 
+# 2021 01 15
 function robo_config_server_internet_check() {
 
     # Check the configuration
@@ -105,7 +106,7 @@ function robo_config_server_internet_check() {
     error_flag=0;
 
     # initial output
-    echo -n "internet sharing ... "
+    echo -n "internet sharing  ... "
 
     # check ipv4-forwarding
     content="$(cat "$FILENAME_CONFIG")"
@@ -137,6 +138,7 @@ function robo_config_server_internet_check() {
     fi
 }
 
+# 2021 01 01
 function robo_config_server_internet_off() {
 
     # print help
@@ -172,7 +174,7 @@ function robo_config_server_internet_off() {
 
 
 #***************************[dhcp]*******************************************
-# 2021 01 14
+# 2021 01 15
 
 function robo_config_server_dhcp_check() {
 
@@ -187,7 +189,7 @@ function robo_config_server_dhcp_check() {
     macs=""
 
     # initial output
-    echo -n "dhcp ... "
+    echo -n "dhcp server       ... "
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"

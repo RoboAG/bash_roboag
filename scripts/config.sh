@@ -402,7 +402,7 @@ function robo_config_user() {
     echo "done :-)"
 }
 
-# 2021 01 04
+# 2021 01 15
 function robo_config_user_check() {
 
     # init variables
@@ -412,7 +412,7 @@ function robo_config_user_check() {
     groups_roboag="plugdev dialout"
 
     # initial output
-    echo -n "users & groups ... "
+    echo -n "users & groups    ... "
 
     # check user roboag
     getent_roboag="$(getent passwd roboag)"
@@ -639,7 +639,7 @@ function robo_config_samba() {
     echo "done :-)"
 }
 
-# 2021 01 14
+# 2021 01 15
 function robo_config_samba_check() {
 
     # init variables
@@ -647,7 +647,7 @@ function robo_config_samba_check() {
     error_flag=0;
 
     # initial output
-    echo -n "samba share ... "
+    echo -n "samba share       ... "
 
     # check mount points
     if [ ! -d "$ROBO_SHARE_ROBOAG" ]; then
