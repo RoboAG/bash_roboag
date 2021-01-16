@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 09
+# 2021 01 16
 
 function robo_help_setup() {
 
@@ -52,10 +52,12 @@ function robo_help_setup() {
     fi
 
     echo ""
-    if [ "$system_flag" != "server" ]; then
+    if [ "$system_flag" == "client" ]; then
         echo "### Setup CLIENT ###"
-    else
+    elif [ "$system_flag" == "server" ]; then
         echo "### Setup SERVER ###"
+    else
+        echo "### Setup STANDALONE ###"
     fi
     echo ""
     echo "simple configurations"
@@ -115,6 +117,9 @@ function robo_help_setup() {
     fi
 
     echo ""
+    if [ "$system_flag" == "" ]; then
+        echo -n "optional: "
+    fi
     echo "setup samba (file shares)"
     if [ "$system_flag" == "server" ]; then
         echo "    $ robo_setup_server_samba"

@@ -122,7 +122,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 15
+# 2021 01 16
 
 function robo_system_wtf() {
 
@@ -179,6 +179,9 @@ function robo_system_wtf() {
     fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
         robo_config_samba_check
+    else
+        echo ""
+        echo "optional: $ robo_config_samba_check"
     fi
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
