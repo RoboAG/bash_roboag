@@ -613,13 +613,13 @@ function _robo_setup_server_samba_getawk() {
 
 
 #***************************[samba user]**************************************
-# 2021 01 03
+# 2021 01 16
 
 function robo_setup_server_smbuser() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "adds roboag as samba user."
+      "adds $ROBO_USER_AG as samba user."
     if [ $? -ne 0 ]; then return -1; fi
 
     # check current mode
@@ -627,20 +627,20 @@ function robo_setup_server_smbuser() {
     if [ $? -ne 0 ]; then return -2; fi
 
     # check if samba user already exists
-    if [ "$(sudo pdbedit -L | grep roboag)" != "" ]; then
-        echo "Error: samba user roboag allready exists!"
+    if [ "$(sudo pdbedit -L | grep $ROBO_USER_AG)" != "" ]; then
+        echo "Error: samba user $ROBO_USER_AG already exists!"
         return -3
     fi
 
     # check if regular user exists
-    groups="$(id roboag 2> /dev/null)"
+    groups="$(id $ROBO_USER_AG 2> /dev/null)"
     if [ $? -ne 0 ]; then
-        echo "regular user roboag does not exist"
+        echo "regular user $ROBO_USER_AG does not exist"
         return -4
     fi
 
     # create user
-    sudo smbpasswd -a roboag
+    sudo smbpasswd -a $ROBO_USER_AG
 
     echo "done :-)"
 }
@@ -655,10 +655,10 @@ function robo_setup_server_smbuser_check() {
     echo -n "samba user        ... "
 
     # check if samba user already exists
-    if [ "$(sudo pdbedit -L | grep roboag)" == "" ]; then
+    if [ "$(sudo pdbedit -L | grep $ROBO_USER_AG)" == "" ]; then
         error_flag=1;
         echo ""
-        echo -n "  roboag does not exist"
+        echo -n "  $ROBO_USER_AG does not exist"
     fi
 
     # final result
@@ -675,10 +675,10 @@ function robo_setup_server_smbuser_restore() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "removes user roboag from samba server."
+      "removes user $ROBO_USER_AG from samba server."
     if [ $? -ne 0 ]; then return -1; fi
 
-    sudo smbpasswd -x roboag
+    sudo smbpasswd -x $ROBO_USER_AG
 
     echo "done :-)"
 }

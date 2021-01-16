@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 10 12
+# 2020 10 16
 
 function robo_help_install() {
 
@@ -141,7 +141,7 @@ function robo_help_install() {
     echo "  Wie ist ihr Vor- und Nachname ?"
     echo "    [Guru der RoboAG]"
     echo "  Welchen Namen möchten Sie zum Anmelden benutzen ?"
-    echo "    [guru]"
+    echo "    [$ROBO_USER_ADMIN]"
     echo "  Wie ist der Name dieses Computers ?"
     echo "    [Olaf]       <set name according to official list>"
     echo "  Wählen sie ein Passwort um ihr Konto zu sichern."

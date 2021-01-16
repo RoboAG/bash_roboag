@@ -166,7 +166,7 @@ function robo_help_setup_workspace() {
         echo "1.b) Copy scripts from server"
         echo "  $ cd \"$ROBO_PATH_SHARED_REPOS\""
         temp="${ROBO_PATH_SHARED_REPOS}bash/"
-        echo "  $ scp -r guru@${_ROBO_SERVER_IP}:${temp} ."
+        echo "  $ scp -r \"${USER}@${_ROBO_SERVER_IP}:${temp}\" ."
         echo -e "\n<enter>\n"; read dummy
     fi
 

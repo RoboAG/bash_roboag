@@ -31,6 +31,14 @@ fi
 
 
 
+#***************************[user]********************************************
+# 2021 01 16
+
+export ROBO_USER_ADMIN="guru"
+export ROBO_USER_AG="roboag"
+
+
+
 #***************************[shared paths]************************************
 # 2021 01 16
 
@@ -343,38 +351,38 @@ alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
 
 #***************************[user]********************************************
 
-# 2021 01 07
+# 2021 01 16
 function robo_config_user() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "add user roboag and add users to groups."
+      "add user $ROBO_USER_AG and add users to groups."
     if [ $? -ne 0 ]; then return -1; fi
 
     # init variables
     user_roboag=""
-    groups_guru="sudo plugdev dialout roboag"
+    groups_guru="sudo plugdev dialout $ROBO_USER_AG"
     groups_roboag="plugdev dialout"
 
     # check user roboag
-    getent_roboag="$(getent passwd roboag)"
+    getent_roboag="$(getent passwd $ROBO_USER_AG)"
     if [ "$getent_roboag" == "" ]; then
         # create user roboag
         if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
             sudo adduser --no-create-home \
             --disabled-password --disabled-login \
-            --gecos "RoboAG" --uid 2000  roboag
+            --gecos "RoboAG" --uid 2000  $ROBO_USER_AG
         else
-            sudo adduser --gecos "RoboAG" --uid 2000  roboag
+            sudo adduser --gecos "RoboAG" --uid 2000  $ROBO_USER_AG
         fi
         if [ $? -ne 0 ]; then return -1; fi
     fi
 
     # add roboag to groups
-    groups="$(cat /etc/group | grep ":.*roboag" | grep -o "^[^:]*")"
+    groups="$(cat /etc/group | grep ":.*$ROBO_USER_AG" | grep -o "^[^:]*")"
     for group in $groups_roboag; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
-            sudo addgroup roboag "$group"
+            sudo addgroup $ROBO_USER_AG "$group"
         fi
     done
 
@@ -424,10 +432,10 @@ function robo_config_user_check() {
     echo -n "users & groups    ... "
 
     # check user roboag
-    getent_roboag="$(getent passwd roboag)"
+    getent_roboag="$(getent passwd $ROBO_USER_AG)"
     if [ "$getent_roboag" != "" ]; then
         user_roboag="1"
-        groups_guru="${groups_guru} roboag"
+        groups_guru="${groups_guru} $ROBO_USER_AG"
     fi
 
     # check groups of current user
@@ -444,14 +452,14 @@ function robo_config_user_check() {
     if [ "$user_roboag" == "" ]; then
         error_flag=1
         echo ""
-        echo -n "  roboag does not exist"
+        echo -n "  $ROBO_USER_AG does not exist"
     else
-        groups="$(cat /etc/group | grep ":.*roboag" | grep -o "^[^:]*")"
+        groups="$(cat /etc/group | grep ":.*$ROBO_USER_AG" | grep -o "^[^:]*")"
         for group in $groups_roboag; do
             if [ "$(echo "$groups" | grep "$group")" == "" ]; then
                 error_flag=1
                 echo ""
-                echo -n "  roboag is not in $group"
+                echo -n "  $ROBO_USER_AG is not in $group"
             fi
         done
     fi
@@ -491,33 +499,33 @@ function robo_config_user_restore() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "removes user/group roboag."
+      "removes user/group $ROBO_USER_AG."
     if [ $? -ne 0 ]; then return -1; fi
 
     # init variables
     user_roboag=""
 
     # check user roboag
-    if [ "$(getent passwd roboag)" == "" ]; then
-        echo "user roboag does not exist"
+    if [ "$(getent passwd $ROBO_USER_AG)" == "" ]; then
+        echo "user $ROBO_USER_AG does not exist"
     else
         # check samba db
-        if [ "$(sudo pdbedit -L | grep roboag)" != "" ]; then
-            echo "Error: samba user roboag still exists!"
+        if [ "$(sudo pdbedit -L | grep $ROBO_USER_AG)" != "" ]; then
+            echo "Error: samba user $ROBO_USER_AG still exists!"
             echo "  --> robo_setup_server_smbuser_restore"
             return -1
         fi
 
         # remove user
-        sudo deluser --remove-home roboag
+        sudo deluser --remove-home $ROBO_USER_AG
     fi
 
     # check group roboag
-    if [ "$(getent group roboag)" == "" ]; then
+    if [ "$(getent group $ROBO_USER_AG)" == "" ]; then
         # remove user
-        sudo delgroup roboag
+        sudo delgroup $ROBO_USER_AG
     else
-        echo "group roboag does not exist (anymore)"
+        echo "group $ROBO_USER_AG does not exist (anymore)"
     fi
 
     echo "done :-)"
@@ -579,7 +587,7 @@ function robo_config_samba() {
             break
         done
         (
-            echo "username=roboag"
+            echo "username=$ROBO_USER_AG"
             echo "password=$password"
         ) | sudo tee "$smb_file" > /dev/null
         sudo chmod 600 "$smb_file"
@@ -674,17 +682,17 @@ function robo_config_samba_check() {
         if [ ! -f "$smb_file" ]; then
             error_flag=1
             echo ""
-            echo -n "  roboag's credential file does not exist"
+            echo -n "  $ROBO_USER_AG's credential file does not exist"
         else
             if [ "$(stat -c "%U" "$smb_file")" != "root" ]; then
                 error_flag=1
                 echo ""
-                echo -n "  roboag's credential file not owned by root"
+                echo -n "  $ROBO_USER_AG's credential file not owned by root"
             fi
             if [ "$(stat -c "%a" "$smb_file")" != "600" ]; then
                 error_flag=1
                 echo ""
-                echo -n "  roboag's credential file's mode is not 600"
+                echo -n "  $ROBO_USER_AG's credential file's mode is not 600"
             fi
         fi
         temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOAG:0: -1}")"

@@ -223,7 +223,7 @@ function robo_help_install_server() {
     if [ "$system_flag" == "roboag" ]; then
         echo "  Ihr Name               : Guru der RoboAG"
         echo "  Name Ihres Servers     : server"
-        echo "  Benutzernamen auswählen: guru"
+        echo "  Benutzernamen auswählen: $ROBO_USER_ADMIN"
     else
         echo "  Your name             : Peter       <beliebig>"
         echo "  Your server's name    : blackbox    <beliebig>"
@@ -480,7 +480,7 @@ function robo_help_install_server1804() {
     if [ "$system_flag" == "roboag" ]; then
         echo "  Your name             : Guru der RoboAG"
         echo "  Your server's name    : server"
-        echo "  Pick a username       : guru"
+        echo "  Pick a username       : $ROBO_USER_ADMIN"
     else
         echo "  Your name             : Peter     <beliebig>"
         echo "  Your server's name    : blackbox"
@@ -660,7 +660,7 @@ function robo_help_install_server1604() {
     echo "7.b) Benutzer und Passwörter einrichten"
     echo "  Benutzername für ihr Konto:"
     if [ "$system_flag" == "roboag" ]; then
-        echo "  [guru]"
+        echo "  [$ROBO_USER_ADMIN]"
     else
         echo "  [peter]    <beliebig>"
     fi
