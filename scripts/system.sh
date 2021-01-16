@@ -209,7 +209,7 @@ function robo_system_wtf() {
     fi
 }
 
-# 2021 01 15
+# 2021 01 16
 function robo_system_check_internet() {
 
     # init variables
@@ -221,15 +221,15 @@ function robo_system_check_internet() {
     # check for internet connection
     if ! network_ping 8.8.8.8 &> /dev/null; then
         error_flag=1;
-        echo ""
-        echo -n "  no internet connection"
+        #echo ""
+        #echo -n "  no internet connection"
     fi;
 
     # final result
     if [ $error_flag -eq 0 ]; then
         echo "ok"
     else
-        echo ""
+        echo ":-("
     fi
 }
 
