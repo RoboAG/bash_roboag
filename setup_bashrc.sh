@@ -33,4 +33,10 @@ else
         echo "$BASHRC_SOURCE"                          >> ~/.bashrc
         echo "robo_help_daily"                         >> ~/.bashrc
     fi
+
+    # source scripts now, if not sourced before
+    if [ "$SOURCED_BASH_MASTER_ROBOAG" == "" ]; then
+        echo "Sourcing roboag scripts now."
+        source "${SCRIPTDIR}bashrc.sh"
+    fi
 fi
