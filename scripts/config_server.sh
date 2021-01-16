@@ -239,6 +239,63 @@ function robo_config_server_dhcp_check() {
     fi
 }
 
+# 2021 01 16
+function robo_config_server_dhcp_show() {
+
+    # Check the configuration
+    FILENAME_LEASES="/var/lib/misc/dnsmasq.leases"
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<quiet>]"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 0-1 parameters"
+        echo "    [#1:]flag for less verbose output"
+        echo "         if not empty only hostnames or IPs will be printed"
+        echo "This function shows all lately connected dhcp-clients."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check for verbose output
+    if [ "$1" != "" ]; then
+        AWK_STRING='
+            if( $4 != "")
+                { print $4 }
+            else if($3 != "")
+                { print $3}
+            else
+                { printf "\n"}';
+    else
+        AWK_STRING='{ print "  " $1 "  " $3 " " $4}';
+    fi
+
+    # check for server
+    _robo_config_need_server "$FUNCNAME"
+
+    # check the file
+    if [ ! -e $FILENAME_LEASES ]; then
+        if [ "$1" == "" ]; then
+            echo "error: file $FILENAME_LEASES does not exist"
+        fi
+        return -2
+    fi
+
+    # do the job
+    cat "$FILENAME_LEASES" | awk "$AWK_STRING"
+}
+
+
 # 2021 01 01
 function robo_config_server_dhcp_list() {
 
