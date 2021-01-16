@@ -174,7 +174,7 @@ function robo_config_server_internet_off() {
 
 
 #***************************[dhcp]*******************************************
-# 2021 01 15
+# 2021 01 16
 
 function robo_config_server_dhcp_check() {
 
@@ -218,7 +218,7 @@ function robo_config_server_dhcp_check() {
 
     # iterate over all macs
     for mac in $macs; do
-        if echo "$dhcp" | grep "$mac" > /dev/null; then
+        if echo "$dhcp" | grep --quiet "$mac"; then
             continue;
         fi
 
@@ -293,7 +293,7 @@ function robo_config_server_dhcp_list() {
     done
 }
 
-# 2021 01 03
+# 2021 01 16
 function robo_config_server_dhcp_add() {
 
     # print help
@@ -343,11 +343,11 @@ function robo_config_server_dhcp_add() {
 
     # check if mac or ip exist
     dhcp="$(robo_config_server_dhcp_list verbose)"
-    if echo "$dhcp" | grep "$param_mac" > /dev/null; then
+    if echo "$dhcp" | grep --quiet "$param_mac"; then
         echo "$FUNCNAME: mac $param_mac already exists."
         return -3
     fi
-    if echo "$dhcp" | grep "$param_ip" > /dev/null; then
+    if echo "$dhcp" | grep --quiet "$param_ip"; then
         echo "$FUNCNAME: ip $param_ip already exists."
         return -3
     fi
