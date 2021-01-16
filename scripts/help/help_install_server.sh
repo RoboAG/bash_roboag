@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 12 29
+# 2021 01 16
 
 function robo_help_install_server() {
 
@@ -282,14 +282,14 @@ function robo_help_install_server() {
     echo "14. Weiteres"
     echo "  Für die weitere Einrichtung des Rechners sollten die folgenden"
     echo "  Skripte auf den neuen Rechner genutzt werden:"
-    echo "    $ robo_help_setup_workspace shared"
+    echo "    $ robo_help_setup_workspace_shared"
     echo "    $ robo_help_setup server"
 
     echo "done :-)"
 }
 
 #***************************[18.04]*******************************************
-# 2020 12 30
+# 2021 01 16
 
 function robo_help_install_server1804() {
 
@@ -531,7 +531,7 @@ function robo_help_install_server1804() {
 
     echo "14. Config"
     echo "  for further configuration and setup see"
-    echo "  $ robo_help_setup_workspace shared"
+    echo "  $ robo_help_setup_workspace_shared"
     echo "  $ robo_help_setup server"
 
     echo "done :-)"
