@@ -141,5 +141,12 @@ function robo_help_setup() {
     echo "    $ robo_system_wtf"
     echo -e "\n<enter>\n"; read dummy
 
+    if [ "$system_flag" == "" ]; then
+        echo ""
+        echo "optional install"
+        echo "    $ config_install_nextcloud"
+        echo -e "\n<enter>\n"; read dummy
+    fi
+
     echo "done :-)"
 }
