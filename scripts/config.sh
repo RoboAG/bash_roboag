@@ -31,15 +31,24 @@ fi
 
 
 
+#***************************[shared paths]************************************
+# 2021 01 16
+
+export ROBO_PATH_SHARED="/opt/roboag/"
+export ROBO_PATH_SHARED_REPOS="${ROBO_PATH_SHARED}repos/"
+export ROBO_PATH_SHARED_DATA="${ROBO_PATH_SHARED}data/"
+
+
+
 #***************************[samba paths]*************************************
-# 2019 11 20
+# 2021 01 16
 
 export _ROBO_SHARE_ROBOAG="/media/roboag/"
 export _ROBO_SHARE_ROBOAG2="/media/roboag_smb/"
-#export _ROBO_SHARE_ROBOAG3="/opt/roboag/data/roboag_smb/"
+#export _ROBO_SHARE_ROBOAG3="${ROBO_PATH_SHARED_DATA}roboag_smb/"
 export _ROBO_SHARE_ROBOSAX="/media/robosax/"
 export _ROBO_SHARE_ROBOSAX2="/media/robosax_smb/"
-#export _ROBO_SHARE_ROBOSAX3="/opt/roboag/data/robosax_smb/"
+#export _ROBO_SHARE_ROBOSAX3="{ROBO_PATH_SHARED_DATA}robosax_smb/"
 
 if [ "$ROBO_SHARE_ROBOAG" == "" ]; then
     if [ -d "_ROBO_SHARE_ROBOAG2" ]; then
@@ -518,7 +527,7 @@ function robo_config_user_restore() {
 
 #***************************[samba]*******************************************
 
-# 2021 01 09
+# 2021 01 16
 function robo_config_samba() {
 
     # print help and check for user agreement
@@ -539,8 +548,8 @@ function robo_config_samba() {
     fi
 
     # check credential file
-    if [ -d "/opt/roboag/" ]; then
-        smb_path="/opt/roboag/data/"
+    if [ -d "$ROBO_PATH_SHARED" ]; then
+        smb_path="$ROBO_PATH_SHARED_DATA"
     else
         smb_path="$HOME"
     fi
@@ -639,7 +648,7 @@ function robo_config_samba() {
     echo "done :-)"
 }
 
-# 2021 01 15
+# 2021 01 16
 function robo_config_samba_check() {
 
     # init variables
@@ -655,8 +664,8 @@ function robo_config_samba_check() {
         echo ""
         echo -n "  mountpoint roboag does not exist"
     else
-        if [ -d "/opt/roboag/" ]; then
-            smb_path="/opt/roboag/data/"
+        if [ -d "$ROBO_PATH_SHARED" ]; then
+            smb_path="$ROBO_PATH_SHARED_DATA"
         else
             smb_path="$HOME"
         fi
@@ -721,7 +730,7 @@ function robo_config_samba_check() {
     fi
 }
 
-# 2021 01 07
+# 2021 01 16
 function robo_config_samba_restore() {
 
     # print help and check for user agreement
@@ -743,8 +752,8 @@ function robo_config_samba_restore() {
     fi
 
     # removing credential file
-    if [ -d "/opt/roboag/" ]; then
-        smb_path="/opt/roboag/data/"
+    if [ -d "$ROBO_PATH_SHARED" ]; then
+        smb_path="$ROBO_PATH_SHARED_DATA"
     else
         smb_path="$HOME"
     fi
