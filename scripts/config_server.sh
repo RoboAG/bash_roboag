@@ -459,3 +459,52 @@ function _robo_config_server_dhcp_create_hostfile() {
         ) | sudo tee "$FILENAME_CONFIG" > /dev/null
     fi
 }
+
+#***************************[intranet]****************************************
+# 2021 01 15
+
+function robo_config_server_intranet_check() {
+
+    # initial output
+    echo -n "intranet on server ... "
+
+    # init variables
+    error_flag=0;
+
+    # load current ports used in intranet
+    port_list="$(netstat -tnl | grep -E -o "${_ROBO_SERVER_IP}:[0-9]+")"
+
+    # check dhcp
+    if config_check_service dnsmasq > /dev/null; then
+        if ! echo "$port_list" | grep ":53"   > /dev/null; then
+            error_flag=1
+            echo ""
+            echo "  no dns-server --> sudo systemctl restart dnsmasq"
+        fi
+    fi
+
+    # check apt-cacher
+    if config_check_service apt-cacher-ng > /dev/null; then
+        if ! echo "$port_list" | grep ":3142" > /dev/null; then
+            error_flag=1
+            echo ""
+            echo "  no apt-cacher --> sudo systemctl restart apt-cacher-ng"
+        fi
+    fi
+
+    # check apt-cacher
+    if config_check_service smbd > /dev/null; then
+        if ! echo "$port_list" | grep ":445"  > /dev/null; then
+            error_flag=1
+            echo ""
+            echo "  no samba      --> sudo systemctl restart smbd"
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
