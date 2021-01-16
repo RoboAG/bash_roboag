@@ -183,7 +183,7 @@ function robo_config_server_dhcp_check() {
     FILENAME_DHCP="/etc/dnsmasq.d/dhcp_hosts.conf"
 
     # init variables
-    error_flag_temp=0; # error_flag is used in config_check_service
+    error_flag=0;
     leases=""
     dhcp=""
     macs=""
@@ -193,10 +193,7 @@ function robo_config_server_dhcp_check() {
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag_temp=2; fi
-
-    # init variables
-    error_flag="$error_flag_temp";
+    if [ $? -ne 0 ]; then error_flag=2; fi
 
     # check if lease file is there
     if [ ! -e "$FILENAME_LEASES" ]; then

@@ -268,19 +268,16 @@ function robo_setup_server_dnsmasq_check() {
     PATH_LOCAL="${ROBO_PATH_SCRIPT}system_config/dnsmasq/"
 
     # init variables
-    error_flag_temp=0; # error_flag is used in config_check_service
+    error_flag=0;
 
     # initial output
     echo -n "dnsmasq on server ... "
 
     # check status of service
     config_check_service dnsmasq "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag_temp=2; fi
+    if [ $? -ne 0 ]; then error_flag=2; fi
     config_check_service systemd-resolved "quiet" "enabled"
-    if [ $? -ne 0 ]; then error_flag_temp=1; fi
-
-    # init variables
-    error_flag="$error_flag_temp";
+    if [ $? -ne 0 ]; then error_flag=1; fi
 
     # iterate over all config_files
     files="$(ls "$PATH_LOCAL")"
