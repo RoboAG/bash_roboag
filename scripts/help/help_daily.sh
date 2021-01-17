@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 09
+# 2021 01 16
 
 function robo_help_daily() {
 
@@ -41,6 +41,9 @@ function robo_help_daily() {
         echo "  $ robo_repo_clone_from_server # clone repos"
     fi
     echo "  $ robo_system_update  # update system"
+    if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "  $ robo_system_ssh     # ssh into each client"
+    fi
     echo ""
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
