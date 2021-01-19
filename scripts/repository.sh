@@ -5,7 +5,16 @@
 
 # ROBO_PATH_WORKSPACE
 
-# note: repo files must be sourced AFTER this script
+
+
+#***************************[dependencies]************************************
+# 2021 01 19
+
+# the following must be sourced BEFORE this script
+#
+# the following must be sourced AFTER this script
+#     repo files
+#     config.sh
 
 
 

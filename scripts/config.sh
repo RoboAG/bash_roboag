@@ -1,11 +1,14 @@
 #!/bin/bash
 
-#***************************[needed external variables]***********************
-# 2020 10 11
+#***************************[dependencies]************************************
+# 2021 01 19
 
-# ROBO_PATH_SCRIPTS
-
-# note: repo files must be sourced BEFORE this script
+# the following must be sourced BEFORE this script
+#     repo files
+#
+# the following must be sourced AFTER this script
+#     config_server.sh - overwritting ROBO_SERVER_IP
+#     almost all files - using _robo_config_need_... or ROBO_CONFIG_IS_...
 
 
 

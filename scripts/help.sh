@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#***************************[dependencies]************************************
+# 2021 01 19
+
+# the following must be sourced BEFORE this script
+#     repo.sh
+#     config.sh
+#
+# the following must be sourced AFTER this script
+
+
+
 #***************************[all]*********************************************
 # 2021 01 03
 

@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#***************************[dependencies]************************************
+# 2021 01 19
+
+# the following must be sourced BEFORE this script
+#     config.sh
+#     setup_server.sh
+#
+# the following must be sourced AFTER this script
+
+
+
 #***************************[update]******************************************
 # 2019 09 10
 
@@ -255,41 +266,4 @@ function robo_system_check_server() {
     else
         echo ""
     fi
-}
-
-
-
-#***************************[ssh]********************************************
-
-# 2021 01 16
-function robo_system_ssh() {
-
-    # print help
-    if [ "$1" == "-h" ]; then
-        echo "$FUNCNAME [<script>]"
-
-        return
-    fi
-    if [ "$1" == "--help" ]; then
-        echo "$FUNCNAME needs 0-1 parameters"
-        echo "    [#1:]script to be executed on each computer"
-        echo "This function logs into each available computer."
-        echo "If a bash script is passed, it will be executed."
-
-        return
-    fi
-
-    # check parameter
-    if [ $# -gt 1 ]; then
-        echo "$FUNCNAME: Parameter Error."
-        $FUNCNAME --help
-        return -1
-    fi
-
-    # load list of current dhcp clients
-    server_flag="0"
-    computers="$(robo_config_server_dhcp_show --none-verbose)"
-    if [ $? -ne 0 ]; then return -2; fi
-
-    network_ssh "$computers" "$ROBO_USER_ADMIN" "$@"
 }

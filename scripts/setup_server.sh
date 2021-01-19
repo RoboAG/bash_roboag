@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#***************************[dependencies]************************************
+# 2021 01 19
+
+# the following must be sourced BEFORE this script
+#     config.sh
+#
+# the following must be sourced AFTER this script
+
+
+
 #***************************[apt-cacher-ng]***********************************
 # 2021 01 03
 
