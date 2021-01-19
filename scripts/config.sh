@@ -76,8 +76,8 @@ fi
 
 
 #***************************[mode of operation]*******************************
-# 2021 01 12
 
+# 2021 01 12
 function _robo_config_mode_get() {
 
     # unset all possible config states
@@ -102,6 +102,7 @@ function _robo_config_mode_get() {
     fi
 }
 
+# 2021 01 12
 function robo_config_mode_get() {
 
     _robo_config_mode_get
@@ -118,6 +119,7 @@ function robo_config_mode_get() {
     fi
 }
 
+# 2021 01 12
 function robo_config_mode_set() {
 
     # print help
@@ -213,7 +215,7 @@ function robo_config_mode_set() {
         fi
     fi
 
-    # check current mode
+    # get current mode
     _robo_config_mode_get
 
     echo "done :-)"
