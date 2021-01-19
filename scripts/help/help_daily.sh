@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 16
+# 2021 01 19
 
 function robo_help_daily() {
 
@@ -47,6 +47,10 @@ function robo_help_daily() {
     echo ""
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo "clients"
+        echo "  $ robo_server_ssh_update # update their system & repos"
+        echo "  $ robo_server_ssh_check  # check  their system"
+        echo ""
         echo "server"
         echo "  $ robo_config_server_internet_on  # internet ON"
         echo "  $ robo_config_server_internet_off # internet OFF"

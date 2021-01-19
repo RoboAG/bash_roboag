@@ -59,6 +59,8 @@ fi
 . ${ROBO_PATH_SCRIPT}scripts/help.sh
 . ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
 
+. ${ROBO_PATH_SCRIPT}scripts/server.sh
+
 #. ${ROBO_PATH_SCRIPT}scripts/setup.sh
 . ${ROBO_PATH_SCRIPT}scripts/setup_server.sh
 
