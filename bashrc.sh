@@ -37,14 +37,6 @@ fi
 
 
 
-#***************************[help]********************************************
-# 2019 11 20
-
-. ${ROBO_PATH_SCRIPT}scripts/help.sh
-. ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
-
-
-
 #***************************[repository]**************************************
 # 2020 10 12
 
@@ -55,17 +47,22 @@ if [ -d "${REPO_BASH_REPO[0]}" ]; then
     . ${REPO_BASH_REPO[0]}bashrc.sh
 fi
 
+
+
+#***************************[internal scripts]********************************
+# 2021 01 19
+
+# config.sh sets _robo_config_need_... and ROBO_CONFIG_IS_...
 . ${ROBO_PATH_SCRIPT}scripts/config.sh
 . ${ROBO_PATH_SCRIPT}scripts/config_server.sh
 
-
-
-#***************************[install & setup]*********************************
-# 2021 01 03
+. ${ROBO_PATH_SCRIPT}scripts/help.sh
+. ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
 
 #. ${ROBO_PATH_SCRIPT}scripts/setup.sh
 . ${ROBO_PATH_SCRIPT}scripts/setup_server.sh
 
+# system.sh depends on most aliases
 . ${ROBO_PATH_SCRIPT}scripts/system.sh
 
 
