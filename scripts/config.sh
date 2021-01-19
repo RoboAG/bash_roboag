@@ -31,6 +31,18 @@ fi
 
 
 
+#***************************[server ip]***************************************
+# 2021 01 19
+
+export _ROBO_SERVER_IP="192.168.2.20"
+export _ROBO_SERVER_IP_MASK="255.255.255.0"
+export _ROBO_SERVER_IP_MASK2="${_ROBO_SERVER_IP}/24"
+
+# this definition is overwritten in server mode
+export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
+
+
+
 #***************************[user]********************************************
 # 2021 01 16
 

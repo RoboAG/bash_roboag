@@ -1,15 +1,10 @@
 #!/bin/bash
 
-#***************************[server config]***********************************
-# 2019 11 20
+#***************************[server ip]***************************************
+# 2021 01 19
 
-export _ROBO_SERVER_IP="192.168.2.20"
-export _ROBO_SERVER_IP_MASK="255.255.255.0"
-export _ROBO_SERVER_IP_MASK2="${_ROBO_SERVER_IP}/24"
-
-if [ "$ROBO_CONFIG_IS_SERVER" == "" ]; then
-    export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
-else
+# overwritting default ip from config.sh
+if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export ROBO_SERVER_IP="localhost"
 fi
 
