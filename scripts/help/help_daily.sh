@@ -28,17 +28,20 @@ function robo_help_daily() {
     fi
 
     echo "help"
-    echo "  $ robo_help                 # overview"
-    echo "  $ robo_help_daily           # this script"
-    echo "  $ robo_help_install         # install"
-    echo "  $ robo_help_setup_workspace # copy scripts"
-    echo "  $ robo_help_setup           # setup"
+    echo "  $ robo_help                    # overview"
+    echo "  $ robo_help_daily              # this script"
+    echo "  $ robo_help_install            # install"
+    echo "  $ robo_help_setup_workspace    # copy scripts"
+    echo "  $ robo_help_setup              # setup"
     echo ""
 
     echo "system"
-    echo "  $ robo_system_wtf           # check  system"
-    echo "  $ robo_repo_update          # update repos"
-    echo "  $ robo_system_update        # update system"
+    echo "  $ robo_system_wtf              # check  system"
+    echo "  $ robo_repo_update             # update repos"
+    if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+        echo "  $ robo_repo_clone_from_server  # clone repos"
+    fi
+    echo "  $ robo_system_update           # update system"
     echo ""
 
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
