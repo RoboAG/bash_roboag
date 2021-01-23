@@ -51,6 +51,7 @@ fi
 alias robo_repo_status="repo_status_all"
 alias robo_repo_update_from_web="repo_pull_all"
 
+# 2021 01 09
 function robo_repo_update_from_server() {
 
     _robo_config_need_client "$FUNCNAME"
@@ -87,6 +88,7 @@ function robo_repo_update_from_server() {
     echo "done :-)"
 }
 
+# 2021 01 09
 function robo_repo_update() {
 
     if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
@@ -96,6 +98,7 @@ function robo_repo_update() {
     fi
 }
 
+# 2021 01 23
 function robo_repo_clone_from_server() {
 
     _robo_config_need_client "$FUNCNAME"
@@ -123,11 +126,15 @@ function robo_repo_clone_from_server() {
         repo_name="$(basename "$repo")"
         repo_short="${repo:$length_ws}"
         repo_path="${ROBO_PATH_WORKSPACE}${repo_short}"
-        if [ -d "$repo_path" ]; then
+        if [ -d "${repo_path}.git" ]; then
             continue
         fi
-
         echo "###g ${repo_name}@server ###"
+        if [ -d "${repo_path}" ]; then
+            echo "  remove old files"
+            rm -rf "$repo_path"
+        fi
+
         repo_parent="$(dirname "$repo_path")"
         if [ ! -d "$repo_parent" ]; then
             echo "  mkdir $repo_parent"
