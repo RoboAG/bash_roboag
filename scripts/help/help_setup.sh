@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 16
+# 2021 01 24
 
 function robo_help_setup() {
 
@@ -127,6 +127,11 @@ function robo_help_setup() {
     fi
     echo "    $ robo_config_samba"
     echo -e "\n<enter>\n"; read dummy
+
+    if [ "$system_flag" == "server" ]; then
+        echo "setup crontab (restart services on reboot)"
+        echo "    $ robo_setup_server_cron"
+    fi
 
     if [ "$system_flag" == "client" ]; then
         echo ""

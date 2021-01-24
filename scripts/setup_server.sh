@@ -689,11 +689,157 @@ function robo_setup_server_smbuser_restore() {
       "removes user $ROBO_USER_AG from samba server."
     if [ $? -ne 0 ]; then return -1; fi
 
+    sudo smbpasswd -x $ROBO_USER_AG
+
+    echo "done :-)"
+}
+
+
+
+#***************************[cron]*********************************************
+
+# 2021 01 24
+function _robo_setup_server_cron_text() {
+
+    # Do the configuration
+    FILE_LOCAL="${ROBO_PATH_SCRIPT}system_config/cron/root"
+
+    # read config file
+    content="$(cat "$FILE_LOCAL")"
+
+    # extract services
+    services="$(echo "$content" | grep "@reboot" | grep -E -o "restart[^&]+")"
+    services="${services:8}"
+    # check services
+    for service in $services; do
+        if ! systemctl is-enabled $service >> /dev/null 2>&1; then
+            content="$(echo "$content" | sed "$ s/ $service / /")"
+        fi
+    done
+
+    current_content="$(sudo crontab -u root -l 2> /dev/null)"
+    if [ $? -eq 0 ] && [ "$content" == "$current_content" ]; then
+        # nothing todo
+        return
+    fi
+
+    echo "$content"
+}
+
+# 2021 01 24
+function robo_setup_server_cron() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "adds a cronjob to restart server deamons."
+    if [ $? -ne 0 ]; then return -1; fi
+
     # check current mode
     _robo_config_need_server "$FUNCNAME"
     if [ $? -ne 0 ]; then return -2; fi
 
-    sudo smbpasswd -x $ROBO_USER_AG
+    # get content
+    content="$(_robo_setup_server_cron_text)"
+    if [ $? -ne 0 ]; then return -3; fi
+    if [ "$content" == "" ]; then
+        echo "nothing todo ;-)"
+        return
+    fi
+
+    # check if config file exists
+    temp_filename="/tmp/root"
+    old_content="$(sudo crontab -u root -l 2> /dev/null)"
+    if [ "$old_content" != "" ]; then
+        need_edit=0
+        last_backup_file="$(_config_file_return_last "$temp_filename" \
+          "${CONFIG_PATH_BACKUP}crontab/")"
+        if [ "$last_backup_file" == "" ] || \
+          [ ! -e "$last_backup_file" ]; then
+            need_edit=1
+        elif [ "$old_content" != "$(cat "$last_backup_file")" ]; then
+            need_edit=1
+        fi
+        if [ $need_edit -eq 1 ]; then
+            echo "crontab of root user already set ..."
+            echo "  $ sudo crontab -u root -e"
+            return -1
+        fi
+
+        echo "updating crontab of root user"
+    else
+        echo "creating crontab of root user"
+    fi
+
+    echo "$content" | tee "$temp_filename" | sudo crontab -u root -
+    config_file_backup "$temp_filename" "crontab"
+    rm "$temp_filename"
+
+    echo "done :-)"
+}
+
+# 2021 01 24
+function robo_setup_server_cron_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "cronjob on server ... "
+
+    # get content
+    content="$(_robo_setup_server_cron_text)"
+    if [ $? -ne 0 ]; then
+        echo "error"
+        return
+    fi
+    if [ "$content" == "" ]; then
+        echo "ok"
+        return
+    fi
+
+    # final result
+    echo ""
+    echo "  --> robo_setup_server_cron"
+}
+
+# 2021 01 24
+function robo_setup_server_cron_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes the cronjob restarting server deamons."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # check if config file exists
+    temp_filename="/tmp/root"
+    old_content="$(sudo crontab -u root -l 2> /dev/null)"
+    if [ "$old_content" == "" ]; then
+        echo "nothing todo ;-)"
+        return
+    fi
+
+    last_backup_file="$(_config_file_return_last "$temp_filename" \
+      "${CONFIG_PATH_BACKUP}crontab/")"
+    if [ "$last_backup_file" == "" ] || \
+      [ ! -e "$last_backup_file" ]; then
+        echo "no backup file of crontab of root ..."
+        echo "  $ sudo crontab -u root -e"
+        return -3
+    fi
+
+    if [ "$old_content" != "$(cat "$last_backup_file")" ]; then
+        echo "last backup file differs from crontab of root ..."
+        echo "  $ cat \"$last_backup_file\""
+        echo "  $ sudo crontab -u root -e"
+        return -4
+    fi
+
+    echo "removing crontab of root"
+    sudo crontab -u root -r
 
     echo "done :-)"
 }

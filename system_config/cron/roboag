@@ -1,0 +1,11 @@
+# /etc/cron.d/roboag
+# ==================
+#
+# Cron file for restarting server deamons after booting.
+#
+# https://github.com/RoboAG/bash_roboag
+# 23.01.2021
+
+
+
+@reboot sleep 30 && systemctl restart dnsmasq smbd apt-cacher-ng
