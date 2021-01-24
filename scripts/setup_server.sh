@@ -681,13 +681,17 @@ function robo_setup_server_smbuser_check() {
     fi
 }
 
-# 2021 01 03
+# 2021 01 24
 function robo_setup_server_smbuser_restore() {
 
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
       "removes user $ROBO_USER_AG from samba server."
     if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
 
     sudo smbpasswd -x $ROBO_USER_AG
 
