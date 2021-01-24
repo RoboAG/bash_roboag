@@ -196,7 +196,7 @@ function robo_setup_server_interfaces_restore() {
 
 
 #***************************[dnsmasq]*****************************************
-# 2021 01 10
+# 2021 01 23
 
 function robo_setup_server_dnsmasq() {
 
@@ -220,7 +220,7 @@ Additionally installs dnsmasq."
     if [ $? -ne 0 ]; then return -3; fi
 
     # check & install dnsmasq
-    _config_install_list "dnsmasq resolveconf" quiet
+    _config_install_list "dnsmasq resolvconf" quiet
     if [ $? -ne 0 ]; then return -4; fi
 
     # check if config path exists
@@ -373,6 +373,8 @@ Additionally uninstalls dnsmasq."
 
     echo "done :-)"
 }
+
+
 
 #***************************[samba]*******************************************
 # 2021 01 03
@@ -618,7 +620,6 @@ function _robo_setup_server_samba_getawk() {
         "
     fi
 }
-
 
 
 
