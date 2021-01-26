@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 24
+# 2021 01 26
 
 function robo_help_setup() {
 
@@ -138,6 +138,10 @@ function robo_help_setup() {
         echo "update repos"
         echo "    $ robo_repo_update"
         echo "    $ robo_repo_clone_from_server"
+        echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "sudo without password"
+        echo "    $ config_sudo_no_password"
         echo -e "\n<enter>\n"; read dummy
     fi
 
