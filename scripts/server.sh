@@ -12,10 +12,10 @@
 
 #***************************[ssh]*********************************************
 
-# 2021 01 28
+# 2021 01 29
 alias robo_server_ssh_check="robo_server_ssh robo_system_wtf"
 alias robo_server_ssh_update="robo_server_ssh \
-  \"config_update_system; robo_repo_update\" tabs"
+  \"config_update_system\; robo_repo_update\" tabs"
 
 # 2021 01 28
 function robo_server_ssh() {
