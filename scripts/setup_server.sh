@@ -377,8 +377,8 @@ Additionally uninstalls dnsmasq."
 
 
 #***************************[samba]*******************************************
-# 2021 01 03
 
+# 2021 01 03
 function robo_setup_server_samba() {
 
     # print help and check for user agreement
@@ -536,6 +536,7 @@ function robo_setup_server_samba_restore() {
     echo "done :-)"
 }
 
+# 2021 01 03
 function _robo_setup_server_samba_getawk() {
 
     FILENAME_CONFIG="/etc/samba/smb.conf"
@@ -549,7 +550,7 @@ function _robo_setup_server_samba_getawk() {
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs no parameters"
         echo "This function returns the awk-script needed to modify the"
-        echo "sambe config file $FILENAME_CONFIG."
+        echo "samba config file $FILENAME_CONFIG."
 
         return
     fi
