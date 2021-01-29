@@ -133,7 +133,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 24
+# 2021 01 29
 
 function robo_system_wtf() {
 
@@ -185,6 +185,7 @@ function robo_system_wtf() {
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_dnsmasq_check
         robo_config_server_dhcp_check
+        robo_setup_server_apache_check
 
         robo_setup_server_samba_check
     fi

@@ -4,8 +4,8 @@
 # Cron file for restarting server deamons and remounting after booting.
 #
 # https://github.com/RoboAG/bash_roboag
-# 24.01.2021
+# 29.01.2021
 
 
 
-@reboot sleep 30 && systemctl restart dnsmasq smbd apt-cacher-ng && mount -a
+@reboot sleep 30 && systemctl restart apache2 dnsmasq smbd apt-cacher-ng && mount -a

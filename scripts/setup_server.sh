@@ -844,3 +844,301 @@ function robo_setup_server_cron_restore() {
 
     echo "done :-)"
 }
+
+
+
+#***************************[apache]******************************************
+
+# 2021 01 29
+function robo_setup_server_apache() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "sets up the apache2 server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # modify listener (only localhost & internal port)
+    FILENAME_CONFIG="/etc/apache2/ports.conf"
+    AWK_STRING="$(_robo_setup_server_apache_getawk)"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    if [ "$AWK_STRING" != "" ]; then
+        _config_file_modify_full "$FILENAME_CONFIG" "apache" "$AWK_STRING"
+        if [ $? -ne 0 ]; then return -4; fi
+    fi
+
+    # check available sites
+    FILENAME_SIMPLE="001-roboag.conf"
+    tmp="/etc/apache2/"
+    FILENAME_CONFIG="${tmp}sites-available/${FILENAME_SIMPLE}"
+    FILENAME_CONFIG2="${tmp}sites-enabled/${FILENAME_SIMPLE}"
+    FILE_LOCAL="${ROBO_PATH_SCRIPT}system_config/apache/${FILENAME_SIMPLE}"
+
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        echo "create virtual host for roboag"
+        echo "  ($FILENAME_CONFIG)"
+        sudo cp "$FILE_LOCAL" "$FILENAME_CONFIG"
+    elif [ "$(cat "$FILE_LOCAL")" != "$(cat "$FILENAME_CONFIG")" ]; then
+        echo "updating virtual host for roboag"
+        echo "  ($FILENAME_CONFIG)"
+        config_file_backup "$FILENAME_CONFIG" "apache"
+        sudo cp "$FILE_LOCAL" "$FILENAME_CONFIG"
+    fi
+    if [ ! -e "$FILENAME_CONFIG2" ]; then
+        echo "enable virtual host for roboag"
+        echo "  ($FILENAME_CONFIG2)"
+        sudo ln -s "$FILENAME_CONFIG" "$FILENAME_CONFIG2"
+    fi
+
+    # disable default site
+    FILENAME_CONFIG="/etc/apache2/sites-enabled/000-default.conf"
+    if [ -L "$FILENAME_CONFIG" ]; then
+        echo "disable default virtual host"
+        echo "  ($FILENAME_CONFIG)"
+        sudo rm "$FILENAME_CONFIG"
+    fi
+
+    # create folder structure
+    PATH_CONFIG="/var/www/html/"
+
+    if [ -d "$PATH_CONFIG" ]; then
+        # check for index.html
+        if [ -f "${PATH_CONFIG}index.html" ]; then
+            echo "moving index.html to folder default/"
+            sudo mkdir -p "${PATH_CONFIG}default"
+            sudo mv "${PATH_CONFIG}index.html" \
+              "${PATH_CONFIG}default/index.html"
+        fi
+        # create main robo folder
+        folders="roboag robosax doc keys"
+        for folder in $folders; do
+            path="${PATH_CONFIG}${folder}/"
+            if [ ! -d "${path}" ]; then
+                echo "create folder $folder/"
+                echo "  ($path)"
+                sudo mkdir "$path"
+                sudo chown $USER:$USER "$path"
+            fi
+        done
+        # create subfolders
+        tmp="${PATH_CONFIG}doc/robolib"
+        if [ ! -L "$tmp" ]; then
+            echo "linking doc/robolib"
+            sudo ln -s "$REPO_ROBOAG_DOC_ROBOLIB" "$tmp"
+        fi
+        tmp="${PATH_CONFIG}doc/punkte"
+        if [ ! -L "$tmp" ]; then
+            echo "linking doc/punkte"
+            sudo ln -s "$REPO_ROBOSAX_DOC_PUNKTE" "$tmp"
+        fi
+    fi
+
+    echo "restarting apache"
+    sudo systemctl restart apache2
+
+    echo "done :-)"
+}
+
+# 2021 01 29
+function robo_setup_server_apache_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "apache server     ... "
+
+    # check status of service
+    config_check_service apache2 "quiet" "enabled"
+    if [ $? -ne 0 ]; then error_flag=1; fi
+
+    # check for shares
+    AWK_STRING="$(_robo_setup_server_apache_getawk)"
+    if [ $? -ne 0 ]; then
+        error_flag=1
+        echo ""
+        echo -n "  error from _robo_setup_server_apache_getawk"
+    elif [ "$AWK_STRING" != "" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  ports.conf can be modified"
+    fi
+
+    # check available sites
+    FILENAME_SIMPLE="001-roboag.conf"
+    tmp="/etc/apache2/"
+    FILENAME_CONFIG="${tmp}sites-available/${FILENAME_SIMPLE}"
+    FILENAME_CONFIG2="${tmp}sites-enabled/${FILENAME_SIMPLE}"
+    FILE_LOCAL="${ROBO_PATH_SCRIPT}system_config/apache/${FILENAME_SIMPLE}"
+
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing virtual host for roboag"
+    elif [ "$(cat "$FILE_LOCAL")" != "$(cat "$FILENAME_CONFIG")" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  virtual host needs to be updated"
+    elif [ ! -e "$FILENAME_CONFIG2" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  virtual host is disabled"
+    fi
+
+    # disable default site
+    FILENAME_CONFIG="/etc/apache2/sites-enabled/000-default.conf"
+    if [ -L "$FILENAME_CONFIG" ]; then
+        error_flag=1
+        echo ""
+        echo "  default virtual host is still enabled"
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_setup_server_apache"
+    fi
+}
+
+# 2021 01 29
+function robo_setup_server_apache_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes config of apache server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check available sites
+    FILENAME_SIMPLE="001-roboag.conf"
+    tmp="/etc/apache2/"
+    FILENAME_CONFIG="${tmp}sites-available/${FILENAME_SIMPLE}"
+    FILENAME_CONFIG2="${tmp}sites-enabled/${FILENAME_SIMPLE}"
+
+    if [ -L "$FILENAME_CONFIG2" ]; then
+        echo "disable virtual host for roboag"
+        echo "  ($FILENAME_CONFIG2)"
+        sudo rm "$FILENAME_CONFIG2"
+    fi
+    if [ -e "$FILENAME_CONFIG" ]; then
+        echo "removing virtual host for roboag"
+        echo "  ($FILENAME_CONFIG)"
+        sudo rm "$FILENAME_CONFIG"
+    fi
+
+    # enable default site
+    FILENAME_SIMPLE="000-default.conf"
+    tmp="/etc/apache2/"
+    FILENAME_CONFIG="${tmp}sites-available/${FILENAME_SIMPLE}"
+    FILENAME_CONFIG2="${tmp}sites-enabled/${FILENAME_SIMPLE}"
+    if [ ! -L "$FILENAME_CONFIG2" ]; then
+        echo "enabling default virtual host"
+        echo "  ($FILENAME_CONFIG)"
+        sudo ln -s "$FILENAME_CONFIG" "$FILENAME_CONFIG2"
+    fi
+
+    # create folder structure
+    PATH_CONFIG="/var/www/html/"
+
+    if [ -d "$PATH_CONFIG" ]; then
+        # check for index.html
+        if [ ! -f "${PATH_CONFIG}index.html" ] && \
+          [ -f "${PATH_CONFIG}default/index.html" ]; then
+            echo "moving index.html from folder default/"
+            sudo mv "${PATH_CONFIG}default/index.html" \
+              "${PATH_CONFIG}index.html"
+        fi
+        # remove subfolders
+        tmp="${PATH_CONFIG}doc/robolib"
+        if [ -L "$tmp" ]; then
+            echo "removing doc/robolib"
+            sudo rm "$tmp"
+        fi
+        tmp="${PATH_CONFIG}doc/punkte"
+        if [ -L "$tmp" ]; then
+            echo "removing doc/punkte"
+            sudo rm "$tmp"
+        fi
+        # remove main robo folders if empty
+        folders="roboag robosax doc keys"
+        for folder in $folders; do
+            path="${PATH_CONFIG}${folder}/"
+            if [ -d "${path}" ]; then
+                sudo rmdir "$path" 2> /dev/null
+                if [ $# -ne 0 ]; then
+                    echo "folder $folder is not empty"
+                else
+                    echo "removing folder $folder"
+                fi
+                echo "  ($path)"
+            fi
+        done
+    fi
+
+    # restore config of ports
+    _config_file_restore_full "$FILENAME_CONFIG" "apache"
+
+    # restart apache
+    echo "restarting apache"
+    sudo systemctl restart apache2
+
+    echo "done :-)"
+}
+
+# 2021 01 29
+function _robo_setup_server_apache_getawk() {
+
+    FILENAME_CONFIG="/etc/apache2/ports.conf"
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "This function returns the awk-script needed to modify the"
+        echo "apache2 config file $FILENAME_CONFIG."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check if config file exists
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        echo "$FUNCNAME: Error"
+        echo "File \"$FILENAME_CONFIG\" does not exist."
+        return -2
+    fi
+
+    # return awk string
+    AWK_STRING="
+        # search for Listen directive
+        \$0 ~ /^[^#]*LISTEN :$/ {
+          print \"# [EDIT]: \",\$0
+          tmp = \$0
+          sub( /LISTEN :/ , \"LISTEN localhost:\", tmp )
+          print tmp
+          sub( /LISTEN :/ , \"LISTEN $_ROBO_SERVER_IP:\")
+        }
+
+        { print \$0 }
+    "
+
+    content="$(cat $FILENAME_CONFIG)"
+    if [ "$content" != "$(echo "$content" | awk "$AWK_STRING")" ]; then
+        echo "$AWK_STRING"
+    fi
+}

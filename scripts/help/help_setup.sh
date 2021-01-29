@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 26
+# 2021 01 29
 
 function robo_help_setup() {
 
@@ -113,6 +113,10 @@ function robo_help_setup() {
         echo ""
         echo "setup dnsmasq (dhcp+dns)"
         echo "    $ robo_setup_server_dnsmasq"
+        echo -e "\n<enter>\n"; read dummy
+        echo ""
+        echo "setup apache"
+        echo "    $ robo_setup_server_apache"
         echo -e "\n<enter>\n"; read dummy
     fi
 

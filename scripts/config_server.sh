@@ -524,7 +524,7 @@ function _robo_config_server_dhcp_create_hostfile() {
 }
 
 #***************************[intranet]****************************************
-# 2021 01 15
+# 2021 01 29
 
 function robo_config_server_intranet_check() {
 
@@ -543,6 +543,15 @@ function robo_config_server_intranet_check() {
             error_flag=1
             echo ""
             echo "  no dns-server --> sudo systemctl restart dnsmasq"
+        fi
+    fi
+
+    # check apache
+    if config_check_service apache2 > /dev/null; then
+        if ! echo "$port_list" | grep ":80"   > /dev/null; then
+            error_flag=1
+            echo ""
+            echo "  no apache2 --> sudo systemctl restart apache2"
         fi
     fi
 
