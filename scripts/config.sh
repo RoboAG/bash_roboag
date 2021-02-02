@@ -13,24 +13,15 @@
 
 
 #***************************[paths and files]*********************************
-# 2020 10 11
+# 2021 02 02
 
+# load and check data dir
 if [ "$ROBO_PATH_CONFIG" == "" ]; then
-    # check if an alternative path exists
-    if [ "$REPO_BASH_DATA_PATH" != "" ] && \
-      [ -d "$REPO_BASH_DATA_PATH" ]; then
-        export ROBO_PATH_CONFIG="${REPO_BASH_DATA_PATH}roboag/"
-    else
-        export ROBO_PATH_CONFIG="${ROBO_PATH_SCRIPT}config/"
-    fi
-
-    # check if config folder exists
-    if [ ! -d "$ROBO_PATH_CONFIG" ]; then
-        echo "creating config folder for \"roboag\""
-        echo "    ($ROBO_PATH_CONFIG)"
-        mkdir -p "$ROBO_PATH_CONFIG"
-    fi
+    ROBO_PATH_CONFIG="$(_repo_bash_data_dirs_get --mkdir "roboag" \
+      "${ROBO_PATH_SCRIPT}config/")"
 fi
+_repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
+  "roboag" "${ROBO_PATH_SCRIPT}config/"
 
 
 
