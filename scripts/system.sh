@@ -133,7 +133,7 @@ function robo_system_install() {
 }
 
 #***************************[check]******************************************
-# 2021 01 29
+# 2021 02 06
 
 function robo_system_wtf() {
 
@@ -171,6 +171,9 @@ function robo_system_wtf() {
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
         robo_config_user_check
     fi
+
+    # paths
+    robo_config_paths_check
 
     # network
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then

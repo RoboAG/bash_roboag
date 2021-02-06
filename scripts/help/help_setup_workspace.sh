@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 16
+# 2021 02 06
 
 alias robo_help_setup_workspace_shared="robo_help_setup_workspace shared"
 alias robo_help_setup_workspace_client="robo_help_setup_workspace client"
@@ -148,14 +148,6 @@ function robo_help_setup_workspace() {
             echo "1.b) Remove checkout script"
             echo "  $ rm \"${filename}\""
             echo -e "\n<enter>\n"; read dummy
-
-            echo "1.c) Config settings"
-            echo "  Config files, e.g. changed by scripts or nano_config(),"
-            echo "  will be copied into the shared repositories - this can be"
-            echo "  a SECURITY ISSUE. For our clients this is a feature :-)"
-            echo "  If you want to keep your config files local:"
-            echo "    $ mkdir -p \"\${HOME}/config/\${HOSTNAME}/\""
-            echo -e "\n<enter>\n"; read dummy
         fi
     else # client mode
         echo "1.a) Create shared folder"
@@ -167,6 +159,15 @@ function robo_help_setup_workspace() {
         echo "  $ cd \"$ROBO_PATH_SHARED_REPOS\""
         temp="${ROBO_PATH_SHARED_REPOS}bash/"
         echo "  $ scp -r \"${USER}@${_ROBO_SERVER_IP}:${temp}\" ."
+        echo -e "\n<enter>\n"; read dummy
+    fi
+    if [ "$mode_flag" != "simple" ]; then
+        echo "1.c) Config settings"
+        echo "  Config files, e.g. changed by scripts or nano_config(),"
+        echo "  will be copied into the shared repositories - this can"
+        echo "  be a SECURITY ISSUE."
+        echo "  You should keep your config files local:"
+        echo "    $ mkdir -p \"\${HOME}/config/\${HOSTNAME}/\""
         echo -e "\n<enter>\n"; read dummy
     fi
 

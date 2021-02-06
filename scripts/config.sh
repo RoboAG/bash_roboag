@@ -808,3 +808,30 @@ function robo_config_samba_restore() {
 
     echo "done :-)"
 }
+
+
+
+#***************************[paths]*******************************************
+
+# 2021 02 06
+function robo_config_paths_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "runtime files     ... "
+
+    tmp="${ROBO_PATH_SCRIPT:0:${#ROBO_PATH_SHARED}}"
+    if [ "$tmp" == "$ROBO_PATH_SHARED" ] && \
+      [ "$REPO_BASH_DATA_PATH" == "" ]; then
+        error_flag=1;
+        echo ""
+        echo "  stored in public folders"
+        echo "  --> $ mkdir -p \"${HOME}/config/${HOSTNAME}/\""
+    fi
+
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    fi
+}
