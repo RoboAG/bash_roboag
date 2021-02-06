@@ -523,6 +523,8 @@ function _robo_config_server_dhcp_create_hostfile() {
     fi
 }
 
+
+
 #***************************[intranet]****************************************
 # 2021 01 29
 

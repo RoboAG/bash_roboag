@@ -849,7 +849,12 @@ function robo_setup_server_cron_restore() {
 
 #***************************[apache]******************************************
 
-# 2021 01 29
+# 2021 02 06
+export ROBO_SERVER_HTML_PATH="/var/www/html/"
+export ROBO_SERVER_KEYS_LIST="packages.microsoft.gpg"
+
+
+# 2021 02 06
 function robo_setup_server_apache() {
 
     # print help and check for user agreement
@@ -903,20 +908,18 @@ function robo_setup_server_apache() {
     fi
 
     # create folder structure
-    PATH_CONFIG="/var/www/html/"
-
-    if [ -d "$PATH_CONFIG" ]; then
+    if [ -d "$ROBO_SERVER_HTML_PATH" ]; then
         # check for index.html
-        if [ -f "${PATH_CONFIG}index.html" ]; then
+        if [ -f "${ROBO_SERVER_HTML_PATH}index.html" ]; then
             echo "moving index.html to folder default/"
-            sudo mkdir -p "${PATH_CONFIG}default"
-            sudo mv "${PATH_CONFIG}index.html" \
-              "${PATH_CONFIG}default/index.html"
+            sudo mkdir -p "${ROBO_SERVER_HTML_PATH}default"
+            sudo mv "${ROBO_SERVER_HTML_PATH}index.html" \
+              "${ROBO_SERVER_HTML_PATH}default/index.html"
         fi
         # create main robo folder
         folders="roboag robosax doc keys"
         for folder in $folders; do
-            path="${PATH_CONFIG}${folder}/"
+            path="${ROBO_SERVER_HTML_PATH}${folder}/"
             if [ ! -d "${path}" ]; then
                 echo "create folder $folder/"
                 echo "  ($path)"
@@ -925,16 +928,37 @@ function robo_setup_server_apache() {
             fi
         done
         # create subfolders
-        tmp="${PATH_CONFIG}doc/robolib"
+        tmp="${ROBO_SERVER_HTML_PATH}doc/robolib"
         if [ ! -L "$tmp" ]; then
             echo "linking doc/robolib"
             sudo ln -s "$REPO_ROBOAG_DOC_ROBOLIB" "$tmp"
         fi
-        tmp="${PATH_CONFIG}doc/punkte"
+        tmp="${ROBO_SERVER_HTML_PATH}doc/punkte"
         if [ ! -L "$tmp" ]; then
             echo "linking doc/punkte"
             sudo ln -s "$REPO_ROBOSAX_DOC_PUNKTE" "$tmp"
         fi
+    fi
+
+    # copy shared keys
+    key_src="/usr/share/keyrings/";
+    key_dest="${ROBO_SERVER_HTML_PATH}keys/";
+
+    if [ -d "$key_dest" ]; then
+        for key in $ROBO_SERVER_KEYS_LIST; do
+            if [ ! -e "${key_src}${key}" ]; then continue; fi
+            if [ ! -e "${key_dest}${key}" ]; then
+                echo "  copy key \"$key\""
+            else
+                tmp="$(diff --brief "${key_src}${key}" "${key_dest}${key}")"
+                if [ "$tmp" == "" ]; then
+                    continue;
+                fi
+                echo "  update key \"$key\""
+            fi
+            sudo cp "${key_src}${key}" "${key_dest}${key}"
+            sudo chmod 644 "${key_dest}${key}"
+        done
     fi
 
     echo "restarting apache"
@@ -943,7 +967,7 @@ function robo_setup_server_apache() {
     echo "done :-)"
 }
 
-# 2021 01 29
+# 2021 02 06
 function robo_setup_server_apache_check() {
 
     # init variables
@@ -994,7 +1018,29 @@ function robo_setup_server_apache_check() {
     if [ -L "$FILENAME_CONFIG" ]; then
         error_flag=1
         echo ""
-        echo "  default virtual host is still enabled"
+        echo -n "  default virtual host is still enabled"
+    fi
+
+    # check for shared keys
+    key_src="/usr/share/keyrings/";
+    key_dest="${ROBO_SERVER_HTML_PATH}keys/";
+
+    if [ -d "$key_dest" ]; then
+        for key in $ROBO_SERVER_KEYS_LIST; do
+            if [ ! -e "${key_src}${key}" ]; then continue; fi
+            if [ ! -e "${key_dest}${key}" ]; then
+                error_flag=1
+                echo ""
+                echo -n "  key \"$key\" is not copied yet"
+            else
+                tmp="$(diff --brief "${key_src}${key}" "${key_dest}${key}")"
+                if [ "$tmp" != "" ]; then
+                    error_flag=1
+                    echo ""
+                    echo -n "  key \"$key\" has changed"
+                fi
+            fi
+        done
     fi
 
     # final result
@@ -1006,7 +1052,7 @@ function robo_setup_server_apache_check() {
     fi
 }
 
-# 2021 01 29
+# 2021 02 06
 function robo_setup_server_apache_restore() {
 
     # print help and check for user agreement
@@ -1042,24 +1088,33 @@ function robo_setup_server_apache_restore() {
         sudo ln -s "$FILENAME_CONFIG" "$FILENAME_CONFIG2"
     fi
 
-    # create folder structure
-    PATH_CONFIG="/var/www/html/"
+    # remove shared keys
+    key_path="${ROBO_SERVER_HTML_PATH}keys/";
 
-    if [ -d "$PATH_CONFIG" ]; then
+    if [ -d "$key_path" ]; then
+        for key in $ROBO_SERVER_KEYS_LIST; do
+            if [ ! -e "${key_path}${key}" ]; then continue; fi
+            echo "  removing key \"$key\""
+            sudo rm "${key_path}${key}"
+        done
+    fi
+
+    # remove folder structure
+    if [ -d "$ROBO_SERVER_HTML_PATH" ]; then
         # check for index.html
-        if [ ! -f "${PATH_CONFIG}index.html" ] && \
-          [ -f "${PATH_CONFIG}default/index.html" ]; then
+        if [ ! -f "${ROBO_SERVER_HTML_PATH}index.html" ] && \
+          [ -f "${ROBO_SERVER_HTML_PATH}default/index.html" ]; then
             echo "moving index.html from folder default/"
-            sudo mv "${PATH_CONFIG}default/index.html" \
-              "${PATH_CONFIG}index.html"
+            sudo mv "${ROBO_SERVER_HTML_PATH}default/index.html" \
+              "${ROBO_SERVER_HTML_PATH}index.html"
         fi
         # remove subfolders
-        tmp="${PATH_CONFIG}doc/robolib"
+        tmp="${ROBO_SERVER_HTML_PATH}doc/robolib"
         if [ -L "$tmp" ]; then
             echo "removing doc/robolib"
             sudo rm "$tmp"
         fi
-        tmp="${PATH_CONFIG}doc/punkte"
+        tmp="${ROBO_SERVER_HTML_PATH}doc/punkte"
         if [ -L "$tmp" ]; then
             echo "removing doc/punkte"
             sudo rm "$tmp"
@@ -1067,7 +1122,7 @@ function robo_setup_server_apache_restore() {
         # remove main robo folders if empty
         folders="roboag robosax doc keys"
         for folder in $folders; do
-            path="${PATH_CONFIG}${folder}/"
+            path="${ROBO_SERVER_HTML_PATH}${folder}/"
             if [ -d "${path}" ]; then
                 sudo rmdir "$path" 2> /dev/null
                 if [ $# -ne 0 ]; then
