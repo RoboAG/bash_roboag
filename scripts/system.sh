@@ -19,7 +19,7 @@ alias robo_system_update="config_update_system"
 
 
 #***************************[install]*****************************************
-# 2021 01 01
+# 2021 02 06
 
 function robo_system_install() {
 
@@ -112,7 +112,11 @@ function robo_system_install() {
         fi
 
         # install vs code
-        config_install_vscode
+        if apt show code 2>> /dev/null; then
+            _config_install_list "code"
+        else
+            config_install_vscode
+        fi
         if [ $? -ne 0 ]; then return -3; fi
     else
         _config_install_list "
