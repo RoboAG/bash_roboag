@@ -208,6 +208,9 @@ function robo_system_wtf() {
         robo_config_server_intranet_check
     fi
 
+    if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+        robo_config_keys_check
+    fi
 
     # checks which need sudo rights
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then

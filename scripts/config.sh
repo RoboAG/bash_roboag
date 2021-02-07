@@ -835,3 +835,94 @@ function robo_config_paths_check() {
         echo "ok"
     fi
 }
+
+
+
+#***************************[keys]********************************************
+
+# ROBO_SERVER_KEYS_LIST is defined in setup_server.sh
+
+
+# 2021 02 06
+function robo_config_keys() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "copies needed keys from RoboAG server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    _robo_config_need_client "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # copy shared keys
+    key_src="${ROBO_SERVER_IP}/keys/";
+    key_dest="/usr/share/keyrings/";
+    tmp_file="$(mktemp)"
+
+    for key in $ROBO_SERVER_KEYS_LIST; do
+        echo -n "" > "${tmp_file}"
+        wget --quiet "${key_src}${key}" --output-document "${tmp_file}" \
+          2> /dev/null
+        if [ $? -ne 0 ] || [ "$(cat "$tmp_file" | wc --bytes)" -eq 0 ]; then
+          continue
+        fi
+        if [ ! -e "${key_dest}${key}" ]; then
+            echo "  add key \"$key\""
+        else
+            tmp="$(diff --brief "${key_dest}${key}" "${tmp_file}")"
+            if [ "$tmp" == "" ]; then
+                continue;
+            fi
+            echo "  update key \"$key\""
+        fi
+        sudo cp "${tmp_file}" "${key_dest}${key}"
+        sudo chown root:root "${key_dest}${key}"
+        sudo chmod 644 "${key_dest}${key}"
+    done
+    rm "${tmp_file}"
+}
+
+# 2021 02 06
+function robo_config_keys_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "keys from server  ... "
+
+    # check shared keys
+    key_src="${ROBO_SERVER_IP}/keys/";
+    key_dest="/usr/share/keyrings/";
+    tmp_file="$(mktemp)"
+
+    for key in $ROBO_SERVER_KEYS_LIST; do
+        echo -n "" > "${tmp_file}"
+        wget --quiet "${key_src}${key}" --output-document "${tmp_file}" \
+          2> /dev/null
+        if [ $? -ne 0 ] || [ "$(cat "$tmp_file" | wc --bytes)" -eq 0 ]; then
+          continue
+        fi
+        if [ ! -e "${key_dest}${key}" ]; then
+            error_flag=1;
+            echo ""
+            echo -n "  missing key \"$key\""
+        else
+            tmp="$(diff --brief "${key_dest}${key}" "${tmp_file}")"
+            if [ "$tmp" == "" ]; then
+                continue;
+            fi
+            error_flag=1;
+            echo ""
+            echo -n "  update key \"$key\""
+        fi
+    done
+    rm "${tmp_file}"
+
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> $ robo_config_keys"
+    fi
+}
