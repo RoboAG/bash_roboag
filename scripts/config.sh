@@ -828,7 +828,7 @@ function robo_config_paths_check() {
         error_flag=1;
         echo ""
         echo "  stored in public folders"
-        echo "  --> $ mkdir -p \"${HOME}/config/${HOSTNAME}/\""
+        echo "  --> $ mkdir -p \"${HOME}/config/${HOSTNAME,,}/\""
     fi
 
     if [ $error_flag -eq 0 ]; then

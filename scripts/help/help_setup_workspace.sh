@@ -167,7 +167,7 @@ function robo_help_setup_workspace() {
         echo "  will be copied into the shared repositories - this can"
         echo "  be a SECURITY ISSUE."
         echo "  You should keep your config files local:"
-        echo "    $ mkdir -p \"\${HOME}/config/\${HOSTNAME}/\""
+        echo "    $ mkdir -p \"\${HOME}/config/\${HOSTNAME,,}/\""
         echo -e "\n<enter>\n"; read dummy
     fi
 
