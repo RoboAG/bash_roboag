@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 29
+# 2021 02 06
 
 function robo_help_setup() {
 
@@ -117,6 +117,17 @@ function robo_help_setup() {
         echo ""
         echo "setup apache"
         echo "    $ robo_setup_server_apache"
+        echo -e "\n<enter>\n"; read dummy
+    fi
+
+    if [ "$system_flag" == "client" ]; then
+        echo ""
+        echo "install vscode"
+        echo "    $ robo_config_keys"
+        echo "    $ config_install_vscode  # this will fail"
+        echo "    $ robo_config_aptcacher"
+        echo "    $ robo_system_update"
+        echo "    $ robo_system_install"
         echo -e "\n<enter>\n"; read dummy
     fi
 
