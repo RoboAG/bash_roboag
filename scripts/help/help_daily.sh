@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 23
+# 2021 02 06
 
 function robo_help_daily() {
 
@@ -50,6 +50,7 @@ function robo_help_daily() {
         echo "  $ robo_server_ssh              # ssh into each client"
         echo "  $ robo_server_ssh_update       # update their system & repos"
         echo "  $ robo_server_ssh_check        # check  their system"
+        echo "  $ robo_server_ssh_getconfigs   # store  their config files"
         echo ""
         echo "server"
         echo "  $ robo_config_server_internet_on  # internet ON"

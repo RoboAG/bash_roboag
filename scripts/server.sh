@@ -67,3 +67,51 @@ function robo_server_ssh() {
     network_ssh --no-passwd --interactive $string_mode \
       "$computers" "$ROBO_USER_ADMIN" "$param_script"
 }
+
+# 2021 02 06
+function robo_server_ssh_getconfigs() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "This function copies the current runtime files (e.g. modified"
+        echo "config files) from each available computer."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check for server
+    _robo_config_need_server "$FUNCNAME"
+
+    # load list of current dhcp clients
+    computers="$(robo_config_server_dhcp_show --none-verbose)"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    for computer in $computers; do
+        echo "  copy from $computer"
+        dest="${HOME}/config/${computer}"
+        if [ ! -d "$dest" ]; then
+            echo "    mkdir $dest"
+            mkdir -p "$dest"
+        fi
+        chmod 755 --recursive "$dest"
+        scp -r -p -q -o PasswordAuthentication=no \
+          "guru@${computer}:/home/guru/config/${computer}" \
+          "${HOME}/config/"
+        chmod 755 --recursive "$dest"
+    done
+
+    echo "done :-)"
+}
