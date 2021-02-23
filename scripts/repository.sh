@@ -88,11 +88,11 @@ function robo_repo_update_from_server() {
     echo "done :-)"
 }
 
-# 2021 01 09
+# 2021 02 23
 function robo_repo_update() {
 
     if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
-        robo_repo_update_from_server
+        robo_repo_update_from_server | _repo_filter_git_grep
     else
         robo_repo_update_from_web
     fi
