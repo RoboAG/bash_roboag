@@ -38,54 +38,54 @@ fi
 
 
 #***************************[repository]**************************************
-# 2020 10 12
+# 2021 03 24
 
-. ${ROBO_PATH_SCRIPT}scripts/repository.sh
+source "${ROBO_PATH_SCRIPT}scripts/repository.sh"
 
 if [ -d "${REPO_BASH_REPO[0]}" ]; then
     export REPO_PATH_WORKSPACE="${ROBO_PATH_WORKSPACE}"
-    . ${REPO_BASH_REPO[0]}bashrc.sh
+    source "${REPO_BASH_REPO[0]}bashrc.sh"
 fi
 
 
 
 #***************************[internal scripts]********************************
-# 2021 01 19
+# 2021 03 24
 
 # config.sh sets _robo_config_need_... and ROBO_CONFIG_IS_...
-. ${ROBO_PATH_SCRIPT}scripts/config.sh
-. ${ROBO_PATH_SCRIPT}scripts/config_server.sh
+source "${ROBO_PATH_SCRIPT}scripts/config.sh"
+source "${ROBO_PATH_SCRIPT}scripts/config_server.sh"
 
-. ${ROBO_PATH_SCRIPT}scripts/help.sh
-. ${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh
+source "${ROBO_PATH_SCRIPT}scripts/help.sh"
+source "${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh"
 
-. ${ROBO_PATH_SCRIPT}scripts/server.sh
+source "${ROBO_PATH_SCRIPT}scripts/server.sh"
 
-#. ${ROBO_PATH_SCRIPT}scripts/setup.sh
-. ${ROBO_PATH_SCRIPT}scripts/setup_server.sh
+#source "${ROBO_PATH_SCRIPT}scripts/setup.sh"
+source "${ROBO_PATH_SCRIPT}scripts/setup_server.sh"
 
 # system.sh depends on most aliases
-. ${ROBO_PATH_SCRIPT}scripts/system.sh
+source "${ROBO_PATH_SCRIPT}scripts/system.sh"
 
 
 
 #***************************[other master scripts]****************************
-# 2019 12 01
+# 2021 03 24
 
 if [ -d "${REPO_BASH_MASTER_SERVER[0]}" ]; then
-    . ${REPO_BASH_MASTER_SERVER[0]}bashrc.sh
+    source "${REPO_BASH_MASTER_SERVER[0]}bashrc.sh"
 fi
 
 if [ -d "${REPO_BASH_MASTER_BASHONLY[0]}" ]; then
-    . ${REPO_BASH_MASTER_BASHONLY[0]}bashrc.sh
+    source "${REPO_BASH_MASTER_BASHONLY[0]}bashrc.sh"
 fi
 
 
 
 #***************************[robolib]*****************************************
-# 2020 09 20
+# 2021 03 24
 
 if [ "${REPO_ROBOAG_LIB[0]}" != "" ] && \
   [ -d "${REPO_ROBOAG_LIB[0]}" ]; then
-    . ${REPO_ROBOAG_LIB[0]}scripts/bashrc.sh
+    source "${REPO_ROBOAG_LIB[0]}scripts/bashrc.sh"
 fi
