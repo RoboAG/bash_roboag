@@ -1145,7 +1145,7 @@ function robo_setup_server_apache_restore() {
     echo "done :-)"
 }
 
-# 2021 01 29
+# 2021 07 23
 function _robo_setup_server_apache_getawk() {
 
     FILENAME_CONFIG="/etc/apache2/ports.conf"
@@ -1181,12 +1181,12 @@ function _robo_setup_server_apache_getawk() {
     # return awk string
     AWK_STRING="
         # search for Listen directive
-        \$0 ~ /^[^#]*LISTEN :$/ {
+        \$0 ~ /^[^#]*(LISTEN|Listen) :$/ {
           print \"# [EDIT]: \",\$0
           tmp = \$0
-          sub( /LISTEN :/ , \"LISTEN localhost:\", tmp )
+          sub( /(LISTEN|Listen) / , \"&localhost\", tmp )
           print tmp
-          sub( /LISTEN :/ , \"LISTEN $_ROBO_SERVER_IP:\")
+          sub( /(LISTEN|Listen) / , \"&$_ROBO_SERVER_IP\")
         }
 
         { print \$0 }
