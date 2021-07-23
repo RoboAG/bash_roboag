@@ -1181,12 +1181,13 @@ function _robo_setup_server_apache_getawk() {
     # return awk string
     AWK_STRING="
         # search for Listen directive
-        \$0 ~ /^[^#]*(LISTEN|Listen) :$/ {
+        \$0 ~ /^[^#]*(LISTEN|Listen) :?[0-9]+$/ {
           print \"# [EDIT]: \",\$0
+          sub( /:/ , \"\")
           tmp = \$0
-          sub( /(LISTEN|Listen) / , \"&localhost\", tmp )
+          sub( /(LISTEN|Listen) / , \"&localhost:\", tmp )
           print tmp
-          sub( /(LISTEN|Listen) / , \"&$_ROBO_SERVER_IP\")
+          sub( /(LISTEN|Listen) / , \"&$_ROBO_SERVER_IP:\")
         }
 
         { print \$0 }
