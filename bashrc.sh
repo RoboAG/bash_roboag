@@ -38,7 +38,17 @@ fi
 
 
 #***************************[repository]**************************************
-# 2021 03 24
+# 2021 07 25
+
+if [ "$ROBO_CONFIG_IS_USER" == "1" ]; then
+    tmp="${HOME}/Downloads/"
+    if [ ! -d "${tmp}" ]; then
+        tmp="${HOME}/"
+    fi
+    export REPO_PATH_CONFIG="${tmp}"
+    export CONFIG_PATH_BACKUP="${tmp}"
+    export NETWORK_PATH_LOG="${tmp}"
+fi
 
 source "${ROBO_PATH_SCRIPT}scripts/repository.sh"
 
@@ -50,29 +60,36 @@ fi
 
 
 #***************************[internal scripts]********************************
-# 2021 03 24
+# 2021 07 26
 
-# config.sh sets _robo_config_need_... and ROBO_CONFIG_IS_...
-source "${ROBO_PATH_SCRIPT}scripts/config.sh"
-source "${ROBO_PATH_SCRIPT}scripts/config_server.sh"
+if [ "$ROBO_CONFIG_IS_USER" != "1" ]; then
+    # config.sh sets _robo_config_need_... and ROBO_CONFIG_IS_...
+    source "${ROBO_PATH_SCRIPT}scripts/config.sh"
+    source "${ROBO_PATH_SCRIPT}scripts/config_server.sh"
 
-source "${ROBO_PATH_SCRIPT}scripts/help.sh"
-source "${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh"
+    source "${ROBO_PATH_SCRIPT}scripts/help.sh"
+    source "${ROBO_PATH_SCRIPT}scripts/help/bashrc.sh"
 
-source "${ROBO_PATH_SCRIPT}scripts/server.sh"
+    source "${ROBO_PATH_SCRIPT}scripts/server.sh"
 
-#source "${ROBO_PATH_SCRIPT}scripts/setup.sh"
-source "${ROBO_PATH_SCRIPT}scripts/setup_server.sh"
+    #source "${ROBO_PATH_SCRIPT}scripts/setup.sh"
+    source "${ROBO_PATH_SCRIPT}scripts/setup_server.sh"
 
-# system.sh depends on most aliases
-source "${ROBO_PATH_SCRIPT}scripts/system.sh"
+    # system.sh depends on most aliases
+    source "${ROBO_PATH_SCRIPT}scripts/system.sh"
+
+else
+    source "${ROBO_PATH_SCRIPT}scripts/help/help_user.sh"
+fi
 
 
 
 #***************************[other master scripts]****************************
-# 2021 03 24
+# 2021 07 25
 
-if [ -d "${REPO_BASH_MASTER_SERVER[0]}" ]; then
+if [ -d "${REPO_BASH_MASTER_SERVER[0]}" ] && \
+  [ "$ROBO_CONFIG_IS_USER" != "1" ]; then
+
     source "${REPO_BASH_MASTER_SERVER[0]}bashrc.sh"
 fi
 

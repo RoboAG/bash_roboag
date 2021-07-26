@@ -45,10 +45,23 @@ fi
 
 
 
+#***************************[change repo paths]*******************************
+# 2020 10 11
+
+export REPO_MODE="roboag"
+alias robo_repo_overview="repo_help_overview_roboag"
+
+
+
 #***************************[global update and stat]**************************
-# 2021 01 09
+# 2021 07 25
 
 alias robo_repo_status="repo_status_all"
+if [ "$ROBO_CONFIG_IS_USER" == "1" ]; then
+    return
+    exit
+fi
+
 alias robo_repo_update_from_web="repo_pull_all"
 
 # 2021 01 09
@@ -151,11 +164,3 @@ function robo_repo_clone_from_server() {
 
     echo "done :-)"
 }
-
-
-
-#***************************[change repo paths]*******************************
-# 2020 10 11
-
-export REPO_MODE="roboag"
-alias robo_repo_overview="repo_help_overview_roboag"
