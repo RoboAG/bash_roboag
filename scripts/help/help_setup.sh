@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 02 06
+# 2021 08 12
 
 function robo_help_setup() {
 
@@ -77,7 +77,7 @@ function robo_help_setup() {
 
     echo ""
     echo "update sources"
-    echo "    $ config_source_list_add_multiverse"
+    #echo "    $ config_source_list_add_multiverse"
     if [ "$system_flag" == "client" ]; then
         echo "    $ robo_config_aptcacher"
     fi
