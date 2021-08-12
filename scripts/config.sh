@@ -24,6 +24,10 @@ _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
   "roboag" "${ROBO_PATH_SCRIPT}config/"
 
 
+# moved here from repository, since path was not set before ...
+export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
+
+
 
 #***************************[server ip]***************************************
 # 2021 01 19

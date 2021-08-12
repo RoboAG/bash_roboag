@@ -109,7 +109,8 @@ function robo_repo_update_from_server() {
 }
 
 # 2021 08 12
-export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
+# moved logfile path to config.sh, since path is not set yet ...
+#export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
 function robo_repo_update() {
 
