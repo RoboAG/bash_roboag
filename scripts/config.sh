@@ -13,11 +13,11 @@
 
 
 #***************************[paths and files]*********************************
-# 2021 02 02
+# 2021 08 12
 
 # load and check data dir
 if [ "$ROBO_PATH_CONFIG" == "" ]; then
-    ROBO_PATH_CONFIG="$(_repo_bash_data_dirs_get --mkdir "roboag" \
+    export ROBO_PATH_CONFIG="$(_repo_bash_data_dirs_get --mkdir "roboag" \
       "${ROBO_PATH_SCRIPT}config/")"
 fi
 _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
