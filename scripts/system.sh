@@ -266,28 +266,30 @@ function robo_system_check_install() {
             fi
         fi
 
-        # check for client install
-        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep server | \
-          tail -n 1 | awk "{print \$1}")"
-        if [ "$date" == "" ]; then
-            error_flag=1;
-            echo ""
-            echo "  no valid log for server"
-            echo -n "  --> robo_system_install server"
-        else
-            date_en="$(echo "$date" | \
-              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-            date_secs="$(date --date="$date_en" +"%s")"
-
-            # calculate time diff in days
-            date_update_server="$(date \
-              --date="$ROBO_SYSTEM_INSTALL_DATE_SERVER" +"%s")"
-
-            if [ $date_update_server -ge $date_secs ]; then
+        # check for server install
+        if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+            date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep server | \
+            tail -n 1 | awk "{print \$1}")"
+            if [ "$date" == "" ]; then
                 error_flag=1;
                 echo ""
-                echo "  new server installs"
+                echo "  no valid log for server"
                 echo -n "  --> robo_system_install server"
+            else
+                date_en="$(echo "$date" | \
+                awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+                date_secs="$(date --date="$date_en" +"%s")"
+
+                # calculate time diff in days
+                date_update_server="$(date \
+                --date="$ROBO_SYSTEM_INSTALL_DATE_SERVER" +"%s")"
+
+                if [ $date_update_server -ge $date_secs ]; then
+                    error_flag=1;
+                    echo ""
+                    echo "  new server installs"
+                    echo -n "  --> robo_system_install server"
+                fi
             fi
         fi
     fi
