@@ -12,14 +12,84 @@
 
 
 #***************************[update]******************************************
-# 2019 09 10
+# 2021 08 12
 
-alias robo_system_update="config_update_system"
+export ROBO_PATH_LOG_UPDATE="${ROBO_PATH_CONFIG}update.log"
+
+function robo_system_update() {
+
+    # call update function
+    config_update_system
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # add logging
+    temp="${ROBO_PATH_CONFIG}update.log"
+    if [ ! -f "$ROBO_PATH_LOG_UPDATE" ]; then
+        touch "$ROBO_PATH_LOG_UPDATE" 2>> /dev/null
+        if [ $? -ne 0 ]; then return -2; fi
+    fi
+    if [ -f "$ROBO_PATH_LOG_UPDATE" ]; then
+        str="$(date +"%d.%m.%Y %H:%M") update system"
+        echo "$str" >> "$ROBO_PATH_LOG_UPDATE"
+    fi
+}
+
+# 2021 08 12
+function robo_system_check_update() {
+
+    # init variables
+    error_flag=0;
+
+   # initial output
+    echo -n "system update     ... "
+
+    # check for logfile
+    if [ ! -f "$ROBO_PATH_LOG_UPDATE" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  no logfile"
+    else
+        # convert date to seconds
+        date="$(tail -n 1 "$ROBO_PATH_LOG_UPDATE" | awk "{print \$1}")"
+        if [ "$date" == "" ]; then
+            error_flag=1;
+            echo ""
+            echo -n "  no valid log"
+        else
+            date_en="$(echo "$date" | \
+              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+            date_secs="$(date --date="$date_en" +"%s")"
+
+            # calculate time diff in days
+            now_secs="$(date +"%s")"
+            diff_days="$(echo "($now_secs - $date_secs) / 60 / 60 / 24" | \
+              bc)"
+
+            if [ $diff_days -ge 6 ]; then
+                error_flag=1;
+                echo ""
+                echo -n "  $diff_days ago"
+            fi
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_system_update"
+    fi
+}
 
 
 
 #***************************[install]*****************************************
-# 2021 02 06
+# 2021 08 12
+
+export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
+export ROBO_SYSTEM_INSTALL_DATE_CLIENT="06/02/2021"
+export ROBO_SYSTEM_INSTALL_DATE_SERVER="06/02/2021"
 
 function robo_system_install() {
 
@@ -133,11 +203,107 @@ function robo_system_install() {
         if [ $? -ne 0 ]; then return -2; fi
     fi
 
+    # add logging
+    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
+        touch "$ROBO_PATH_LOG_INSTALL" 2>> /dev/null
+        if [ $? -ne 0 ]; then return -3; fi
+    fi
+    if [ -f "$ROBO_PATH_LOG_INSTALL" ]; then
+        str="$(date +"%d.%m.%Y %H:%M") install"
+        if [ "$server_flag" -ne 0 ]; then
+            str="${str} server"
+        fi
+        echo "$str" >> "$ROBO_PATH_LOG_INSTALL"
+    fi
+    if [ $? -ne 0 ]; then return -3; fi
+
     echo "done :-)"
 }
 
+
+# 2021 08 12
+function robo_system_check_install() {
+
+    # init variables
+    error_flag=0;
+
+   # initial output
+    echo -n "system install    ... "
+
+    # check for internet connection
+    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
+        error_flag=1;
+        echo ""
+        echo "  no logfile"
+        echo -n "  --> robo_system_install"
+        if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+            echo ""
+            echo -n "  --> robo_system_install server"
+        fi
+    else
+        # check for client install
+        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep -v server | \
+          tail -n 1 | awk "{print \$1}")"
+        if [ "$date" == "" ]; then
+            error_flag=1;
+            echo ""
+            echo "  no valid log"
+            echo -n "  --> robo_system_install"
+        else
+            date_en="$(echo "$date" | \
+              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+            date_secs="$(date --date="$date_en" +"%s")"
+
+            # calculate time diff in days
+            date_update_client="$(date \
+              --date="$ROBO_SYSTEM_INSTALL_DATE_CLIENT" +"%s")"
+
+            if [ $date_update_client -ge $date_secs ]; then
+                error_flag=1;
+                echo ""
+                echo "  new client installs"
+                echo -n "  --> robo_system_install"
+            fi
+        fi
+
+        # check for client install
+        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep server | \
+          tail -n 1 | awk "{print \$1}")"
+        if [ "$date" == "" ]; then
+            error_flag=1;
+            echo ""
+            echo "  no valid log for server"
+            echo -n "  --> robo_system_install server"
+        else
+            date_en="$(echo "$date" | \
+              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+            date_secs="$(date --date="$date_en" +"%s")"
+
+            # calculate time diff in days
+            date_update_server="$(date \
+              --date="$ROBO_SYSTEM_INSTALL_DATE_SERVER" +"%s")"
+
+            if [ $date_update_server -ge $date_secs ]; then
+                error_flag=1;
+                echo ""
+                echo "  new server installs"
+                echo -n "  --> robo_system_install server"
+            fi
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
+
+
+
 #***************************[check]******************************************
-# 2021 02 06
+# 2021 08 12
 
 function robo_system_wtf() {
 
@@ -214,6 +380,11 @@ function robo_system_wtf() {
 
     if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
         robo_config_keys_check
+    fi
+
+    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
+        robo_system_check_update
+        robo_system_check_install
     fi
 
     # checks which need sudo rights
