@@ -1,14 +1,11 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 07 26
+# 2021 08 12
 
 function robo_help_user() {
 
     echo "### ROBOAG ###"
-    echo ""
-
-    echo "  $ robo_help           # Übersicht zur Hilfe"
     echo ""
 
     echo "  $ robolib_init_kepler # Legt die Konfig für das Keplerboard an"
