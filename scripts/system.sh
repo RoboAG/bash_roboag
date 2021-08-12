@@ -383,8 +383,9 @@ function robo_system_wtf() {
     fi
 
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
-        robo_system_check_update
         robo_system_check_install
+        robo_system_check_update
+        robo_repo_check
     fi
 
     # checks which need sudo rights

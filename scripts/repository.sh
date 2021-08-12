@@ -75,6 +75,7 @@ function robo_repo_update_from_server() {
     if [ $? -ne 0 ]; then return -3; fi
 
     length_ws="${#ROBO_PATH_WORKSPACE}"
+    error=0
 
     # iterate over repos
     for i in ${!repos[@]}; do
@@ -90,23 +91,97 @@ function robo_repo_update_from_server() {
         repo_path="${ROBO_SHARE_ROBOAG}Repos/${repo_short}"
         if [ ! -d "$repo_path" ]; then
             echo "unknown repository ${repo}"
+            error=1;
             continue
         fi
 
         echo "###g ${repo_name}@server ###"
         (cd "$repo" && git pull --tags "file://${repo_path}")
+        if [ $? -ne 0 ]; then error=2; fi
     done
 
-    echo "done :-)"
+    # check result
+    if [ $error -eq 0 ]; then
+        echo "done :-)"
+    else
+        return $error
+    fi
 }
 
-# 2021 02 23
+# 2021 08 12
+export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
+
 function robo_repo_update() {
 
     if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
         robo_repo_update_from_server | _repo_filter_git_grep
     else
         robo_repo_update_from_web
+    fi
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # add logging
+    if [ ! -f "$ROBO_PATH_LOG_REPO" ]; then
+        touch "$ROBO_PATH_LOG_REPO" 2>> /dev/null
+        if [ $? -ne 0 ]; then return -2; fi
+    fi
+    if [ -f "$ROBO_PATH_LOG_REPO" ]; then
+        str="$(date +"%d.%m.%Y %H:%M") repo";
+        if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
+            str="${str} server"
+        else
+            str="${str} web"
+        fi
+
+        echo "$str" >> "$ROBO_PATH_LOG_REPO"
+    fi
+}
+
+# 2021 08 12
+function robo_repo_check() {
+
+    # init variables
+    error_flag=0;
+
+   # initial output
+    echo -n "repos             ... "
+
+    # check for logfile
+    if [ ! -f "$ROBO_PATH_LOG_REPO" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  no logfile"
+    else
+        # convert date to seconds
+        date="$(tail -n 1 "$ROBO_PATH_LOG_REPO" | awk "{print \$1}")"
+        if [ "$date" == "" ]; then
+            error_flag=1;
+            echo ""
+            echo -n "  no valid log"
+        else
+            date_en="$(echo "$date" | \
+              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+            date_secs="$(date --date="$date_en" +"%s")"
+
+            # calculate time diff in days
+            now_secs="$(date +"%s")"
+            diff_days="$(echo "($now_secs - $date_secs) / 60 / 60 / 24" | \
+              bc)"
+
+            if [ $diff_days -ge 6 ]; then
+                error_flag=1;
+                echo ""
+                echo -n "  $diff_days ago"
+            fi
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_repo_update"
     fi
 }
 
