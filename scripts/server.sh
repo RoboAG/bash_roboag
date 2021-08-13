@@ -12,16 +12,24 @@
 
 #***************************[ssh]*********************************************
 
-# 2021 08 12
+# 2021 08 13
 alias robo_server_ssh_check="robo_server_ssh robo_system_wtf"
-alias robo_server_ssh_update="robo_server_ssh \
-  \"config_update_system\; robo_repo_update\" tabs"
+alias robo_server_ssh_update="_robo_server_ssh_update_repo; \
+  _robo_server_ssh_update_system"
 alias _robo_server_ssh_update_repo="robo_server_ssh \
   \"robo_repo_update\" tabs"
 alias _robo_server_ssh_update_system="robo_server_ssh \
-  \"config_update_system\" tabs"
+  \"robo_system_update\" tabs"
 alias _robo_server_ssh_install="robo_server_ssh \
   \"robo_system_install\" tabs"
+alias _robo_server_ssh_reboot="robo_server_ssh \
+  \"sudo reboot\" tabs"
+alias _robo_server_ssh_poweroff="robo_server_ssh \
+  \"sudo poweroff\" tabs"
+
+# 2021 08 13 - only temp
+alias _robo_server_ssh_mount="robo_server_ssh \
+  \"sudo mount /media/roboag/ \&\& ls /media/roboag/\" tabs"
 
 # 2021 01 28
 function robo_server_ssh() {
