@@ -34,7 +34,7 @@ function robo_system_update() {
     fi
 }
 
-# 2021 08 12
+# 2021 09 19
 function robo_system_check_update() {
 
     # init variables
@@ -68,7 +68,7 @@ function robo_system_check_update() {
             if [ $diff_days -ge 6 ]; then
                 error_flag=1;
                 echo ""
-                echo -n "  $diff_days ago"
+                echo -n "  $diff_days days ago"
             fi
         fi
     fi
