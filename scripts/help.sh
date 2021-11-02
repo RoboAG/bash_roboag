@@ -83,6 +83,12 @@ function robo_help_all() {
     echo -n "  "; robo_config_server_internet_on -h
     echo -n "  "; robo_config_server_internet_off -h
     echo ""
+    echo -n "  "; robo_server_userdata_list -h
+    echo -n "  "; robo_server_userdata_add -h
+    echo -n "  "; robo_server_userdata_check -h
+    echo -n "  "; robo_server_userdata_fix -h
+    echo -n "  "; robo_server_userdata_backup -h
+    echo ""
     echo -n "  "; robo_server_check_clients -h
     echo -n "  "; robo_server_ssh_getconfigs -h
     echo ""
@@ -131,6 +137,12 @@ function robo_help() {
         echo "server functions"
         echo -n "  "; robo_config_server_internet_on -h
         echo -n "  "; robo_config_server_internet_off -h
+        echo ""
+        echo -n "  "; robo_server_userdata_list -h
+        echo -n "  "; robo_server_userdata_add -h
+        echo -n "  "; robo_server_userdata_check -h
+        echo -n "  "; robo_server_userdata_fix -h
+        echo -n "  "; robo_server_userdata_backup -h
         echo ""
         echo -n "  "; robo_server_check_clients -h
         echo -n "  "; robo_server_ssh_getconfigs -h

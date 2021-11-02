@@ -305,7 +305,7 @@ function robo_system_check_install() {
 
 
 #***************************[check]******************************************
-# 2021 08 12
+# 2021 11 02
 
 function robo_system_wtf() {
 
@@ -378,6 +378,7 @@ function robo_system_wtf() {
     fi
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_config_server_intranet_check
+        robo_server_userdata_check
     fi
 
     if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then

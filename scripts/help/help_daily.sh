@@ -59,5 +59,9 @@ function robo_help_daily() {
         echo "  $ robo_config_server_internet_on  # internet ON"
         echo "  $ robo_config_server_internet_off # internet OFF"
         echo ""
+        echo "  $ robo_server_userdata_list all   # list all users"
+        echo "  $ robo_server_userdata_add        # add a user"
+        echo "  $ robo_server_userdata_backup     # backup current data"
+        echo ""
     fi
 }
