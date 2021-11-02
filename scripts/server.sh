@@ -27,9 +27,6 @@ alias _robo_server_ssh_reboot="robo_server_ssh \
 alias _robo_server_ssh_poweroff="robo_server_ssh \
   \"sudo poweroff\" tabs"
 
-# 2021 08 13 - only temp
-alias _robo_server_ssh_mount="robo_server_ssh \
-  \"sudo mount /media/roboag/ \&\& ls /media/roboag/\" tabs"
 
 # 2021 01 28
 function robo_server_ssh() {
@@ -82,7 +79,7 @@ function robo_server_ssh() {
       "$computers" "$ROBO_USER_ADMIN" "$param_script"
 }
 
-# 2021 02 06
+# 2021 10 26
 function robo_server_ssh_getconfigs() {
 
     # print help
@@ -108,10 +105,11 @@ function robo_server_ssh_getconfigs() {
 
     # check for server
     _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
 
     # load list of current dhcp clients
     computers="$(robo_config_server_dhcp_show --none-verbose)"
-    if [ $? -ne 0 ]; then return -2; fi
+    if [ $? -ne 0 ]; then return -3; fi
 
     for computer in $computers; do
         echo "  copy from $computer"
@@ -134,7 +132,7 @@ function robo_server_ssh_getconfigs() {
 
 #***************************[client status]***********************************
 
-# 2021 08 12
+# 2021 10 26
 function robo_server_check_clients() {
 
     # print help
@@ -146,7 +144,7 @@ function robo_server_check_clients() {
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
         echo "    [#1:]flag for checking all clients (default \"\")"
-        echo "         \"\" checks only connected clients"
+        echo "         \"\"   checks only connected clients"
         echo "         all  checks all clients"
         echo "The last update date for system (apt), robo repos &"
         echo "installation will be checked."
@@ -170,13 +168,14 @@ function robo_server_check_clients() {
 
     # check for server
     _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -3; fi
 
     # load list of current dhcp clients
     if [ "$param_flag" == "" ]; then
         computers="$(robo_config_server_dhcp_show --none-verbose)"
-        if [ $? -ne 0 ]; then return -2; fi
+        if [ $? -ne 0 ]; then return -4; fi
     else
-        if [ ! -d "${HOME}/config/" ]; then return -2; fi
+        if [ ! -d "${HOME}/config/" ]; then return -5; fi
         computers="$(ls "${HOME}/config/")"
     fi
 
