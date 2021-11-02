@@ -12,7 +12,7 @@
 
 
 #***************************[all]*********************************************
-# 2021 01 19
+# 2021 11 02
 
 function robo_help_all() {
 
@@ -82,9 +82,16 @@ function robo_help_all() {
     echo "server functions"
     echo -n "  "; robo_config_server_internet_on -h
     echo -n "  "; robo_config_server_internet_off -h
+    echo ""
+    echo -n "  "; robo_server_check_clients -h
+    echo -n "  "; robo_server_ssh_getconfigs -h
+    echo ""
     echo -n "  "; robo_server_ssh -h
     echo -n "  "; echo "robo_server_ssh_check       #no help"
     echo -n "  "; echo "robo_server_ssh_update      #no help"
+    echo -n "  "; echo "_robo_server_ssh_...        #no help"
+    echo ""
+    echo -n "  "; robo_config_server_dhcp_show -h
     echo -n "  "; robo_config_server_dhcp_list -h
     echo -n "  "; robo_config_server_dhcp_add -h
     echo -n "  "; robo_config_server_dhcp_edit -h
@@ -94,7 +101,7 @@ function robo_help_all() {
 
 
 #***************************[help]********************************************
-# 2021 01 19
+# 2021 11 02
 
 function robo_help() {
 
@@ -124,9 +131,16 @@ function robo_help() {
         echo "server functions"
         echo -n "  "; robo_config_server_internet_on -h
         echo -n "  "; robo_config_server_internet_off -h
+        echo ""
+        echo -n "  "; robo_server_check_clients -h
+        echo -n "  "; robo_server_ssh_getconfigs -h
+        echo ""
         echo -n "  "; robo_server_ssh -h
         echo -n "  "; echo "robo_server_ssh_check       #no help"
         echo -n "  "; echo "robo_server_ssh_update      #no help"
+        echo -n "  "; echo "_robo_server_ssh_...        #no help"
+        echo ""
+        echo -n "  "; robo_config_server_dhcp_show -h
         echo -n "  "; robo_config_server_dhcp_list -h
         echo -n "  "; robo_config_server_dhcp_add -h
         echo -n "  "; robo_config_server_dhcp_edit -h

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 08 12
+# 2021 11 02
 
 function robo_help_daily() {
 
@@ -47,11 +47,13 @@ function robo_help_daily() {
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         echo "clients"
         echo "  $ robo_config_server_dhcp_show # list clients"
+        echo ""
+        echo "  $ robo_server_ssh_getconfigs   # store  their config files"
         echo "  $ robo_server_check_clients    # check client logs"
+        echo ""
         echo "  $ robo_server_ssh              # ssh into each client"
         echo "  $ robo_server_ssh_update       # update their system & repos"
         echo "  $ robo_server_ssh_check        # check  their system"
-        echo "  $ robo_server_ssh_getconfigs   # store  their config files"
         echo ""
         echo "server"
         echo "  $ robo_config_server_internet_on  # internet ON"
