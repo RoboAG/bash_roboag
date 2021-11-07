@@ -532,7 +532,7 @@ function robo_server_userdata_backup() {
     echo "done :-)"
 }
 
-# 2021 11 01
+# 2021 11 07
 function robo_server_userdata_fix() {
 
     # print help
@@ -574,7 +574,7 @@ function robo_server_userdata_fix() {
         if [ ! -d "${path}neu/" ]; then
             echo "$user: creating folder \"neu/\""
             mkdir -p "${path}neu/"
-            if [ $? -eq 0 ]; then
+            if [ $? -ne 0 ]; then
                 continue
             fi
             sudo chown $USER:roboag "${path}neu/"

@@ -60,8 +60,9 @@ function robo_help_daily() {
         echo "  $ robo_config_server_internet_off # internet OFF"
         echo ""
         echo "  $ robo_server_userdata_show       # list all users"
-        echo "  $ robo_server_userdata_add        # add a user"
+        echo "  $ robo_server_userdata_add        # add a new user"
         echo "  $ robo_server_userdata_backup     # backup current data"
+        echo "  $ robo_server_userdata_fix        # create \"neu/\" folders"
         echo ""
     fi
 }
