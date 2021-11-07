@@ -277,20 +277,17 @@ function robo_server_check_clients() {
 # 2021 10 25
 export ROBO_PATH_ROBOAG_USER="${ROBO_PATH_ROBOAG}/User/"
 
-# 2021 10 26
-function robo_server_userdata_list() {
+# 2021 11 07
+function _robo_server_userdata_list() {
 
     # print help
     if [ "$1" == "-h" ]; then
-        echo "$FUNCNAME [<flag>]"
+        echo "$FUNCNAME"
 
         return
     fi
     if [ "$1" == "--help" ]; then
-        echo "$FUNCNAME needs 0-1 parameters"
-        echo "    [#1:]flag for outputting additional infos (default \"\")"
-        echo "         \"\"   lists only user names"
-        echo "         all  shows some additional information"
+        echo "$FUNCNAME needs no parameters"
         echo "Lists all existing users on shared roboag data folder."
         echo "  ($ROBO_PATH_ROBOAG_USER)"
 
@@ -298,16 +295,10 @@ function robo_server_userdata_list() {
     fi
 
     # check parameter
-    if [ $# -gt 1 ]; then
+    if [ $# -gt 0 ]; then
         echo "$FUNCNAME: Parameter Error."
         $FUNCNAME --help
         return -1
-    fi
-
-    param_flag="$1"
-    if [ "$param_flag" != "" ] && [ "$param_flag" != "all" ]; then
-        echo "$FUNCNAME: Unknown <flag> \"$param_flag\"."
-        return -2
     fi
 
     # check if path exists
@@ -320,11 +311,40 @@ function robo_server_userdata_list() {
     # load list of users
     users="$(ls "$ROBO_PATH_ROBOAG_USER" | grep -v "^_")"
 
-    # print list
-    if [ "$param_flag" != "all" ]; then
-        echo "$users"
+    # print list of users
+    echo "$users"
+}
+
+# 2021 11 07
+function robo_server_userdata_show() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<flag>]"
+
         return
     fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "Shows details of all existing users on shared data folder."
+        echo "  ($ROBO_PATH_ROBOAG_USER)"
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # load list of users
+    users="$(_robo_server_userdata_list)"
+    if [ $? -ne 0 ]; then
+        return -2;
+    fi
+
     (
         echo -e "*name* *new* *count* *last*"
         for user in $users; do
@@ -356,9 +376,9 @@ function robo_server_userdata_list() {
 
     echo ""
     echo "user data commands:"
+    echo "  $ robo_server_userdata_show"
     echo "  $ robo_server_userdata_check"
     echo "  $ robo_server_userdata_fix"
-    echo "  $ robo_server_userdata_list"
     echo "  $ robo_server_userdata_add"
 }
 
@@ -405,7 +425,7 @@ function robo_server_userdata_add() {
     fi
 
     # load list of users
-    users="$(robo_server_userdata_list)"
+    users="$(_robo_server_userdata_list)"
     if [ $? -ne 0 ]; then
         return -5;
     fi
@@ -459,7 +479,7 @@ function robo_server_userdata_backup() {
     if [ $? -ne 0 ]; then return -2; fi
 
     # load list of users
-    users="$(robo_server_userdata_list)"
+    users="$(_robo_server_userdata_list)"
     if [ $? -ne 0 ]; then
         return -3;
     fi
@@ -541,7 +561,7 @@ function robo_server_userdata_fix() {
     if [ $? -ne 0 ]; then return -2; fi
 
     # load list of users
-    users="$(robo_server_userdata_list)"
+    users="$(_robo_server_userdata_list)"
     if [ $? -ne 0 ]; then
         return -3;
     fi
@@ -605,7 +625,7 @@ function robo_server_userdata_check() {
     echo -n "user data         ... "
 
     # load list of users
-    users="$(robo_server_userdata_list)"
+    users="$(_robo_server_userdata_list)"
     if [ $? -ne 0 ] || [ "$users" == "" ]; then
         users=""
         error_flag=1;

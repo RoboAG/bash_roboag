@@ -12,7 +12,7 @@
 
 
 #***************************[all]*********************************************
-# 2021 11 02
+# 2021 11 07
 
 function robo_help_all() {
 
@@ -83,7 +83,8 @@ function robo_help_all() {
     echo -n "  "; robo_config_server_internet_on -h
     echo -n "  "; robo_config_server_internet_off -h
     echo ""
-    echo -n "  "; robo_server_userdata_list -h
+    echo -n "  "; _robo_server_userdata_list -h
+    echo -n "  "; robo_server_userdata_show -h
     echo -n "  "; robo_server_userdata_add -h
     echo -n "  "; robo_server_userdata_check -h
     echo -n "  "; robo_server_userdata_fix -h
@@ -107,7 +108,7 @@ function robo_help_all() {
 
 
 #***************************[help]********************************************
-# 2021 11 02
+# 2021 11 07
 
 function robo_help() {
 
@@ -138,7 +139,7 @@ function robo_help() {
         echo -n "  "; robo_config_server_internet_on -h
         echo -n "  "; robo_config_server_internet_off -h
         echo ""
-        echo -n "  "; robo_server_userdata_list -h
+        echo -n "  "; robo_server_userdata_show -h
         echo -n "  "; robo_server_userdata_add -h
         echo -n "  "; robo_server_userdata_check -h
         echo -n "  "; robo_server_userdata_fix -h
