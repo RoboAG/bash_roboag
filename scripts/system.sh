@@ -85,11 +85,11 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2021 08 12
+# 2022 02 11
 
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
-export ROBO_SYSTEM_INSTALL_DATE_CLIENT="06/02/2021"
-export ROBO_SYSTEM_INSTALL_DATE_SERVER="06/02/2021"
+export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11/02/2022"
+export ROBO_SYSTEM_INSTALL_DATE_SERVER="11/02/2022"
 
 function robo_system_install() {
 
@@ -172,13 +172,6 @@ function robo_system_install() {
             _config_install_list "python"
         else
             _config_install_list "python3 python-is-python3"
-        fi
-
-        # check for eagle
-        if apt show eagle 2>> /dev/null; then
-            _config_install_list "eagle"
-        else
-            echo "eagle is not available"
         fi
 
         # install vs code
