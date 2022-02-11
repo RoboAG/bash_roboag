@@ -221,7 +221,7 @@ function robo_system_install() {
 }
 
 
-# 2021 08 12
+# 2022 02 11
 function robo_system_check_install() {
 
     # init variables
@@ -258,7 +258,7 @@ function robo_system_check_install() {
             date_update_client="$(date \
               --date="$ROBO_SYSTEM_INSTALL_DATE_CLIENT" +"%s")"
 
-            if [ $date_update_client -ge $date_secs ]; then
+            if [ $date_update_client -gt $date_secs ]; then
                 error_flag=1;
                 echo ""
                 echo "  new client installs"
@@ -284,7 +284,7 @@ function robo_system_check_install() {
                 date_update_server="$(date \
                 --date="$ROBO_SYSTEM_INSTALL_DATE_SERVER" +"%s")"
 
-                if [ $date_update_server -ge $date_secs ]; then
+                if [ $date_update_server -gt $date_secs ]; then
                     error_flag=1;
                     echo ""
                     echo "  new server installs"
