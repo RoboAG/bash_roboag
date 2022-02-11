@@ -158,7 +158,7 @@ function robo_system_install() {
             git meld
 
             vim kate bless
-            exuberant-ctags konsole
+            exuberant-ctags
 
             binutils gcc avr-libc avrdude
             g++ cmake
