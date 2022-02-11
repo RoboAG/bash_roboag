@@ -89,7 +89,7 @@ function robo_system_check_update() {
 
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11/02/2022"
-export ROBO_SYSTEM_INSTALL_DATE_SERVER="11/02/2022"
+export ROBO_SYSTEM_INSTALL_DATE_SERVER="06/02/2021"
 
 function robo_system_install() {
 
