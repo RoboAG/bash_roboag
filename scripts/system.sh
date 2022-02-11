@@ -155,7 +155,7 @@ function robo_system_install() {
 
             regexxer pwgen
 
-            subversion git meld
+            git meld
 
             vim kate bless
             exuberant-ctags konsole
