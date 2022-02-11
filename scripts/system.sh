@@ -163,7 +163,7 @@ function robo_system_install() {
             binutils gcc avr-libc avrdude
             g++ cmake
 
-            $PYTHON
+            $PYTHON $PYTHON-serial $PYTHON-opencv
 
             librecad inkscape dia
 
