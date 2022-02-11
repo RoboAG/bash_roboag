@@ -12,20 +12,28 @@
 
 #***************************[ssh]*********************************************
 
-# 2021 08 13
+# 2022 02 11
 alias robo_server_ssh_check="robo_server_ssh robo_system_wtf"
+
 alias robo_server_ssh_update="_robo_server_ssh_update_repo; \
   _robo_server_ssh_update_system"
 alias _robo_server_ssh_update_repo="robo_server_ssh \
   \"robo_repo_update\" tabs"
 alias _robo_server_ssh_update_system="robo_server_ssh \
   \"robo_system_update\" tabs"
+
 alias _robo_server_ssh_install="robo_server_ssh \
   \"robo_system_install\" tabs"
+
 alias _robo_server_ssh_reboot="robo_server_ssh \
   \"sudo reboot\" tabs"
 alias _robo_server_ssh_poweroff="robo_server_ssh \
   \"sudo poweroff\" tabs"
+
+alias _robo_server_ssh_pololu="robo_server_ssh \
+  \"pololu_repo_make\" tabs"
+alias _robo_server_ssh_robolib="robo_server_ssh \
+  \"robolib_repo_make\" tabs"
 
 
 # 2021 01 28
