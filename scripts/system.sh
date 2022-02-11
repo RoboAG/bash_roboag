@@ -135,6 +135,13 @@ function robo_system_install() {
     # check ubuntu version
     VER=$(lsb_release -r | cut -f2 | cut -d. -f1)
 
+    # check python version
+    if [ "$VER" -lt "20" ]; then
+        PYTHON="python"
+    else
+        PYTHON="python3"
+    fi
+
     # select between server and client
     if [ "$server_flag" -eq 0 ]; then
         # basic install
@@ -156,6 +163,8 @@ function robo_system_install() {
             binutils gcc avr-libc avrdude
             g++ cmake
 
+            $PYTHON
+
             librecad inkscape dia
 
             zim doxygen
@@ -168,10 +177,8 @@ function robo_system_install() {
         if [ $? -ne 0 ]; then return -2; fi
 
         # ubuntu-version dependend packages
-        if [ "$VER" -lt "20" ]; then
-            _config_install_list "python"
-        else
-            _config_install_list "python3 python-is-python3"
+        if [ "$PYTHON" == "python3" ]; then
+            _config_install_list "python-is-python3"
         fi
 
         # install vs code
