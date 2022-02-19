@@ -1,22 +1,28 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2022 02 11
+# 2022 02 19
 
 function robo_help_user() {
 
-    echo "### ROBOAG ###"
-    echo ""
+    echo    "### ROBOAG ###"
+    echo    ""
 
-    echo "  $ robolib_init_kepler    # Legt die Konfig für das Keplerboard an"
-    echo "  $ robolib_init_3pi       # Legt die Konfig für einen 3Pi an"
-    echo ""
-    echo "  $ robolib_build [mcu]    # Kompiliert im aktuellen Ordner"
-    echo "  $ robolib_clean          # Entfernt alle Kompilierartefakte"
-    echo ""
-    echo "  $ robolib_avrdude [mcu]  # Avrdude zum Herunterladen (3Pi, ISP)"
-    echo "  $ robolib_download [mcu] # Robolib-Downloader (RS232 & Bootloader)"
-    echo ""
-    echo "  $ robolib_data [comport] # Einfacher Datanaustausch (RS232)"
-    echo ""
+    echo -n "  $ robolib_init_kepler        # Legt die Konfig für das"
+    echo                                    " Keplerboard an"
+    echo -n "  $ robolib_init_3pi           # Legt die Konfig für einen"
+    echo                                    " 3Pi an"
+    echo    ""
+    echo    "  $ robolib_build [mcu]        # Kompiliert im aktuellen Ordner"
+    echo -n "  $ robolib_clean              # Entfernt alle "
+    echo                                    " Kompilierartefakte"
+    echo    ""
+    echo -n "  $ robolib_avrdude [comport]  # Avrdude zum Herunterladen"
+    echo                                    " (3Pi, ISP)"
+    echo -n "  $ robolib_download [comport] # Robolib-Downloader"
+    echo                                    " (RS232 & Bootloader)"
+    echo    ""
+    echo -n "  $ robolib_data [comport]     # Einfacher Datanaustausch"
+    echo                                    " (RS232)"
+    echo    ""
 }
