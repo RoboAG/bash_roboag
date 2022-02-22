@@ -251,8 +251,10 @@ function robo_system_install() {
     fi
     if [ -f "$ROBO_PATH_LOG_INSTALL" ]; then
         str="$(date +"%d.%m.%Y %H:%M") install"
-        if [ "$server_flag" -ne 0 ]; then
-            str="${str} server"
+        if [ "$server_flag" -eq 0 ]; then
+            str="${str} client ${ROBO_SYSTEM_INSTALL_DATE_CLIENT}"
+        else
+            str="${str} server ${ROBO_SYSTEM_INSTALL_DATE_SERVER}"
         fi
         echo "$str" >> "$ROBO_PATH_LOG_INSTALL"
     fi
@@ -283,9 +285,9 @@ function robo_system_check_install() {
         fi
     else
         # check for client install
-        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep -v server | \
-          tail -n 1 | awk "{print \$1}")"
-        if [ "$date" == "" ]; then
+        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep " install client " | \
+          tail -n 1 | awk "{print \$5}")"
+        if [ $? -ne 0 ] || [ "$date" == "" ]; then
             error_flag=1;
             echo ""
             echo "  no valid log for client installation"
@@ -306,9 +308,10 @@ function robo_system_check_install() {
 
         # check for server mode
         if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
-            date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep server | \
-            tail -n 1 | awk "{print \$1}")"
-            if [ "$date" == "" ]; then
+            # check for server install
+            date="$(cat "$ROBO_PATH_LOG_INSTALL" | \
+              grep " install server " | tail -n 1 | awk "{print \$5}")"
+            if [ $? -ne 0 ] || [ "$date" == "" ]; then
                 error_flag=1;
                 echo ""
                 echo "  no valid log for server install"
