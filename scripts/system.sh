@@ -11,6 +11,49 @@
 
 
 
+#***************************[date]********************************************
+# 2022 02 22
+
+function _robo_system_convert_date_to_sec() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME dd.mm.yyyy"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 1 parameter"
+        echo "     #1: date in german/european notation"
+        echo "         e.g. 17.06.2021"
+        echo "This function converts the given day into unix time."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # init variables
+    date="$1"
+
+    # convert date into american style (e.g. 06/17/2021)
+    date_en="$(echo "$date" | awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # convert date into unix time
+    date_secs="$(date --date="$date_en" +"%s")"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    echo "$date_secs"
+}
+
+
+
 #***************************[update]******************************************
 # 2022 02 22
 
@@ -55,12 +98,10 @@ function robo_system_check_update() {
             echo ""
             echo -n "  no valid log"
         else
-            date_en="$(echo "$date" | \
-              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-            date_secs="$(date --date="$date_en" +"%s")"
-
-            # calculate time diff in days
+            # convert given date & today in unix time
+            date_secs="$(_robo_system_convert_date_to_sec "$date")"
             now_secs="$(date +"%s")"
+            # calculate time diff in days
             diff_days="$(echo "($now_secs - $date_secs) / 60 / 60 / 24" | \
               bc)"
 
@@ -84,12 +125,13 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2022 02 11
+# 2022 02 22
 
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
-export ROBO_SYSTEM_INSTALL_DATE_CLIENT="02/11/2022"
-export ROBO_SYSTEM_INSTALL_DATE_SERVER="06/02/2021"
+export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11.02.2022"
+export ROBO_SYSTEM_INSTALL_DATE_SERVER="02.06.2021"
 
+# 2022 02 11
 function robo_system_install() {
 
     # print help
@@ -220,7 +262,7 @@ function robo_system_install() {
 }
 
 
-# 2022 02 11
+# 2022 02 22
 function robo_system_check_install() {
 
     # init variables
@@ -246,47 +288,42 @@ function robo_system_check_install() {
         if [ "$date" == "" ]; then
             error_flag=1;
             echo ""
-            echo "  no valid log"
+            echo "  no valid log for client installation"
             echo -n "  --> robo_system_install"
         else
-            date_en="$(echo "$date" | \
-              awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-            date_secs="$(date --date="$date_en" +"%s")"
+            # convert last install date & latest timestamp into unix time
+            date_secs="$(_robo_system_convert_date_to_sec "$date")"
+            date_timestamp_secs="$(_robo_system_convert_date_to_sec \
+              "$ROBO_SYSTEM_INSTALL_DATE_CLIENT")"
 
-            # calculate time diff in days
-            date_update_client="$(date \
-              --date="$ROBO_SYSTEM_INSTALL_DATE_CLIENT" +"%s")"
-
-            if [ $date_update_client -gt $date_secs ]; then
+            if [ $? -ne 0 ] || [ $date_timestamp_secs -gt $date_secs ]; then
                 error_flag=1;
                 echo ""
-                echo "  new client installs"
+                echo "  new client install"
                 echo -n "  --> robo_system_install"
             fi
         fi
 
-        # check for server install
+        # check for server mode
         if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
             date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep server | \
             tail -n 1 | awk "{print \$1}")"
             if [ "$date" == "" ]; then
                 error_flag=1;
                 echo ""
-                echo "  no valid log for server"
+                echo "  no valid log for server install"
                 echo -n "  --> robo_system_install server"
             else
-                date_en="$(echo "$date" | \
-                awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-                date_secs="$(date --date="$date_en" +"%s")"
+                # convert last install date & latest timestamp into unix time
+                date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                date_timestamp_secs="$(_robo_system_convert_date_to_sec \
+                "$ROBO_SYSTEM_INSTALL_DATE_SERVER")"
 
-                # calculate time diff in days
-                date_update_server="$(date \
-                --date="$ROBO_SYSTEM_INSTALL_DATE_SERVER" +"%s")"
-
-                if [ $date_update_server -gt $date_secs ]; then
+                if [ $? -ne 0 ] || \
+                  [ $date_timestamp_secs -gt $date_secs ]; then
                     error_flag=1;
                     echo ""
-                    echo "  new server installs"
+                    echo "  new server install"
                     echo -n "  --> robo_system_install server"
                 fi
             fi
