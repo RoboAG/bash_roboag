@@ -12,7 +12,7 @@
 
 
 #***************************[update]******************************************
-# 2021 08 12
+# 2022 02 22
 
 export ROBO_PATH_LOG_UPDATE="${ROBO_PATH_CONFIG}update.log"
 
@@ -23,7 +23,6 @@ function robo_system_update() {
     if [ $? -ne 0 ]; then return -1; fi
 
     # add logging
-    temp="${ROBO_PATH_CONFIG}update.log"
     if [ ! -f "$ROBO_PATH_LOG_UPDATE" ]; then
         touch "$ROBO_PATH_LOG_UPDATE" 2>> /dev/null
         if [ $? -ne 0 ]; then return -2; fi
