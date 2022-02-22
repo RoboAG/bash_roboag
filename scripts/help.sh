@@ -12,7 +12,7 @@
 
 
 #***************************[all]*********************************************
-# 2021 11 07
+# 2022 02 22
 
 function robo_help_all() {
 
@@ -77,6 +77,9 @@ function robo_help_all() {
     echo "install functions"
     echo -n "  "; echo "robo_system_update          #no help"
     echo -n "  "; robo_system_install -h
+    echo -n "  "; robo_system_uninstall -h
+    echo ""
+    echo "check system"
     echo -n "  "; robo_system_wtf -h
     echo ""
     echo "server functions"
@@ -108,7 +111,7 @@ function robo_help_all() {
 
 
 #***************************[help]********************************************
-# 2021 11 07
+# 2022 02 22
 
 function robo_help() {
 
@@ -131,6 +134,9 @@ function robo_help() {
     echo "install functions"
     echo -n "  "; echo "robo_system_update          #no help"
     echo -n "  "; robo_system_install -h
+    echo -n "  "; robo_system_uninstall -h
+    echo ""
+    echo "check system"
     echo -n "  "; robo_system_wtf -h
     echo ""
 

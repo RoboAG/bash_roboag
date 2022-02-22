@@ -130,6 +130,8 @@ function robo_system_check_update() {
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11.02.2022"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="02.06.2021"
+export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="22.02.2022"
+export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
 # 2022 02 11
 function robo_system_install() {
@@ -263,6 +265,82 @@ function robo_system_install() {
     echo "done :-)"
 }
 
+# 2022 02 22
+function robo_system_uninstall() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<system>]"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 0-1 parameters"
+        echo "    [#1:]system for uninstalling packages"
+        echo "         \"\" regular packages (default)"
+        echo "         \"server\" additional packages for server"
+        echo "This function uninstalls packages, not needed anymore."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # init variables
+    server_flag="0"
+
+    if [ $# -gt 0 ]; then
+        if [ "$1" == "server" ]; then
+            server_flag="1"
+
+            _robo_config_need_server "$FUNCNAME"
+            if [ $? -ne 0 ]; then return; fi
+        elif [ "$1" != "" ]; then
+            echo "$FUNCNAME: Parameter Error."
+            $FUNCNAME --help
+            return -1
+        fi
+    fi
+
+    # select between server and client
+    if [ "$server_flag" -eq 0 ]; then
+        # basic install
+        _config_uninstall_list "
+            konsole
+            subversion
+            synaptic
+            eagle
+            " "" --yes
+        if [ $? -ne 0 ]; then return -2; fi
+
+    else
+        echo "<nothing todo>"
+    fi
+
+    # add logging
+    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
+        touch "$ROBO_PATH_LOG_INSTALL" 2>> /dev/null
+        if [ $? -ne 0 ]; then return -3; fi
+    fi
+    if [ -f "$ROBO_PATH_LOG_INSTALL" ]; then
+        str="$(date +"%d.%m.%Y %H:%M") uninstall"
+        if [ "$server_flag" -eq 0 ]; then
+            str="${str} client ${ROBO_SYSTEM_UNINSTALL_DATE_CLIENT}"
+            echo "$str" >> "$ROBO_PATH_LOG_INSTALL"
+        else
+            str="${str} server ${ROBO_SYSTEM_UNINSTALL_DATE_SERVER}"
+            # don't save info into logfile
+        fi
+    fi
+    if [ $? -ne 0 ]; then return -3; fi
+
+    echo "done :-)"
+}
 
 # 2022 02 22
 function robo_system_check_install() {
@@ -278,11 +356,11 @@ function robo_system_check_install() {
         error_flag=1;
         echo ""
         echo "  no logfile"
-        echo -n "  --> robo_system_install"
+        echo "  --> robo_system_install"
         if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
-            echo ""
-            echo -n "  --> robo_system_install server"
+            echo "  --> robo_system_install server"
         fi
+        echo -n "  --> robo_system_uninstall"
     else
         # check for client install
         date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep " install client " | \
@@ -303,6 +381,28 @@ function robo_system_check_install() {
                 echo ""
                 echo "  new client install"
                 echo -n "  --> robo_system_install"
+            fi
+        fi
+
+        # check for client uninstall
+        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep " uninstall client " | \
+          tail -n 1 | awk "{print \$5}")"
+        if [ $? -ne 0 ] || [ "$date" == "" ]; then
+            error_flag=1;
+            echo ""
+            echo "  no valid log for client uninstallation"
+            echo -n "  --> robo_system_uninstall"
+        else
+            # convert last install date & latest timestamp into unix time
+            date_secs="$(_robo_system_convert_date_to_sec "$date")"
+            date_timestamp_secs="$(_robo_system_convert_date_to_sec \
+              "$ROBO_SYSTEM_UNINSTALL_DATE_CLIENT")"
+
+            if [ $? -ne 0 ] || [ $date_timestamp_secs -gt $date_secs ]; then
+                error_flag=1;
+                echo ""
+                echo "  new client uninstall"
+                echo -n "  --> robo_system_uninstall"
             fi
         fi
 
@@ -330,6 +430,9 @@ function robo_system_check_install() {
                     echo -n "  --> robo_system_install server"
                 fi
             fi
+
+            # check for server uninstall
+            # ... upcoming ...
         fi
     fi
 
