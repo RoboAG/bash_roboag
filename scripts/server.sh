@@ -140,7 +140,7 @@ function robo_server_ssh_getconfigs() {
 
 #***************************[client status]***********************************
 
-# 2021 10 26
+# 2022 02 23
 function robo_server_check_clients() {
 
     # print help
@@ -187,13 +187,17 @@ function robo_server_check_clients() {
         computers="$(ls "${HOME}/config/")"
     fi
 
-
+    # setup constants for comparing dates
     now_secs="$(date +"%s")"
-    date_update_client="$(date \
-      --date="$ROBO_SYSTEM_INSTALL_DATE_CLIENT" +"%s")"
+    date_install_secs="$(_robo_system_convert_date_to_sec \
+        "$ROBO_SYSTEM_INSTALL_DATE_CLIENT")"
+    if [ $? -ne 0 ]; then return -6; fi
+    date_uninstall_secs="$(_robo_system_convert_date_to_sec \
+        "$ROBO_SYSTEM_UNINSTALL_DATE_CLIENT")"
+    if [ $? -ne 0 ]; then return -7; fi
 
     (
-        echo -e "*name* *install* *update* *repo*"
+        echo -e "*name* *install* *uninstall* *update* *repo*"
         for computer in $computers; do
             dest="${HOME}/config/${computer}/roboag/"
             if [ ! -d "$dest" ]; then continue; fi
@@ -207,15 +211,42 @@ function robo_server_check_clients() {
             if [ ! -f "$temp" ]; then
                 echo -n "--- "
             else
-                date="$(cat "$temp" | grep -v server | tail -n 1 | \
-                  awk "{print \$1}")"
-                date_en="$(echo "$date" | \
-                  awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-                if [ "$date" == "" ] || [ "$date_en" == "//" ]; then
+                date="$(cat "$temp" | grep " install client " | \
+                tail -n 1 | awk "{print \$5}")"
+                if [ $? -eq 0 ] && [ "$date" != "" ]; then
+                    date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                    if [ $? -ne 0 ]; then date_secs=""; fi
+                else
+                    date_secs=""
+                fi
+                if [ "$date_secs" == "" ]; then
                     echo -n "err "
                 else
-                    date_secs="$(date --date="$date_en" +"%s")"
-                    if [ $date_update_client -ge $date_secs ]; then
+                    if [ $date_install_secs -gt $date_secs ]; then
+                        echo -n "$date "
+                    else
+                        echo -n "ok "
+                    fi
+                fi
+            fi
+
+            # last uninstall date
+            temp="${dest}install.log"
+            if [ ! -f "$temp" ]; then
+                echo -n "--- "
+            else
+                date="$(cat "$temp" | grep " uninstall client " | \
+                tail -n 1 | awk "{print \$5}")"
+                if [ $? -eq 0 ] && [ "$date" != "" ]; then
+                    date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                    if [ $? -ne 0 ]; then date_secs=""; fi
+                else
+                    date_secs=""
+                fi
+                if [ "$date_secs" == "" ]; then
+                    echo -n "err "
+                else
+                    if [ $date_uninstall_secs -gt $date_secs ]; then
                         echo -n "$date "
                     else
                         echo -n "ok "
@@ -229,12 +260,15 @@ function robo_server_check_clients() {
                 echo -n "--- "
             else
                 date="$(tail -n 1 "$temp" | awk "{print \$1}")"
-                date_en="$(echo "$date" | \
-                  awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-                if [ "$date" == "" ] || [ "$date_en" == "//" ]; then
+                if [ $? -eq 0 ] && [ "$date" != "" ]; then
+                    date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                    if [ $? -ne 0 ]; then date_secs=""; fi
+                else
+                    date_secs=""
+                fi
+                if [ "$date_secs" == "" ]; then
                     echo -n "err "
                 else
-                    date_secs="$(date --date="$date_en" +"%s")"
                     diff_days="$(echo \
                       "($now_secs - $date_secs) / 60 / 60 / 24" | bc)"
                     if [ $diff_days -ge 6 ]; then
@@ -251,12 +285,15 @@ function robo_server_check_clients() {
                 echo -n "--- "
             else
                 date="$(tail -n 1 "$temp" | awk "{print \$1}")"
-                date_en="$(echo "$date" | \
-                  awk -F "." "{print \$2\"/\"\$1\"/\"\$3}")"
-                if [ "$date" == "" ] || [ "$date_en" == "//" ]; then
+                if [ $? -eq 0 ] && [ "$date" != "" ]; then
+                    date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                    if [ $? -ne 0 ]; then date_secs=""; fi
+                else
+                    date_secs=""
+                fi
+                if [ "$date_secs" == "" ]; then
                     echo -n "err "
                 else
-                    date_secs="$(date --date="$date_en" +"%s")"
                     diff_days="$(echo \
                       "($now_secs - $date_secs) / 60 / 60 / 24" | bc)"
                     if [ $diff_days -ge 6 ]; then
