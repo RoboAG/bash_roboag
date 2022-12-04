@@ -125,12 +125,12 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2022 02 22
+# 2022 07 07
 
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11.02.2022"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="02.06.2021"
-export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="22.02.2022"
+export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
 # 2022 02 11
@@ -191,7 +191,6 @@ function robo_system_install() {
         _config_install_list "
             openssh-server
 
-            synaptic
             cifs-utils
             net-tools
             ntp
