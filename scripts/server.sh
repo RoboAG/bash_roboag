@@ -36,7 +36,7 @@ alias _robo_server_ssh_robolib="robo_server_ssh \
   \"robolib_repo_make\" tabs"
 
 
-# 2021 01 28
+# 2023 01 13
 function robo_server_ssh() {
 
     # print help
@@ -82,6 +82,9 @@ function robo_server_ssh() {
     # load list of current dhcp clients
     computers="$(robo_config_server_dhcp_show --none-verbose)"
     if [ $? -ne 0 ]; then return -2; fi
+
+    # filter (raspi with open-roberta-lab)
+    computers="$(echo "$computers" | grep -v orlab)"
 
     network_ssh --no-passwd --interactive $string_mode \
       "$computers" "$ROBO_USER_ADMIN" "$param_script"
