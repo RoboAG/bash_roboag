@@ -244,7 +244,7 @@ function robo_config_server_dhcp_check() {
     fi
 }
 
-# 2021 08 12
+# 2023 01 13
 function robo_config_server_dhcp_show() {
 
     # Check the configuration
@@ -298,7 +298,8 @@ function robo_config_server_dhcp_show() {
     fi
 
     # do the job
-    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | column -txn
+    # additionally: remove target "*" in quiet mode
+    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | column -txn
 }
 
 
