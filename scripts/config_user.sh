@@ -34,8 +34,8 @@ export ROBO_USER_AG="roboag"
 
 
 #***************************[shared paths]************************************
-# 2021 01 16
+# 2023 01 20
 
-export ROBO_PATH_SHARED="/opt/roboag/"
-export ROBO_PATH_SHARED_REPOS="${ROBO_PATH_SHARED}repos/"
-export ROBO_PATH_SHARED_DATA="${ROBO_PATH_SHARED}data/"
+export ROBO_PATH_OPT="/opt/roboag/"
+export ROBO_PATH_OPT_REPOS="${ROBO_PATH_OPT}repos/"
+export ROBO_PATH_OPT_DATA="${ROBO_PATH_OPT}data/"

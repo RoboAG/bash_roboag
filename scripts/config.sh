@@ -540,8 +540,8 @@ function robo_config_samba() {
     fi
 
     # check credential file
-    if [ -d "$ROBO_PATH_SHARED" ]; then
-        smb_path="$ROBO_PATH_SHARED_DATA"
+    if [ -d "$ROBO_PATH_OPT" ]; then
+        smb_path="$ROBO_PATH_OPT_DATA"
     else
         smb_path="$HOME"
     fi
@@ -656,8 +656,8 @@ function robo_config_samba_check() {
         echo ""
         echo -n "  mountpoint roboag does not exist"
     else
-        if [ -d "$ROBO_PATH_SHARED" ]; then
-            smb_path="$ROBO_PATH_SHARED_DATA"
+        if [ -d "$ROBO_PATH_OPT" ]; then
+            smb_path="$ROBO_PATH_OPT_DATA"
         else
             smb_path="$HOME"
         fi
@@ -744,8 +744,8 @@ function robo_config_samba_restore() {
     fi
 
     # removing credential file
-    if [ -d "$ROBO_PATH_SHARED" ]; then
-        smb_path="$ROBO_PATH_SHARED_DATA"
+    if [ -d "$ROBO_PATH_OPT" ]; then
+        smb_path="$ROBO_PATH_OPT_DATA"
     else
         smb_path="$HOME"
     fi
@@ -798,8 +798,8 @@ function robo_config_paths_check() {
     # initial output
     echo -n "runtime files     ... "
 
-    tmp="${ROBO_PATH_SCRIPT:0:${#ROBO_PATH_SHARED}}"
-    if [ "$tmp" == "$ROBO_PATH_SHARED" ] && \
+    tmp="${ROBO_PATH_SCRIPT:0:${#ROBO_PATH_OPT}}"
+    if [ "$tmp" == "$ROBO_PATH_OPT" ] && \
       [ "$REPO_BASH_DATA_PATH" == "" ]; then
         error_flag=1;
         echo ""

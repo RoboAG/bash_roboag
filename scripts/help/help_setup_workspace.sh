@@ -59,7 +59,7 @@ function robo_help_setup_workspace() {
         echo ""
 
         echo "In SHARED mode the repositories are stored globally - for now"
-        echo -n "the path is \"${ROBO_PATH_SHARED_REPOS}\". "
+        echo -n "the path is \"${ROBO_PATH_OPT_REPOS}\". "
         echo    "Therefore, all users have"
         echo "access to the repositories. For the setup the current user"
         echo "needs sudo rights."
@@ -93,7 +93,7 @@ function robo_help_setup_workspace() {
     if [ "$mode_flag" == "simple" ]; then
         path_workspace=""
     else
-        path_workspace="$ROBO_PATH_SHARED_REPOS"
+        path_workspace="$ROBO_PATH_OPT_REPOS"
     fi
     path_roboag="${path_workspace}bash/master/roboag/"
 
@@ -151,13 +151,13 @@ function robo_help_setup_workspace() {
         fi
     else # client mode
         echo "1.a) Create shared folder"
-        echo "  $ sudo mkdir -p \"$ROBO_PATH_SHARED_REPOS\""
-        echo "  $ sudo chown \$USER \"$ROBO_PATH_SHARED_REPOS\""
+        echo "  $ sudo mkdir -p \"$ROBO_PATH_OPT_REPOS\""
+        echo "  $ sudo chown \$USER \"$ROBO_PATH_OPT_REPOS\""
         echo -e "\n<enter>\n"; read dummy
 
         echo "1.b) Copy scripts from server"
-        echo "  $ cd \"$ROBO_PATH_SHARED_REPOS\""
-        temp="${ROBO_PATH_SHARED_REPOS}bash/"
+        echo "  $ cd \"$ROBO_PATH_OPT_REPOS\""
+        temp="${ROBO_PATH_OPT_REPOS}bash/"
         echo "  $ scp -r \"${USER}@${_ROBO_SERVER_IP}:${temp}\" ."
         echo -e "\n<enter>\n"; read dummy
     fi
