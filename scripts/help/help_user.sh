@@ -1,13 +1,14 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2022 02 19
+# 2023 01 20
 
 function robo_help_user() {
 
     echo    "### ROBOAG ###"
     echo    ""
 
+    echo    "robolib"
     echo -n "  $ robolib_init_kepler        # Legt die Konfig für das"
     echo                                    " Keplerboard an"
     echo -n "  $ robolib_init_3pi           # Legt die Konfig für einen"
@@ -24,5 +25,10 @@ function robo_help_user() {
     echo    ""
     echo -n "  $ robolib_data [comport]     # Einfacher Datanaustausch"
     echo                                    " (RS232)"
+    echo    ""
+    echo    ""
+
+    echo    "Open-Roberta-Lab"
+    echo    "  $ robo_orlab_connect         # Connector zum Herunterladen"
     echo    ""
 }
