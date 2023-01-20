@@ -60,7 +60,9 @@ fi
 
 
 #***************************[internal scripts]********************************
-# 2021 07 26
+# 2023 01 20
+
+source "${ROBO_PATH_SCRIPT}scripts/config_user.sh"
 
 if [ "$ROBO_CONFIG_IS_USER" != "1" ]; then
     # config.sh sets _robo_config_need_... and ROBO_CONFIG_IS_...

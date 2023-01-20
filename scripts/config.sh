@@ -5,6 +5,7 @@
 
 # the following must be sourced BEFORE this script
 #     repo files
+#     config_user.sh
 #
 # the following must be sourced AFTER this script
 #     config_server.sh - overwritting ROBO_SERVER_IP
@@ -26,35 +27,6 @@ _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
 
 # moved here from repository, since path was not set before ...
 export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
-
-
-
-#***************************[server ip]***************************************
-# 2021 01 19
-
-export _ROBO_SERVER_IP="192.168.2.20"
-export _ROBO_SERVER_IP_MASK="255.255.255.0"
-export _ROBO_SERVER_IP_MASK2="${_ROBO_SERVER_IP}/24"
-
-# this definition is overwritten in server mode
-export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
-
-
-
-#***************************[user]********************************************
-# 2021 01 16
-
-export ROBO_USER_ADMIN="guru"
-export ROBO_USER_AG="roboag"
-
-
-
-#***************************[shared paths]************************************
-# 2021 01 16
-
-export ROBO_PATH_SHARED="/opt/roboag/"
-export ROBO_PATH_SHARED_REPOS="${ROBO_PATH_SHARED}repos/"
-export ROBO_PATH_SHARED_DATA="${ROBO_PATH_SHARED}data/"
 
 
 
