@@ -1,0 +1,99 @@
+diff --git a/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java b/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
+index accf2ff..2e4bfe4 100644
+--- a/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
++++ b/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
+@@ -33,7 +33,7 @@ class OpenRobertaConnector {
+     private final IDetector wiredRobotDetector = new SerialRobotDetector();
+     private final IDetector rndisDetector = new RndisDetector();
+     private final IDetector naoDetector = new mDnsDetector();
+-    private final RobotDetectorHelper robotDetectorHelper = new RobotDetectorHelper(Arrays.asList(this.wiredRobotDetector, this.rndisDetector, this.naoDetector));
++    private final RobotDetectorHelper robotDetectorHelper = new RobotDetectorHelper(Arrays.asList(this.wiredRobotDetector));
+ 
+     OpenRobertaConnector() {
+         ResourceBundle messages = ResourceBundle.getBundle(PropertyHelper.getInstance().getProperty("messagesBundle"), Locale.getDefault());
+diff --git a/src/main/java/de/fhg/iais/roberta/util/CustomAddressHelper.java b/src/main/java/de/fhg/iais/roberta/util/CustomAddressHelper.java
+index 82e7977..fe2b2bd 100644
+--- a/src/main/java/de/fhg/iais/roberta/util/CustomAddressHelper.java
++++ b/src/main/java/de/fhg/iais/roberta/util/CustomAddressHelper.java
+@@ -23,7 +23,7 @@ public class CustomAddressHelper {
+ 
+     private static final int MAX_ADDRESS_ENTRIES = 5;
+     private static final String CUSTOM_ADDRESSES_FILENAME =
+-            SystemUtils.getUserHome().getPath() + File.separator + "OpenRobertaConnector" + File.separator + "customaddresses.txt";
++            SystemUtils.getUserHome().getPath() + File.separator + ".open_roberta" + File.separator + "connector" + File.separator + "customaddresses.txt";
+     private static final String ADDRESS_DELIMITER = " "; // colon may be used in ipv6 addresses
+ 
+     private Deque<Pair<String, String>> addresses = new ArrayDeque<>();
+diff --git a/src/main/java/de/fhg/iais/roberta/util/WiredRobotIdFileHelper.java b/src/main/java/de/fhg/iais/roberta/util/WiredRobotIdFileHelper.java
+index eb49098..80246a4 100644
+--- a/src/main/java/de/fhg/iais/roberta/util/WiredRobotIdFileHelper.java
++++ b/src/main/java/de/fhg/iais/roberta/util/WiredRobotIdFileHelper.java
+@@ -28,7 +28,7 @@ public final class WiredRobotIdFileHelper {
+     private static final String WIRED_ROBOT_ID_FILENAME = "wired-robot-ids.txt";
+     private static final String
+         WIRED_ROBOT_ID_FILEPATH =
+-        SystemUtils.getUserHome().getPath() + File.separator + "OpenRobertaConnector" + File.separator + WIRED_ROBOT_ID_FILENAME;
++        SystemUtils.getUserHome().getPath() + File.separator + ".open_roberta" + File.separator + "connector" + File.separator + WIRED_ROBOT_ID_FILENAME;
+ 
+     private WiredRobotIdFileHelper() {
+     }
+@@ -40,7 +40,7 @@ public final class WiredRobotIdFileHelper {
+         File file = new File(WIRED_ROBOT_ID_FILEPATH);
+ 
+         if ( !file.exists() ) {
+-            LOG.warn("Could not find {}, using default file!", WIRED_ROBOT_ID_FILEPATH);
++            LOG.debug("Could not find {}, using default file!", WIRED_ROBOT_ID_FILEPATH);
+         }
+ 
+         try (InputStream inputStream = (file.exists()) ?
+diff --git a/src/main/resources/OpenRobertaConnector.properties b/src/main/resources/OpenRobertaConnector.properties
+index 5cfccdf..06e83cf 100644
+--- a/src/main/resources/OpenRobertaConnector.properties
++++ b/src/main/resources/OpenRobertaConnector.properties
+@@ -1,11 +1,11 @@
+ brickIp=10.0.1.1
+-serverIp=lab.open-roberta.org
++serverIp=192.168.2.20
+ serverPort=443
+ groupId=${groupId}
+ artifactId=${artifactId}
+ version=${version}
+ buildTimeStamp=${buildTimeStamp}
+-messagesBundle=messages
++messagesBundle=messages_de
+ repository=OpenRoberta/openroberta-connector/
+ timeToHelp=60
+ 
+diff --git a/src/main/resources/logback.xml b/src/main/resources/logback.xml
+index 00c9024..28c69ca 100644
+--- a/src/main/resources/logback.xml
++++ b/src/main/resources/logback.xml
+@@ -7,7 +7,7 @@
+ 
+     <appender name="FILE"  class="ch.qos.logback.core.FileAppender">
+         <append>false</append>
+-        <file>${user.home}/OpenRobertaConnector/OpenRobertaConnector.log</file>
++        <file>${user.home}/.open_roberta/connector/connector.log</file>
+         <encoder>
+             <pattern>%d [%thread] %-5level %logger{36} %M - %msg%n</pattern>
+         </encoder>
+@@ -17,4 +17,4 @@
+         <appender-ref ref="STDOUT" />
+         <appender-ref ref="FILE" />
+     </root>
+-</configuration>
+\ No newline at end of file
++</configuration>
+diff --git a/src/main/resources/messages_de.properties b/src/main/resources/messages_de.properties
+index bb895e4..98c85b7 100644
+--- a/src/main/resources/messages_de.properties
++++ b/src/main/resources/messages_de.properties
+@@ -63,7 +63,7 @@ scan=Scannen
+ selectDeviceType=W\u00E4hle einen Ger\u00E4tetyp.
+ serialMonitor=Serial Monitor
+ serverInfo=Du kannst jetzt deine Programme an den Roboter schicken. Vergiss nicht das USB Kabel wieder einzustecken, wenn dein Programm ausgef\u00FChrt wurde.
+-title=Open Roberta Connector
++title=Open Roberta Connector - RoboAG
+ token=Token
+ tokenInfo=Den Token kannst du mit \u00BBkopieren\u00AB und \u00BBeinf\u00FCgen\u00AB im Open Roberta Lab unter Roboter>verbinden einf\u00FCgen.
+ tokenTimeout=Die G\u00FCltigkeit des Token ist abgelaufen. Klicke auf \u00BBOK\u00AB und anschlie\u00DFend auf \u00BBVerbinden\u00AB um es noch mal zu \
