@@ -299,7 +299,8 @@ function robo_config_server_dhcp_show() {
 
     # do the job
     # additionally: remove target "*" in quiet mode
-    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | $ROBO_RUN_COLUMN
+    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | \
+      $ROBO_RUN_COLUMN
 }
 
 
@@ -349,7 +350,7 @@ function robo_config_server_dhcp_list() {
           | grep "^[^#]*dhcp-host" \
           | sed 's/dhcp-host=//g' \
           | awk --field-separator=, "$AWK_STRING" \
-          | ROBO_RUN_COLUMN)"
+          | $ROBO_RUN_COLUMN)"
 
         if [ "$result" != "" ]; then
             echo "${PATH_CONFIG}${file}"
