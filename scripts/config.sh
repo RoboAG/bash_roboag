@@ -30,6 +30,22 @@ export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
 
 
+#***************************[ubuntu versions]*********************************
+# 2023 01 27
+
+# set defaults
+ROBO_RUN_COLUMN="column --table"
+
+# load current version (for Ubuntu 22.04)
+release="$(lsb_release -rs)"
+
+# handle older versions
+if [ "$release" == "20.04" ]; then
+    ROBO_RUN_COLUMN="column -txn"
+fi
+
+
+
 #***************************[samba paths]*************************************
 # 2021 01 16
 

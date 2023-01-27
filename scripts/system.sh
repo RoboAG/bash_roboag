@@ -133,7 +133,7 @@ export ROBO_SYSTEM_INSTALL_DATE_SERVER="02.06.2021"
 export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
-# 2022 02 11
+# 2023 01 27
 function robo_system_install() {
 
     # print help
@@ -232,7 +232,7 @@ function robo_system_install() {
         if [ $? -ne 0 ]; then return -3; fi
     else
         _config_install_list "
-            exfat-fuse exfat-utils
+            exfat-fuse
 
             apt-cacher-ng
 
@@ -242,6 +242,10 @@ function robo_system_install() {
             mariadb-server
             php php-mysql phpmyadmin
             " "" --yes
+        # handled older operating systems
+        if [ "$(lsb_release -rs)" == "20.04" ]; then
+	        _config_install_list "exfat-utils" "" --yes
+        fi
         if [ $? -ne 0 ]; then return -2; fi
     fi
 

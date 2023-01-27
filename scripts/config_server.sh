@@ -244,7 +244,7 @@ function robo_config_server_dhcp_check() {
     fi
 }
 
-# 2023 01 13
+# 2023 01 27
 function robo_config_server_dhcp_show() {
 
     # Check the configuration
@@ -299,11 +299,11 @@ function robo_config_server_dhcp_show() {
 
     # do the job
     # additionally: remove target "*" in quiet mode
-    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | column -txn
+    cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | $ROBO_RUN_COLUMN
 }
 
 
-# 2021 08 12
+# 2023 01 27
 function robo_config_server_dhcp_list() {
 
     # print help
@@ -349,7 +349,7 @@ function robo_config_server_dhcp_list() {
           | grep "^[^#]*dhcp-host" \
           | sed 's/dhcp-host=//g' \
           | awk --field-separator=, "$AWK_STRING" \
-          | column -txn)"
+          | ROBO_RUN_COLUMN)"
 
         if [ "$result" != "" ]; then
             echo "${PATH_CONFIG}${file}"
