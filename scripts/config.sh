@@ -117,7 +117,7 @@ function robo_config_mode_get() {
     fi
 }
 
-# 2021 01 12
+# 2023 01 27
 function robo_config_mode_set() {
 
     # print help
@@ -175,7 +175,7 @@ function robo_config_mode_set() {
     fi
 
     _config_simple_parameter_check "$FUNCNAME" "" \
-      "Switching mode of system from $current_flag to ${mode_flag^^}."
+      " switches mode of system from $current_flag to ${mode_flag^^}."
     if [ $? -ne 0 ]; then return -2; fi
 
     # create config files

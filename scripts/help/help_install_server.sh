@@ -1,9 +1,66 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 01 16
+# 2023 01 27
 
 function robo_help_install_server() {
+
+    # Hilfe anzeigen
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME [<system>]"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME benötigt 0-1 parameter"
+        echo "    [#1:]System für welches die Installationsanleitung angezeigt werden soll."
+        echo "         Standardwert des optionalen Parameters ist \"roboag\"."
+        echo "           \"roboag\"     Server der RoboAG (bzw. des RoboSAX)"
+        echo "           \"togo\"       ToGo-Server"
+        echo ""
+        echo "Diese Funktion ist nur ein Wrapper und ruft die Standardanleitung auf:"
+        echo "    $ robo_help_install <server>"
+        echo ""
+        echo "Hinweis: Ältere Anleitungen können weiterhin eingesehen werden:"
+        echo "    $ robo_help_install_server2004"
+        echo "    $ robo_help_install_server1804"
+        echo "    $ robo_help_install_server1604"
+
+        return
+    fi
+
+    # Parameter prüfen
+    if [ $# -gt 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # ersten Parameter prüfen (system-flag)
+    system_flag="server"
+    if [ $# -gt 0 ]; then
+        if [ "$1" == "roboag" ]; then
+            # nothing to do :-)
+            dummy=1
+        elif [ "$1" == "togo" ]; then
+            system_flag="togo"
+        else
+            echo "$FUNCNAME: Parameter Error."
+            $FUNCNAME --help
+            return -1
+        fi
+    fi
+
+    # Standardanleitung aufrufen
+    robo_help_install "$system_flag"
+}
+
+
+
+#***************************[20.04]*******************************************
+# 2023 01 27
+
+function robo_help_install_server2004() {
 
     # print help
     if [ "$1" == "-h" ]; then
@@ -17,12 +74,6 @@ function robo_help_install_server() {
         echo "         Leave option empty to run for \"roboag\"."
         echo "           \"roboag\"     Server of RoboAG (and RoboSAX)"
         echo "           \"togo\"       ToGo-Server"
-        echo "         Deprecated versions for Ubuntu 18.04:"
-        echo "           \"roboag1804\" Server of RoboAG"
-        echo "           \"togo1804\"   ToGo-Server"
-        echo "         Deprecated versions for Ubuntu 16.04:"
-        echo "           \"roboag1604\" Server of RoboAG"
-        echo "           \"togo1604\"   ToGo-Server"
 
         return
     fi
@@ -37,25 +88,6 @@ function robo_help_install_server() {
     # check first parameter (system-flag)
     system_flag="roboag"
     if [ $# -gt 0 ]; then
-        # check for deprecated versions
-        if [ "$1" == "roboag1804" ]; then
-            robo_help_install_server1804 roboag
-            return
-        fi
-        if [ "$1" == "togo1804" ]; then
-            robo_help_install_server1804 togo
-            return
-        fi
-        if [ "$1" == "roboag1604" ]; then
-            robo_help_install_server1604 roboag
-            return
-        fi
-        if [ "$1" == "togo1604" ]; then
-            robo_help_install_server1604 togo
-            return
-        fi
-
-        #check for current versions
         if [ "$1" == "roboag" ]; then
             # nothing to do :-)
             dummy=1
@@ -287,6 +319,8 @@ function robo_help_install_server() {
 
     echo "done :-)"
 }
+
+
 
 #***************************[18.04]*******************************************
 # 2021 01 16
@@ -840,4 +874,3 @@ function robo_help_install_server1604() {
 
     echo "done :-)"
 }
-

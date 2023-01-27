@@ -1,47 +1,55 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2020 10 16
+# 2023 01 27
 
 function robo_help_install() {
 
-    # print help
+    # Hilfe anzeigen
     if [ "$1" == "-h" ]; then
         echo "$FUNCNAME [<system>]"
 
         return
     fi
     if [ "$1" == "--help" ]; then
-        echo "$FUNCNAME needs 0-1 parameters"
-        echo "    [#1:]system for which install instructions will be shown"
-        echo "         Leave option empty to run for \"client\"."
-        echo "           \"client\"     common computers (client)"
-        echo "           \"raspi\"      raspberry pi     (client)"
-        echo "           \"server\"     server"
+        echo "$FUNCNAME benötigt 0-1 parameter"
+        echo "    [#1:]System für welches die Installationsanleitung angezeigt werden soll."
+        echo "         Standardwert des optionalen Parameters ist \"pc\"."
+        echo "           \"pc\"         Standard-PC(client)"
+        echo "           \"raspi\"      RaspberryPi(client)"
+        echo "           \"server\"     Server der Roboag"
+        echo "           \"togo\"       Server ToGo"
+        echo ""
+        echo "Hinweis: Ältere Anleitungen können weiterhin eingesehen werden:"
+        echo "    $ robo_help_install_client2004"
 
         return
     fi
 
-    # check parameter
+    # Parameter prüfen
     if [ $# -gt 1 ]; then
         echo "$FUNCNAME: Parameter Error."
         $FUNCNAME --help
         return -1
     fi
 
-    # check first parameter (system-flag)
+    # ersten Parameter prüfen (system-flag)
     system_flag="client"
+    server_flag=""
     if [ $# -gt 0 ]; then
         if [ "$1" == "client" ]; then
             # nothing to do :-)
             dummy=1
         elif [ "$1" == "raspi" ]; then
             system_flag="raspi"
-            echo "$FUNCNAME: raspberry pis are not documented yet"
+            echo "$FUNCNAME: RaspberryPis sind noch nicht dokumentiert."
             return
         elif [ "$1" == "server" ]; then
-            robo_help_install_server
-            return $?
+            system_flag="server"
+            server_flag="roboag"
+        elif [ "$1" == "togo" ]; then
+            system_flag="server"
+            server_flag="togo"
         else
             echo "$FUNCNAME: Parameter Error."
             $FUNCNAME --help
@@ -49,8 +57,125 @@ function robo_help_install() {
         fi
     fi
 
+    # Hilfsmarker für Server & Client anlegen
+    S=" "
+    C="x"
+    if [ "$server" != "" ]; then
+        S="x"
+        C=" "
+    fi
+
+    # Anleitung
     echo ""
-    echo "### Install Client ###"
+    echo "### Allgemeine Installationsanleitung ###"
+    echo ""
+    echo "Betriebssystem: Ubuntu 20.04.1 LTS"
+    echo "Quelle        : https://releases.ubuntu.com/22.04/"
+    temp="${REPO_ROBOAG_DOC_INSTALL[1]}"
+    if [ "$temp" != "" ]; then
+        echo "  (siehe auch ${REPO_ROBOAG_DOC_INSTALL[1]})"
+    fi
+
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo "Sprachauswahl"
+    echo "  [...             ]"
+    echo "  [Dansk           ]"
+    echo " *[Deutsch         ]*   [Ubuntu ausprobieren]   *[Ubuntu installieren]* "
+    echo "  [Eesti           ]"
+    echo "  [English         ]"
+    echo "  [...             ]"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo "Tastaturbelegeung"
+    echo "  [...             ]   *[German               ]*"
+    echo "  [Georgian        ]    [German - German (...)]"
+    echo " *[German          ]*   [German - German (...)]"
+    echo "  [German (Austria)]    [German - German (...)]"
+    echo "  [Greek           ]    [German - German (...)]"
+    echo "  [...             ]    [...                  ]"
+    echo ""
+    echo "                        [Beenden]  [Zurück]   *[Weiter]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo "Aktualisierung und andere Software"
+    echo "  Welche Anwendungen möchten Sie am Anfang installieren?"
+    echo "  [ ] Normale Installation"
+    echo "  [x] Minimale Installation"
+    echo ""
+    echo "  Weitere Optionen"
+    echo "  [$S] Während Ubuntu installiert wird Aktualisierungen herunterladen"
+    echo "  [x] Installieren Sie Software von Drittanbietern ..."
+    echo ""
+    echo "                        [Beenden]  [Zurück]   *[Weiter]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+
+    echo "Installationsart"
+    echo "  [$C] Festplatte löschen und Ubuntu installieren"
+    echo "  [$S] Etwas Anderes"
+    echo ""
+    echo "                        [Beenden]  [Zurück]   *[Jetzt installieren]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    if [ "$server_flag" != "" ]; then
+        echo "TODO details server ..."
+    fi
+
+    echo "Änderungen auf die Festplatte schreiben"
+    echo "                        [Zurück]   *[Weiter]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo "Wo befinden Sie sich?"
+    echo "  [Berlin                                  ]"
+    echo "                        [Zurück]   *[Weiter]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+
+    echo "Wer sind Sie?"
+    echo "                       Ihr Name: [Guru der RoboAG                 ]"
+    echo "            Name Ihres Rechners: [<siehe externe Liste>           ]"
+    echo "  Bitte Benutzernamen auswählen: [guru                            ]"
+    echo "         Ein Passwort auswählen: [<geheim ;-)>                    ]"
+    echo "           Passwort wiederholen: [<Passwort wiederholen>          ]"
+    echo "                                 ( ) Automatisch anmelden"
+    echo "                                 (x) Passwort zum Anmelden abfragen"
+    echo "                                 [ ] Active Directory verwenden"
+    echo ""
+    echo "                        [Zurück]   *[Weiter]*"
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo ""
+    echo "  ... sehr lange warten ..."
+    echo -e "\n<Enter drücken>\n"; read dummy
+
+    echo "Installation abgeschlossen"
+    echo "      [Jetzt  neu starten]"
+    echo -e "\n<Enter>"; read dummy
+
+    echo "  bei Aufforderung Installationsmedium entfernen"
+    echo -e "\n<Enter>"; read dummy
+
+    echo "Fertig :-)"
+    echo ""
+    echo "Nächste Anleitung für die globale Konfiguration einsehen:"
+    echo "    $ robo_help_setup_workspace"
+}
+
+
+
+
+#***************************[20.04]*******************************************
+# 2023 01 27
+
+function robo_help_install_client2004() {
+
+    _config_simple_parameter_check "$FUNCNAME" "" \
+      "shows install instructions for clients on Lubuntu 20.04."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    echo ""
+    echo "### Install Client - deprecated ###"
     echo ""
     echo "Operating System: Lubuntu 20.04.1 LTS"
     temp="${REPO_ROBOAG_DOC_INSTALL[1]}"
@@ -175,4 +300,3 @@ function robo_help_install() {
     echo "call next script for help regarding setup:"
     echo "    $ robo_help_setup_workspace"
 }
-
