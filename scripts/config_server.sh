@@ -300,7 +300,7 @@ function robo_config_server_dhcp_show() {
     # do the job
     # additionally: remove target "*" in quiet mode
     cat "$FILENAME_LEASES" | awk "$AWK_STRING" | grep -v -E "^\*?$" | \
-      $ROBO_RUN_COLUMN
+      $ROBO_RUN_COLUMN | sort
 }
 
 

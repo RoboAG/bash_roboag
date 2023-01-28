@@ -143,7 +143,7 @@ function robo_server_ssh_getconfigs() {
 
 #***************************[client status]***********************************
 
-# 2022 02 23
+# 2023 01 27
 function robo_server_check_clients() {
 
     # print help
@@ -187,7 +187,7 @@ function robo_server_check_clients() {
         if [ $? -ne 0 ]; then return -4; fi
     else
         if [ ! -d "${HOME}/config/" ]; then return -5; fi
-        computers="$(ls "${HOME}/config/")"
+        computers="$(ls "${HOME}/config/" | sort)"
     fi
 
     # setup constants for comparing dates
@@ -309,7 +309,7 @@ function robo_server_check_clients() {
             echo ""
 
         done
-    ) | column -tx | sort
+    ) | $ROBO_RUN_COLUMN
 
     echo ""
     echo "ssh commands:"
@@ -325,7 +325,7 @@ function robo_server_check_clients() {
 # 2021 10 25
 export ROBO_PATH_ROBOAG_USER="${ROBO_PATH_ROBOAG}/User/"
 
-# 2021 11 07
+# 2023 01 27
 function _robo_server_userdata_list() {
 
     # print help
@@ -357,13 +357,13 @@ function _robo_server_userdata_list() {
     fi
 
     # load list of users
-    users="$(ls "$ROBO_PATH_ROBOAG_USER" | grep -v "^_")"
+    users="$(ls "$ROBO_PATH_ROBOAG_USER" | grep -v "^_" | sort)"
 
     # print list of users
     echo "$users"
 }
 
-# 2021 11 07
+# 2023 01 27
 function robo_server_userdata_show() {
 
     # print help
@@ -420,7 +420,7 @@ function robo_server_userdata_show() {
             last="$(echo "$dirs" | grep -E "^[0-9]{4}_" | sort | tail -n 1)"
             echo "$last"
         done
-    ) | column -tx | sort
+    ) | $ROBO_RUN_COLUMN
 
     echo ""
     echo "user data commands:"
