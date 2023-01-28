@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 08 12
+# 2023 01 28
 
 function robo_help_setup() {
 
@@ -71,6 +71,7 @@ function robo_help_setup() {
     if [ "$system_flag" != "" ]; then
         echo ""
         echo "user & groups"
+        echo "    $ config_password_disable_rejection"
         echo "    $ robo_config_user"
         echo -e "\n<enter>\n"; read dummy
     fi
