@@ -14,29 +14,30 @@
 
 #***************************[open roberta connector]**************************
 # 2023 01 20
-export ROBO_ORLAB_CONNECTOR_NAME="OpenRobertaConnector.jar"
+export ROBO_ORLAB_CONNECTOR_NAME="OpenRobertaConnector"
+export _ROBO_ORLAB_CONNECTOR_PATH1="${ROBO_PATH_OPT_BIN}${ROBO_ORLAB_CONNECTOR_NAME}/"
+export _ROBO_ORLAB_CONNECTOR_PATH2="${HOME}/Downloads/${ROBO_ORLAB_CONNECTOR_NAME}/"
 
 # 2023 01 20
 alias orlab_connect="robo_orlab_connect"
 
 function robo_orlab_connect () {
-    path="${ROBO_PATH_OPT_BIN}"
-    file="${path}${ROBO_ORLAB_CONNECTOR_NAME}"
-    if [ -e "$file" ]; then
-        echo "using roboag version of connector"
+    path="$_ROBO_ORLAB_CONNECTOR_PATH1"
+    if [ -d "$path" ]; then
+        echo "using roboag version of connector"        
     else
-        path="${HOME}/Downloads/"
-        file="${path}${ROBO_ORLAB_CONNECTOR_NAME}"
-        if [ -e "$file" ]; then
+        path="$_ROBO_ORLAB_CONNECTOR_PATH2"
+        if [ -d "$path" ]; then
             echo "using downloaded version of connector"
         else
             echo "cannot find connector :-("
             return -1
         fi
     fi
+    file="${path}${ROBO_ORLAB_CONNECTOR_NAME}.jar"
     echo "  ($file)"
     (
-        cd "$ROBO_ORLAB_CONNECTOR_PATH"
-        java -jar -Dfile.encoding=utf-8 "$ROBO_ORLAB_CONNECTOR"
+        cd "$path"
+        java -jar -Dfile.encoding=utf-8 "$file"
     )
 }

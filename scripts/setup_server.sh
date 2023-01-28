@@ -854,7 +854,7 @@ export ROBO_SERVER_HTML_PATH="/var/www/html/"
 export ROBO_SERVER_KEYS_LIST="packages.microsoft.gpg"
 
 
-# 2021 02 06
+# 2023 01 20
 function robo_setup_server_apache() {
 
     # print help and check for user agreement
@@ -917,7 +917,7 @@ function robo_setup_server_apache() {
               "${ROBO_SERVER_HTML_PATH}default/index.html"
         fi
         # create main robo folder
-        folders="roboag robosax doc keys"
+        folders="roboag robosax doc keys orlab"
         for folder in $folders; do
             path="${ROBO_SERVER_HTML_PATH}${folder}/"
             if [ ! -d "${path}" ]; then
@@ -1052,7 +1052,7 @@ function robo_setup_server_apache_check() {
     fi
 }
 
-# 2021 02 06
+# 2022 01 20
 function robo_setup_server_apache_restore() {
 
     # print help and check for user agreement
@@ -1120,7 +1120,7 @@ function robo_setup_server_apache_restore() {
             sudo rm "$tmp"
         fi
         # remove main robo folders if empty
-        folders="roboag robosax doc keys"
+        folders="roboag robosax doc keys orlab"
         for folder in $folders; do
             path="${ROBO_SERVER_HTML_PATH}${folder}/"
             if [ -d "${path}" ]; then
@@ -1197,4 +1197,119 @@ function _robo_setup_server_apache_getawk() {
     if [ "$content" != "$(echo "$content" | awk "$AWK_STRING")" ]; then
         echo "$AWK_STRING"
     fi
+}
+
+
+
+#***************************[open roberta connector]**************************
+# 2023 01 20
+
+function robo_setup_server_orlab_connector () {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "builds the connector for open-roberta-lab."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # Do the configuration
+    PATH_PATCH="${ROBO_PATH_SCRIPT}system_config/open_roberta/connector.patch"
+    PATH_REPO="${REPO_ROBOAG_ROBERTA_CONNECTOR[0]}"
+    PATH_TMP="/tmp/orlab/"
+    PATH_ZIP="${PATH_TMP}zip/"
+    PATH_HTML="${ROBO_SERVER_HTML_PATH}orlab/"
+
+    SRC_JAR_="${PATH_TMP}target/${ROBO_ORLAB_CONNECTOR_NAME}"
+    SRC_LIBS="${PATH_TMP}target/libs/"
+    SRC_RSC="${PATH_TMP}resources/"
+    RSC_SUBDIRS="linux megaavr"
+
+    ZIP_JAR="${PATH_ZIP}${ROBO_ORLAB_CONNECTOR_NAME}.jar"
+    ZIP_LIBS="${PATH_ZIP}libs/"
+    ZIP_RSC="${PATH_ZIP}resources/"
+
+    # check if repo exists
+    if [ ! -d "$PATH_REPO" ]; then
+        echo "clone repo of open-roberta-connector"
+        git_clone_roboag_roberta_connector
+        if [ $? -ne 0 ]; then return -3; fi
+    fi
+
+    # create temp folder
+    echo "create temp folder"
+    echo "  ($PATH_TMP)"
+    if [ -d "$PATH_TMP" ]; then
+        rm -rf "$PATH_TMP"
+        if [ $? -ne 0 ]; then return -4; fi
+    fi
+    mkdir -p "$PATH_TMP"
+
+    # copy git-repo
+    echo "copy git-repo"
+    echo "  ($PATH_REPO)"
+    rsync --archive --exclude=".git" "$PATH_REPO" "$PATH_TMP"
+    if [ $? -ne 0 ]; then return -5; fi
+
+    # switch to folder & apply patch
+    echo "apply patch"
+    echo "  ($PATH_PATCH)"
+    cd "$PATH_TMP"
+    git apply "$PATH_PATCH"
+    if [ $? -ne 0 ]; then return -6; fi
+
+    # build java application
+    echo "build connector"
+    mvn clean install
+    if [ $? -ne 0 ]; then return -7; fi
+    if [ ! -e "${SRC_JAR_}"*.jar ]; then
+        echo "cannot find jar file"
+        echo "  (${SRC_JAR_}*.jar)"
+        return -7
+    fi
+
+    # copy everything together
+    echo "copy & zip files"
+    echo "  ($PATH_ZIP)"
+    mkdir -p "$PATH_ZIP"
+    if [ $? -ne 0 ]; then return -8; fi
+    echo "    1. *.jar"
+    cp "${SRC_JAR_}"*.jar "$ZIP_JAR"
+    if [ $? -ne 0 ]; then return -8; fi
+    echo "    2. libs/"
+    mkdir -p "$ZIP_LIBS"
+    rsync --archive --delete "$SRC_LIBS" "$ZIP_LIBS"
+    if [ $? -ne 0 ]; then return -8; fi
+    echo "    3. resources/"
+    for subdir in $RSC_SUBDIRS; do
+        echo "        ${subdir}/"
+        mkdir -p "${ZIP_RSC}${subdir}/"
+        rsync --archive --delete \
+          "${SRC_RSC}${subdir}/" "${ZIP_RSC}${subdir}/"
+        if [ $? -ne 0 ]; then return -8; fi
+    done
+    echo "    4. zip everything"
+    cd "$PATH_ZIP"
+    zip -r "${ROBO_ORLAB_CONNECTOR_NAME}" *
+
+    # copy zip to apache server
+    if [ ! -d "$PATH_HTML" ]; then
+        echo "create apache folder"
+        echo "  ($PATH_HTML)"
+        sudo mkdir "$PATH_HTML"
+        if [ $? -ne 0 ]; then return -9; fi
+        sudo chown $USER:$USER "$PATH_HTML"
+        if [ $? -ne 0 ]; then return -9; fi
+    fi
+    echo "copy zip into apache folder"
+    cp "${PATH_ZIP}${ROBO_ORLAB_CONNECTOR_NAME}.zip" "$PATH_HTML"
+    if [ $? -ne 0 ]; then return -9; fi
+
+    echo "remove temp folder"
+    #rm -r "$PATH_TMP"
+    if [ $? -ne 0 ]; then return -10; fi
+
+    echo "done :-)"
 }
