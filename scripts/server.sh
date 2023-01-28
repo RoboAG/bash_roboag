@@ -90,7 +90,7 @@ function robo_server_ssh() {
       "$computers" "$ROBO_USER_ADMIN" "$param_script"
 }
 
-# 2021 10 26
+# 2023 01 20
 function robo_server_ssh_getconfigs() {
 
     # print help
@@ -131,7 +131,7 @@ function robo_server_ssh_getconfigs() {
         fi
         chmod 755 --recursive "$dest"
         scp -r -p -q -o PasswordAuthentication=no \
-          "guru@${computer}:/home/guru/config/${computer}" \
+          "guru@${computer}:/home/guru/config/${computer,,}" \
           "${HOME}/config/"
         chmod 755 --recursive "$dest"
     done
