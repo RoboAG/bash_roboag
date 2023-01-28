@@ -1,12 +1,12 @@
 diff --git a/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java b/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
-index accf2ff..2e4bfe4 100644
+index d811b6b..c8d63e3 100644
 --- a/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
 +++ b/src/main/java/de/fhg/iais/roberta/main/OpenRobertaConnector.java
-@@ -33,7 +33,7 @@ class OpenRobertaConnector {
-     private final IDetector wiredRobotDetector = new SerialRobotDetector();
+@@ -35,7 +35,7 @@ class OpenRobertaConnector {
      private final IDetector rndisDetector = new RndisDetector();
      private final IDetector naoDetector = new mDnsDetector();
--    private final RobotDetectorHelper robotDetectorHelper = new RobotDetectorHelper(Arrays.asList(this.wiredRobotDetector, this.rndisDetector, this.naoDetector));
+     private final IDetector robotinoDetector = new HostnameDetector();
+-    private final RobotDetectorHelper robotDetectorHelper = new RobotDetectorHelper(Arrays.asList(this.wiredRobotDetector, this.rndisDetector, this.naoDetector, this.robotinoDetector));
 +    private final RobotDetectorHelper robotDetectorHelper = new RobotDetectorHelper(Arrays.asList(this.wiredRobotDetector));
  
      OpenRobertaConnector() {
@@ -77,13 +77,6 @@ index 00c9024..28c69ca 100644
          <encoder>
              <pattern>%d [%thread] %-5level %logger{36} %M - %msg%n</pattern>
          </encoder>
-@@ -17,4 +17,4 @@
-         <appender-ref ref="STDOUT" />
-         <appender-ref ref="FILE" />
-     </root>
--</configuration>
-\ No newline at end of file
-+</configuration>
 diff --git a/src/main/resources/messages_de.properties b/src/main/resources/messages_de.properties
 index bb895e4..98c85b7 100644
 --- a/src/main/resources/messages_de.properties
@@ -97,3 +90,14 @@ index bb895e4..98c85b7 100644
  token=Token
  tokenInfo=Den Token kannst du mit \u00BBkopieren\u00AB und \u00BBeinf\u00FCgen\u00AB im Open Roberta Lab unter Roboter>verbinden einf\u00FCgen.
  tokenTimeout=Die G\u00FCltigkeit des Token ist abgelaufen. Klicke auf \u00BBOK\u00AB und anschlie\u00DFend auf \u00BBVerbinden\u00AB um es noch mal zu \
+diff --git a/src/main/resources/wired-robot-ids.txt b/src/main/resources/wired-robot-ids.txt
+index 85b28cb..98affef 100644
+--- a/src/main/resources/wired-robot-ids.txt
++++ b/src/main/resources/wired-robot-ids.txt
+@@ -31,6 +31,5 @@
+ 0403,6015,festobionic
+ 16C0,0933,rob3rta
+ 0403,6001,festobionicflower
+-1a86,7523,mbot2
+ 0694,0009,spike
+ 0694,0010,spike
