@@ -304,7 +304,7 @@ function robo_config_server_dhcp_show() {
 }
 
 
-# 2023 01 27
+# 2023 01 28
 function robo_config_server_dhcp_list() {
 
     # print help
@@ -349,7 +349,7 @@ function robo_config_server_dhcp_list() {
         result="$(cat ${PATH_CONFIG}${file} \
           | grep "^[^#]*dhcp-host" \
           | sed 's/dhcp-host=//g' \
-          | awk --field-separator=, "$AWK_STRING" \
+          | awk -F, "$AWK_STRING" \
           | $ROBO_RUN_COLUMN)"
 
         if [ "$result" != "" ]; then

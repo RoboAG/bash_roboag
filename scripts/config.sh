@@ -351,7 +351,7 @@ alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
 
 #***************************[user]********************************************
 
-# 2021 01 16
+# 2023 01 28
 function robo_config_user() {
 
     # print help and check for user agreement
@@ -405,7 +405,7 @@ function robo_config_user() {
     # update permissions of roboags home
     if [ "$getent_roboag" != "" ]; then
         home_roboag="$(echo "$getent_roboag" | \
-        awk --field-separator=: "{print \$6 }")"
+        awk -F: "{print \$6 }")"
         if [ -d "$home_roboag" ]; then
             current_mode="$(stat -c "%a" "$home_roboag")"
             if [ $? -ne 0 ] || [ "$current_mode" != "770" ]; then
@@ -419,7 +419,7 @@ function robo_config_user() {
     echo "done :-)"
 }
 
-# 2021 01 16
+# 2023 01 28
 function robo_config_user_check() {
 
     # init variables
@@ -475,7 +475,7 @@ function robo_config_user_check() {
     # update permissions of roboags home
     if [ "$getent_roboag" != "" ]; then
         home_roboag="$(echo "$getent_roboag" | \
-        awk --field-separator=: "{print \$6 }")"
+        awk -F: "{print \$6 }")"
         if [ -d "$home_roboag" ]; then
             current_mode="$(stat -c "%a" "$home_roboag")"
             if [ $? -ne 0 ] || [ "$current_mode" != "770" ]; then
