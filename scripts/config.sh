@@ -918,3 +918,54 @@ function robo_config_keys_check() {
         echo "  --> $ robo_config_keys"
     fi
 }
+
+
+
+#***************************[open roberta connector]**************************
+# 2022 02 03
+
+function robo_config_orlab_connector () {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "copies open-roberta-lab connector from server."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # set paths
+    URL_ZIP="${ROBO_SERVER_IP}/orlab/${ROBO_ORLAB_CONNECTOR_NAME}.zip"
+    PATH_DST="${ROBO_PATH_OPT_BIN}${ROBO_ORLAB_CONNECTOR_NAME}/"
+
+
+    # create folder
+    if [ ! -d "$PATH_DST" ]; then
+        echo "create folder"
+        echo "  ($PATH_DST)"
+        sudo mkdir -p "$PATH_DST"
+        if [ $? -ne 0 ]; then return -2; fi
+    fi
+
+    # copy zip from server
+    echo "download zip"
+    echo "  ($URL_ZIP)"
+    tmp_file="$(mktemp)"
+    wget --quiet "${URL_ZIP}" --output-document "${tmp_file}" 2> /dev/null
+    if [ $? -ne 0 ] || [ "$(cat "$tmp_file" | wc --bytes)" -eq 0 ]; then
+        rm "${tmp_file}"
+        return -3
+    fi
+
+    # unzip
+    echo "unzip connector"
+    echo "  ($URL_ZIP)"
+    sudo unzip -u -o "$tmp_file" -d "$PATH_DST"
+    if [ $? -ne 0 ]; then
+        rm "${tmp_file}"
+        return -4;
+    fi
+
+    # rm temp file
+    echo "remove temp file"
+    rm "${tmp_file}"
+
+    echo "done :-)"
+}
