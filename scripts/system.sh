@@ -133,7 +133,7 @@ export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
-# 2023 01 27
+# 2023 02 03
 function robo_system_install() {
 
     # print help
@@ -176,10 +176,10 @@ function robo_system_install() {
     fi
 
     # check ubuntu version
-    VER=$(lsb_release -r | cut -f2 | cut -d. -f1)
+    UBUNTU_VERSION=$(lsb_release -rs | cut -d. -f1)
 
     # check python version
-    if [ "$VER" -lt "20" ]; then
+    if [ "$UBUNTU_VERSION" -lt "20" ]; then
         PYTHON="python"
     else
         PYTHON="python3"
@@ -245,7 +245,7 @@ function robo_system_install() {
             maven            
             " "" --yes
         # handled older operating systems
-        if [ "$(lsb_release -rs)" == "20.04" ]; then
+        if [ "$UBUNTU_VERSION" -le "20" ]; then
 	        _config_install_list "exfat-utils" "" --yes
         fi
         if [ $? -ne 0 ]; then return -2; fi

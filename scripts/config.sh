@@ -31,16 +31,16 @@ export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
 
 #***************************[ubuntu versions]*********************************
-# 2023 01 27
+# 2023 02 03
 
-# set defaults
+# set default (for Ubuntu 22.04)
 ROBO_RUN_COLUMN="column --table"
 
-# load current version (for Ubuntu 22.04)
-release="$(lsb_release -rs)"
+# load current ubuntu version
+VER="$(lsb_release -rs | cut -d. -f1)"
 
 # handle older versions
-if [ "$release" == "20.04" ]; then
+if [ "$VER" -lt 22 ]; then
     ROBO_RUN_COLUMN="column -txn"
 fi
 
