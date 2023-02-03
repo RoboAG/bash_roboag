@@ -125,10 +125,10 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2023 01 20
+# 2023 02 03
 
 export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
-export ROBO_SYSTEM_INSTALL_DATE_CLIENT="11.02.2022"
+export ROBO_SYSTEM_INSTALL_DATE_CLIENT="03.02.2023"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
@@ -197,10 +197,9 @@ function robo_system_install() {
 
             regexxer pwgen
 
-            git meld
+            git meld bc
 
             vim kate bless
-            exuberant-ctags
 
             binutils gcc avr-libc avrdude
             g++ cmake
@@ -241,14 +240,15 @@ function robo_system_install() {
             apache2
             mariadb-server
             php php-mysql phpmyadmin
-            
-            maven            
+
+            maven
             " "" --yes
+        if [ $? -ne 0 ]; then return -2; fi
         # handled older operating systems
         if [ "$UBUNTU_VERSION" -le "20" ]; then
 	        _config_install_list "exfat-utils" "" --yes
+            if [ $? -ne 0 ]; then return -2; fi
         fi
-        if [ $? -ne 0 ]; then return -2; fi
     fi
 
     # add logging
