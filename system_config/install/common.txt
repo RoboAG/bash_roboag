@@ -1,6 +1,3 @@
-# note: If file is updated, also change $ROBO_SYSTEM_INSTALL_DATE_COMMON
-#       in ../../scripts/system.sh
-
 # ssh
 openssh-server
 
@@ -19,7 +16,7 @@ git meld bc
 vim kate bless
 
 # µC & C
-binutils gcc avr-libc avrdude
+arduino binutils gcc avr-libc avrdude
 
 # C++ & cmake
 g++ cmake
