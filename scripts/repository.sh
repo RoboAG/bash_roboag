@@ -108,9 +108,9 @@ function robo_repo_update_from_server() {
     fi
 }
 
-# 2021 08 12
+# 2023 02 04
 # moved logfile path to config.sh, since path is not set yet ...
-#export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
+#export ROBO_FILE_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
 function robo_repo_update() {
 
@@ -122,11 +122,11 @@ function robo_repo_update() {
     if [ $? -ne 0 ]; then return -1; fi
 
     # add logging
-    if [ ! -f "$ROBO_PATH_LOG_REPO" ]; then
-        touch "$ROBO_PATH_LOG_REPO" 2>> /dev/null
+    if [ ! -f "$ROBO_FILE_LOG_REPO" ]; then
+        touch "$ROBO_FILE_LOG_REPO" 2>> /dev/null
         if [ $? -ne 0 ]; then return -2; fi
     fi
-    if [ -f "$ROBO_PATH_LOG_REPO" ]; then
+    if [ -f "$ROBO_FILE_LOG_REPO" ]; then
         str="$(date +"%d.%m.%Y %H:%M") repo";
         if [ "$ROBO_CONFIG_IS_CLIENT" == "1" ]; then
             str="${str} server"
@@ -134,11 +134,11 @@ function robo_repo_update() {
             str="${str} web"
         fi
 
-        echo "$str" >> "$ROBO_PATH_LOG_REPO"
+        echo "$str" >> "$ROBO_FILE_LOG_REPO"
     fi
 }
 
-# 2021 09 25
+# 2023 02 04
 function robo_repo_check() {
 
     # init variables
@@ -148,13 +148,13 @@ function robo_repo_check() {
     echo -n "repos             ... "
 
     # check for logfile
-    if [ ! -f "$ROBO_PATH_LOG_REPO" ]; then
+    if [ ! -f "$ROBO_FILE_LOG_REPO" ]; then
         error_flag=1;
         echo ""
         echo -n "  no logfile"
     else
         # convert date to seconds
-        date="$(tail -n 1 "$ROBO_PATH_LOG_REPO" | awk "{print \$1}")"
+        date="$(tail -n 1 "$ROBO_FILE_LOG_REPO" | awk "{print \$1}")"
         if [ "$date" == "" ]; then
             error_flag=1;
             echo ""

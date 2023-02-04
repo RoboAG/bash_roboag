@@ -55,9 +55,9 @@ function _robo_system_convert_date_to_sec() {
 
 
 #***************************[update]******************************************
-# 2022 02 22
+# 2023 02 04
 
-export ROBO_PATH_LOG_UPDATE="${ROBO_PATH_CONFIG}update.log"
+export ROBO_FILE_LOG_UPDATE="${ROBO_PATH_CONFIG}update.log"
 
 function robo_system_update() {
 
@@ -66,17 +66,17 @@ function robo_system_update() {
     if [ $? -ne 0 ]; then return -1; fi
 
     # add logging
-    if [ ! -f "$ROBO_PATH_LOG_UPDATE" ]; then
-        touch "$ROBO_PATH_LOG_UPDATE" 2>> /dev/null
+    if [ ! -f "$ROBO_FILE_LOG_UPDATE" ]; then
+        touch "$ROBO_FILE_LOG_UPDATE" 2>> /dev/null
         if [ $? -ne 0 ]; then return -2; fi
     fi
-    if [ -f "$ROBO_PATH_LOG_UPDATE" ]; then
+    if [ -f "$ROBO_FILE_LOG_UPDATE" ]; then
         str="$(date +"%d.%m.%Y %H:%M") update system"
-        echo "$str" >> "$ROBO_PATH_LOG_UPDATE"
+        echo "$str" >> "$ROBO_FILE_LOG_UPDATE"
     fi
 }
 
-# 2021 09 19
+# 2023 02 04
 function robo_system_check_update() {
 
     # init variables
@@ -86,13 +86,13 @@ function robo_system_check_update() {
     echo -n "system update     ... "
 
     # check for logfile
-    if [ ! -f "$ROBO_PATH_LOG_UPDATE" ]; then
+    if [ ! -f "$ROBO_FILE_LOG_UPDATE" ]; then
         error_flag=1;
         echo ""
         echo -n "  no logfile"
     else
         # convert date to seconds
-        date="$(tail -n 1 "$ROBO_PATH_LOG_UPDATE" | awk "{print \$1}")"
+        date="$(tail -n 1 "$ROBO_FILE_LOG_UPDATE" | awk "{print \$1}")"
         if [ "$date" == "" ]; then
             error_flag=1;
             echo ""
@@ -125,15 +125,15 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2023 02 03
+# 2023 02 04
 
-export ROBO_PATH_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
+export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_CLIENT="03.02.2023"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
-# 2023 02 03
+# 2023 02 04
 function robo_system_install() {
 
     # print help
@@ -252,25 +252,25 @@ function robo_system_install() {
     fi
 
     # add logging
-    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
-        touch "$ROBO_PATH_LOG_INSTALL" 2>> /dev/null
+    if [ ! -f "$ROBO_FILE_LOG_INSTALL" ]; then
+        touch "$ROBO_FILE_LOG_INSTALL" 2>> /dev/null
         if [ $? -ne 0 ]; then return -3; fi
     fi
-    if [ -f "$ROBO_PATH_LOG_INSTALL" ]; then
+    if [ -f "$ROBO_FILE_LOG_INSTALL" ]; then
         str="$(date +"%d.%m.%Y %H:%M") install"
         if [ "$server_flag" -eq 0 ]; then
             str="${str} client ${ROBO_SYSTEM_INSTALL_DATE_CLIENT}"
         else
             str="${str} server ${ROBO_SYSTEM_INSTALL_DATE_SERVER}"
         fi
-        echo "$str" >> "$ROBO_PATH_LOG_INSTALL"
+        echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
     fi
     if [ $? -ne 0 ]; then return -3; fi
 
     echo "done :-)"
 }
 
-# 2022 02 22
+# 2023 02 04
 function robo_system_uninstall() {
 
     # print help
@@ -328,15 +328,15 @@ function robo_system_uninstall() {
     fi
 
     # add logging
-    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
-        touch "$ROBO_PATH_LOG_INSTALL" 2>> /dev/null
+    if [ ! -f "$ROBO_FILE_LOG_INSTALL" ]; then
+        touch "$ROBO_FILE_LOG_INSTALL" 2>> /dev/null
         if [ $? -ne 0 ]; then return -3; fi
     fi
-    if [ -f "$ROBO_PATH_LOG_INSTALL" ]; then
+    if [ -f "$ROBO_FILE_LOG_INSTALL" ]; then
         str="$(date +"%d.%m.%Y %H:%M") uninstall"
         if [ "$server_flag" -eq 0 ]; then
             str="${str} client ${ROBO_SYSTEM_UNINSTALL_DATE_CLIENT}"
-            echo "$str" >> "$ROBO_PATH_LOG_INSTALL"
+            echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
         else
             str="${str} server ${ROBO_SYSTEM_UNINSTALL_DATE_SERVER}"
             # don't save info into logfile
@@ -347,7 +347,7 @@ function robo_system_uninstall() {
     echo "done :-)"
 }
 
-# 2022 02 22
+# 2023 02 04
 function robo_system_check_install() {
 
     # init variables
@@ -357,7 +357,7 @@ function robo_system_check_install() {
     echo -n "system install    ... "
 
     # check for internet connection
-    if [ ! -f "$ROBO_PATH_LOG_INSTALL" ]; then
+    if [ ! -f "$ROBO_FILE_LOG_INSTALL" ]; then
         error_flag=1;
         echo ""
         echo "  no logfile"
@@ -368,7 +368,7 @@ function robo_system_check_install() {
         echo -n "  --> robo_system_uninstall"
     else
         # check for client install
-        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep " install client " | \
+        date="$(cat "$ROBO_FILE_LOG_INSTALL" | grep " install client " | \
           tail -n 1 | awk "{print \$5}")"
         if [ $? -ne 0 ] || [ "$date" == "" ]; then
             error_flag=1;
@@ -390,7 +390,7 @@ function robo_system_check_install() {
         fi
 
         # check for client uninstall
-        date="$(cat "$ROBO_PATH_LOG_INSTALL" | grep " uninstall client " | \
+        date="$(cat "$ROBO_FILE_LOG_INSTALL" | grep " uninstall client " | \
           tail -n 1 | awk "{print \$5}")"
         if [ $? -ne 0 ] || [ "$date" == "" ]; then
             error_flag=1;
@@ -414,8 +414,8 @@ function robo_system_check_install() {
         # check for server mode
         if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
             # check for server install
-            date="$(cat "$ROBO_PATH_LOG_INSTALL" | \
-              grep " install server " | tail -n 1 | awk "{print \$5}")"
+            date="$(cat "$ROBO_FILE_LOG_INSTALL" | \
+              grep " install server " | tail -n 1 | awk '{print $5}')"
             if [ $? -ne 0 ] || [ "$date" == "" ]; then
                 error_flag=1;
                 echo ""

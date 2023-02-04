@@ -14,7 +14,7 @@
 
 
 #***************************[paths and files]*********************************
-# 2021 08 12
+# 2023 02 04
 
 # load and check data dir
 if [ "$ROBO_PATH_CONFIG" == "" ]; then
@@ -26,7 +26,7 @@ _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
 
 
 # moved here from repository, since path was not set before ...
-export ROBO_PATH_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
+export ROBO_FILE_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
 
 
