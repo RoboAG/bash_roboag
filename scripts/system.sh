@@ -131,7 +131,13 @@ export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_COMMON="03.02.2023"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_COMMON="07.07.2022"
-export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
+export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="04.02.2023"
+
+common_path="${ROBO_PATH_SCRIPT}system_config/install/"
+export ROBO_FILE_INSTALL_CLIENT="${common_path}/common.txt"
+export ROBO_FILE_INSTALL_SERVER="${common_path}/server.txt"
+export ROBO_FILE_UNINSTALL_CLIENT="${common_path}/uninstall_common.txt"
+export ROBO_FILE_UNINSTALL_SERVER="${common_path}/uninstall_server.txt"
 
 # 2023 02 04
 function robo_system_install() {
@@ -188,34 +194,12 @@ function robo_system_install() {
     # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
         # common install
-        _config_install_list "
-            openssh-server
-
-            cifs-utils
-            net-tools
-            ntp
-
-            regexxer pwgen
-
-            git meld bc
-
-            vim kate bless
-
-            binutils gcc avr-libc avrdude
-            g++ cmake
-
-            $PYTHON $PYTHON-serial $PYTHON-opencv
-
-            librecad inkscape dia
-
-            zim doxygen
-
-            libreoffice libreoffice-help-de
-            okular gwenview
-
-            vlc
-            " "" --yes
+        list="$(_robo_config_read_list "${ROBO_FILE_INSTALL_CLIENT}")"
         if [ $? -ne 0 ]; then return -2; fi
+        _config_install_list "$list" "" --yes
+        if [ $? -ne 0 ]; then return -3; fi
+        _config_install_list "$PYTHON $PYTHON-serial $PYTHON-opencv" "" --yes
+        if [ $? -ne 0 ]; then return -3; fi
 
         # ubuntu-version dependend packages
         if [ "$PYTHON" == "python3" ]; then
@@ -232,24 +216,15 @@ function robo_system_install() {
         if [ $? -ne 0 ]; then return -4; fi
     else
         # server install
-        _config_install_list "
-            exfat-fuse
-
-            apt-cacher-ng
-
-            samba samba-common
-
-            apache2
-            mariadb-server
-            php php-mysql phpmyadmin
-
-            maven
-            " "" --yes
+        list="$(_robo_config_read_list "${ROBO_FILE_INSTALL_SERVER}")"
         if [ $? -ne 0 ]; then return -2; fi
+        _config_install_list "$list" "" --yes
+        if [ $? -ne 0 ]; then return -3; fi
+
         # handle older operating systems
         if [ "$UBUNTU_VERSION" -le "20" ]; then
 	        _config_install_list "exfat-utils" "" --yes
-            if [ $? -ne 0 ]; then return -3; fi
+            if [ $? -ne 0 ]; then return -4; fi
         fi
     fi
 
@@ -317,16 +292,16 @@ function robo_system_uninstall() {
     # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
         # common uninstall
-        _config_uninstall_list "
-            konsole
-            subversion
-            synaptic
-            eagle
-            " "" --yes
+        list="$(_robo_config_read_list "${ROBO_FILE_UNINSTALL_CLIENT}")"
         if [ $? -ne 0 ]; then return -2; fi
-
+        _config_uninstall_list "$list" "" --yes
+        if [ $? -ne 0 ]; then return -3; fi
     else
-        echo "<nothing todo>"
+        # server uninstall
+        list="$(_robo_config_read_list "${ROBO_FILE_UNINSTALL_SERVER}")"
+        if [ $? -ne 0 ]; then return -2; fi
+        _config_uninstall_list "$list" "" --yes
+        if [ $? -ne 0 ]; then return -3; fi
     fi
 
     # add logging
@@ -338,11 +313,10 @@ function robo_system_uninstall() {
         str="$(date +"%d.%m.%Y %H:%M") uninstall"
         if [ "$server_flag" -eq 0 ]; then
             str="${str} common ${ROBO_SYSTEM_UNINSTALL_DATE_COMMON}"
-            echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
         else
             str="${str} server ${ROBO_SYSTEM_UNINSTALL_DATE_SERVER}"
-            # don't save info into logfile
         fi
+        echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
     fi
     if [ $? -ne 0 ]; then return -3; fi
 
@@ -364,10 +338,12 @@ function robo_system_check_install() {
         echo ""
         echo "  no logfile"
         echo "  --> robo_system_install"
-        if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
-            echo "  --> robo_system_install server"
-        fi
         echo -n "  --> robo_system_uninstall"
+        if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
+        echo ""
+            echo "  --> robo_system_install server"
+            echo -n "  --> robo_system_uninstall server"
+        fi
     else
         # check for common install
         date="$(cat "$ROBO_FILE_LOG_INSTALL" | \
@@ -441,7 +417,27 @@ function robo_system_check_install() {
             fi
 
             # check for server uninstall
-            # ... upcoming ...
+            date="$(cat "$ROBO_FILE_LOG_INSTALL" | \
+              grep " uninstall server " | tail -n 1 | awk '{print $5}')"
+            if [ $? -ne 0 ] || [ "$date" == "" ]; then
+                error_flag=1;
+                echo ""
+                echo "  no valid log for server uninstall"
+                echo -n "  --> robo_system_uninstall server"
+            else
+                # convert last install date & latest timestamp into unix time
+                date_secs="$(_robo_system_convert_date_to_sec "$date")"
+                date_timestamp_secs="$(_robo_system_convert_date_to_sec \
+                "$ROBO_SYSTEM_UNINSTALL_DATE_SERVER")"
+
+                if [ $? -ne 0 ] || \
+                  [ $date_timestamp_secs -gt $date_secs ]; then
+                    error_flag=1;
+                    echo ""
+                    echo "  new server uninstall"
+                    echo -n "  --> robo_system_uninstall server"
+                fi
+            fi
         fi
     fi
 

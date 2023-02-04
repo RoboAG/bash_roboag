@@ -1,0 +1,19 @@
+# note: If file is updated, also change $ROBO_SYSTEM_INSTALL_DATE_SERVER
+#       in ../../scripts/system.sh
+
+# filesystem
+exfat-fuse
+
+# apt
+apt-cacher-ng
+
+# samba share
+samba samba-common
+
+# html web server
+apache2
+mariadb-server
+php php-mysql phpmyadmin
+
+# java compiler
+maven

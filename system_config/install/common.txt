@@ -1,0 +1,41 @@
+# note: If file is updated, also change $ROBO_SYSTEM_INSTALL_DATE_COMMON
+#       in ../../scripts/system.sh
+
+# ssh
+openssh-server
+
+# filesystem & network
+cifs-utils
+net-tools
+ntp
+
+# cli tools
+regexxer pwgen
+
+# versioning
+git meld bc
+
+# editors
+vim kate bless
+
+# µC & C
+binutils gcc avr-libc avrdude
+
+# C++ & cmake
+g++ cmake
+
+# python
+# installed version is distribution dependend
+
+# drawing & construction
+librecad inkscape dia
+
+# documentation
+zim doxygen
+
+# documents
+libreoffice libreoffice-help-de
+okular gwenview
+
+# multimedia
+vlc

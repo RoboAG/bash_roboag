@@ -1,0 +1,14 @@
+# note: If file is updated, also change $ROBO_SYSTEM_UNINSTALL_DATE_COMMON
+#       in ../../scripts/system.sh
+
+# terminal
+konsole
+
+# apt
+synaptic
+
+# versioning
+subversion
+
+# drawing & construction
+eagle

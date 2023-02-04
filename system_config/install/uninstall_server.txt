@@ -1,0 +1,4 @@
+# note: If file is updated, also change $ROBO_SYSTEM_UNINSTALL_DATE_SERVER
+#       in ../../scripts/system.sh
+
+# file is empty

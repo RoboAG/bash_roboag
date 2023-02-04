@@ -28,6 +28,52 @@ _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
 # moved here from repository, since path was not set before ...
 export ROBO_FILE_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
+# 2023 02 04
+function _robo_config_read_list() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME <filename>"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs 1 parameter"
+        echo "     #1: filename"
+        echo "Returning read list as string."
+        echo "Note: Removing comments and empty lines."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -ne 1 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # store parameter
+    filename="$1"
+
+    # check if file exists
+    if [ ! -e "$filename" ]; then
+        return -2
+    fi
+
+    # load data
+    lines="$(cat "$filename" | grep -o -E "^[^#]+")"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    # check for globbing
+    if echo "$lines" | grep -q -E "[^-+_ a-zA-Z0-9]"; then
+        return -4
+    fi
+
+    # return result
+    echo "$lines"
+}
+
 
 
 #***************************[ubuntu versions]*********************************
