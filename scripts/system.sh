@@ -128,9 +128,9 @@ function robo_system_check_update() {
 # 2023 02 04
 
 export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
-export ROBO_SYSTEM_INSTALL_DATE_CLIENT="03.02.2023"
+export ROBO_SYSTEM_INSTALL_DATE_COMMON="03.02.2023"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
-export ROBO_SYSTEM_UNINSTALL_DATE_CLIENT="07.07.2022"
+export ROBO_SYSTEM_UNINSTALL_DATE_COMMON="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="--.--.----"
 
 # 2023 02 04
@@ -145,9 +145,9 @@ function robo_system_install() {
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
         echo "    [#1:]system for installed packages"
-        echo "         \"\" regular packages (default)"
+        echo "         \"\"       common packages (default)"
         echo "         \"server\" additional packages for server"
-        echo "This function installs all packages needed."
+        echo "This function installs all needed packages."
 
         return
     fi
@@ -185,9 +185,9 @@ function robo_system_install() {
         PYTHON="python3"
     fi
 
-    # select between server and client
+    # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
-        # basic install
+        # common install
         _config_install_list "
             openssh-server
 
@@ -220,6 +220,7 @@ function robo_system_install() {
         # ubuntu-version dependend packages
         if [ "$PYTHON" == "python3" ]; then
             _config_install_list "python-is-python3"
+            if [ $? -ne 0 ]; then return -3; fi
         fi
 
         # install vs code
@@ -228,8 +229,9 @@ function robo_system_install() {
         else
             config_install_vscode
         fi
-        if [ $? -ne 0 ]; then return -3; fi
+        if [ $? -ne 0 ]; then return -4; fi
     else
+        # server install
         _config_install_list "
             exfat-fuse
 
@@ -244,28 +246,28 @@ function robo_system_install() {
             maven
             " "" --yes
         if [ $? -ne 0 ]; then return -2; fi
-        # handled older operating systems
+        # handle older operating systems
         if [ "$UBUNTU_VERSION" -le "20" ]; then
 	        _config_install_list "exfat-utils" "" --yes
-            if [ $? -ne 0 ]; then return -2; fi
+            if [ $? -ne 0 ]; then return -3; fi
         fi
     fi
 
     # add logging
     if [ ! -f "$ROBO_FILE_LOG_INSTALL" ]; then
         touch "$ROBO_FILE_LOG_INSTALL" 2>> /dev/null
-        if [ $? -ne 0 ]; then return -3; fi
+        if [ $? -ne 0 ]; then return -5; fi
     fi
     if [ -f "$ROBO_FILE_LOG_INSTALL" ]; then
         str="$(date +"%d.%m.%Y %H:%M") install"
         if [ "$server_flag" -eq 0 ]; then
-            str="${str} client ${ROBO_SYSTEM_INSTALL_DATE_CLIENT}"
+            str="${str} common ${ROBO_SYSTEM_INSTALL_DATE_COMMON}"
         else
             str="${str} server ${ROBO_SYSTEM_INSTALL_DATE_SERVER}"
         fi
         echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
     fi
-    if [ $? -ne 0 ]; then return -3; fi
+    if [ $? -ne 0 ]; then return -5; fi
 
     echo "done :-)"
 }
@@ -282,7 +284,7 @@ function robo_system_uninstall() {
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs 0-1 parameters"
         echo "    [#1:]system for uninstalling packages"
-        echo "         \"\" regular packages (default)"
+        echo "         \"\"       common packages (default)"
         echo "         \"server\" additional packages for server"
         echo "This function uninstalls packages, not needed anymore."
 
@@ -312,9 +314,9 @@ function robo_system_uninstall() {
         fi
     fi
 
-    # select between server and client
+    # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
-        # basic install
+        # common uninstall
         _config_uninstall_list "
             konsole
             subversion
@@ -335,7 +337,7 @@ function robo_system_uninstall() {
     if [ -f "$ROBO_FILE_LOG_INSTALL" ]; then
         str="$(date +"%d.%m.%Y %H:%M") uninstall"
         if [ "$server_flag" -eq 0 ]; then
-            str="${str} client ${ROBO_SYSTEM_UNINSTALL_DATE_CLIENT}"
+            str="${str} common ${ROBO_SYSTEM_UNINSTALL_DATE_COMMON}"
             echo "$str" >> "$ROBO_FILE_LOG_INSTALL"
         else
             str="${str} server ${ROBO_SYSTEM_UNINSTALL_DATE_SERVER}"
@@ -367,41 +369,43 @@ function robo_system_check_install() {
         fi
         echo -n "  --> robo_system_uninstall"
     else
-        # check for client install
-        date="$(cat "$ROBO_FILE_LOG_INSTALL" | grep " install client " | \
-          tail -n 1 | awk "{print \$5}")"
+        # check for common install
+        date="$(cat "$ROBO_FILE_LOG_INSTALL" | \
+          grep -E " install (client|common) " | \
+          tail -n 1 | awk '{print $5}')"
         if [ $? -ne 0 ] || [ "$date" == "" ]; then
             error_flag=1;
             echo ""
-            echo "  no valid log for client installation"
+            echo "  no valid log for common installation"
             echo -n "  --> robo_system_install"
         else
             # convert last install date & latest timestamp into unix time
             date_secs="$(_robo_system_convert_date_to_sec "$date")"
             date_timestamp_secs="$(_robo_system_convert_date_to_sec \
-              "$ROBO_SYSTEM_INSTALL_DATE_CLIENT")"
+              "$ROBO_SYSTEM_INSTALL_DATE_COMMON")"
 
             if [ $? -ne 0 ] || [ $date_timestamp_secs -gt $date_secs ]; then
                 error_flag=1;
                 echo ""
-                echo "  new client install"
+                echo "  new common install"
                 echo -n "  --> robo_system_install"
             fi
         fi
 
-        # check for client uninstall
-        date="$(cat "$ROBO_FILE_LOG_INSTALL" | grep " uninstall client " | \
-          tail -n 1 | awk "{print \$5}")"
+        # check for common uninstall
+        date="$(cat "$ROBO_FILE_LOG_INSTALL" | \
+          grep -E " uninstall (client|common) " | \
+          tail -n 1 | awk '{print $5}')"
         if [ $? -ne 0 ] || [ "$date" == "" ]; then
             error_flag=1;
             echo ""
-            echo "  no valid log for client uninstallation"
+            echo "  no valid log for common uninstallation"
             echo -n "  --> robo_system_uninstall"
         else
             # convert last install date & latest timestamp into unix time
             date_secs="$(_robo_system_convert_date_to_sec "$date")"
             date_timestamp_secs="$(_robo_system_convert_date_to_sec \
-              "$ROBO_SYSTEM_UNINSTALL_DATE_CLIENT")"
+              "$ROBO_SYSTEM_UNINSTALL_DATE_COMMON")"
 
             if [ $? -ne 0 ] || [ $date_timestamp_secs -gt $date_secs ]; then
                 error_flag=1;
