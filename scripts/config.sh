@@ -28,7 +28,7 @@ _repo_bash_data_dirs_check --rmdir "$ROBO_PATH_CONFIG" \
 # moved here from repository, since path was not set before ...
 export ROBO_FILE_LOG_REPO="${ROBO_PATH_CONFIG}repo.log"
 
-# 2023 02 04
+# 2023 02 07
 function _robo_config_read_list() {
 
     # print help
@@ -62,16 +62,17 @@ function _robo_config_read_list() {
     fi
 
     # load data
-    lines="$(cat "$filename" | grep -o -E "^[^#]+")"
+    lines_raw="$(cat "$filename")"
     if [ $? -ne 0 ]; then return -3; fi
+    lines_filtered="$(echo "$lines_raw" | grep -o -E "^[^#]+")"
 
     # check for globbing
-    if echo "$lines" | grep -q -E "[^-+_ a-zA-Z0-9]"; then
+    if echo "$lines_filtered" | grep -q -E "[^-+_ a-zA-Z0-9]"; then
         return -4
     fi
 
     # return result
-    echo "$lines"
+    echo "$lines_filtered"
 }
 
 
