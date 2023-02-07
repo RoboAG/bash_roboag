@@ -494,7 +494,7 @@ function robo_server_userdata_add() {
     echo "done :-)"
 }
 
-# 2021 11 02
+# 2023 02 05
 function robo_server_userdata_backup() {
 
     # print help
@@ -505,9 +505,7 @@ function robo_server_userdata_backup() {
     fi
     if [ "$1" == "--help" ]; then
         echo "$FUNCNAME needs no parameters"
-        echo "Renames all \"new\" folders into current day."
-        echo ""
-        echo "  warning: function is work in progress"
+        echo "Renames all \"neu\" folders into current day."
 
         return
     fi
@@ -518,9 +516,6 @@ function robo_server_userdata_backup() {
         $FUNCNAME --help
         return -1
     fi
-
-    echo "  warning: function is work in progress"
-    echo ""
 
     # check for server
     _robo_config_need_server "$FUNCNAME"
@@ -580,6 +575,39 @@ function robo_server_userdata_backup() {
     echo "done :-)"
 }
 
+# 2023 02 07
+function _robo_server_userdata_backup_check() {
+
+    # this is just a helper function for robo_server_userdata_check()
+    # the following variables must be supplied
+    #   users
+    #   error_flag
+
+    # local variables
+    error_flag__backup=0
+
+    # load list of users
+    for user in $users; do
+        path="${ROBO_PATH_ROBOAG_USER}${user}/"
+        if [ ! -d "$path" ]; then continue; fi
+
+        # check if there are any files
+        result="$(find "${path}neu/" -type f)"
+        if [ "$result" == "" ]; then continue; fi
+
+        error_flag__backup=1
+        echo ""
+        echo -n "  $user: found new data"
+        break
+    done
+    if [ $error_flag__backup -ne 0 ]; then
+        error_flag=2
+        echo ""
+        echo -n "    --> robo_server_userdata_backup"
+    fi
+}
+
+
 # 2021 11 07
 function robo_server_userdata_fix() {
 
@@ -611,7 +639,7 @@ function robo_server_userdata_fix() {
     # load list of users
     users="$(_robo_server_userdata_list)"
     if [ $? -ne 0 ]; then
-        return -3;
+        return -3
     fi
 
     for user in $users; do
@@ -663,11 +691,194 @@ function robo_server_userdata_fix() {
     done
 }
 
-# 2021 11 01
+# 2023 02 05
+function _robo_server_userdata_fix_check() {
+
+    # this is just a helper function for robo_server_userdata_check()
+    # the following variables must be supplied
+    #   users
+    #   error_flag
+
+    # local variables
+    error_flag__fix=0
+
+    # load list of users
+    for user in $users; do
+        path="${ROBO_PATH_ROBOAG_USER}${user}/"
+        if [ ! -d "$path" ]; then continue; fi
+
+        # check if new folder exists
+        if [ ! -d "${path}neu/" ]; then
+            error_flag__fix=1
+            echo ""
+            echo -n "  $user: missing folder \"neu\""
+            break
+        fi
+
+        # update owner of new folder
+        current_user="$(stat -c "%U" "${path}neu/")"
+        current_group="$(stat -c "%G" "${path}neu/")"
+        if [ $? -ne 0 ] || [ "$current_user" != "$USER" ] || \
+          [ "$current_group" != "roboag" ]; then
+            error_flag__fix=2
+            echo ""
+            echo -n "  $user: wrong owner of \"neu\""
+            break
+        fi
+
+        # update permissions of new folder
+        current_mode="$(stat -c "%a" "${path}neu/")"
+        if [ $? -ne 0 ] || [ "$current_mode" != "775" ]; then
+            error_flag__fix=3
+            echo ""
+            echo -n "  $user: wrong permissions of \"neu\""
+            break
+        fi
+
+        # update owner of subfolders and subfiles
+        result="$(find "${path}neu/" \! -user $USER -o \! -group roboag)"
+        if [ "$result" != "" ]; then
+            error_flag__fix=4
+            echo ""
+            echo -n "  $user: wrong owner of folders/files"
+            break
+        fi
+
+        # update permissions of subfolders and subfiles
+        result="$(find "${path}neu/" -type d \! -perm  775)"
+        result+="$(find "${path}neu/" -type f \! -perm -664)"
+        if [ "$result" != "" ]; then
+            error_flag__fix=5
+            echo ""
+            echo -n "  $user: wrong permissions of folders/files"
+            break
+        fi
+    done
+    if [ $error_flag__fix -ne 0 ]; then
+        error_flag=2
+        echo ""
+        echo -n "    --> robo_server_userdata_fix"
+    fi
+}
+
+
+# 2021 11 07
+function robo_server_userdata_clean() {
+
+    # print help
+    if [ "$1" == "-h" ]; then
+        echo "$FUNCNAME"
+
+        return
+    fi
+    if [ "$1" == "--help" ]; then
+        echo "$FUNCNAME needs no parameters"
+        echo "Fixes file names & removes some compilation artefacts."
+
+        return
+    fi
+
+    # check parameter
+    if [ $# -gt 0 ]; then
+        echo "$FUNCNAME: Parameter Error."
+        $FUNCNAME --help
+        return -1
+    fi
+
+    # check for server
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # load list of users
+    users="$(_robo_server_userdata_list)"
+    if [ $? -ne 0 ]; then
+        return -3
+    fi
+
+    for user in $users; do
+        path="${ROBO_PATH_ROBOAG_USER}${user}/"
+        if [ ! -d "$path" ]; then continue; fi
+
+        # rename file & folder names
+        (
+            cd "$path"
+            file_name_clean_recursive_check >> /dev/null
+            if [ $? -ne 0 ]; then
+                file_name_clean_recursive
+            fi
+        )
+
+        # check for temp folders & files
+        list_tmp="$(find "$path" -type d -name "tmp")"
+        list_lib="$(find "$path" -type d -name "lib")"
+        list_obj="$(find "$path" -type f -name "*.o")"
+
+        # remove temp folders & files
+        if [ "${list_tmp}${list_lib}${list_obj}" != "" ]; then
+            echo "$user: removing temp folders/files"
+            find "$path" -ignore_readdir_race -type d -name "tmp" \
+              -execdir bash -c "echo '    {}/'; rm -r {}" \;
+            find "$path" -ignore_readdir_race -type d -name "lib" \
+              -execdir bash -c "echo '    {}/'; rm -r {}" \;
+            find "$path" -type f -name "*.o" -exec \
+              bash -c "echo '    {}'; rm {}" \;
+        fi
+    done
+}
+
+# 2023 02 07
+function _robo_server_userdata_clean_check() {
+
+    # this is just a helper function for robo_server_userdata_check()
+    # the following variables must be supplied
+    #   users
+    #   error_flag
+
+    # local variables
+    error_flag__clean=0
+
+    # load list of users
+    for user in $users; do
+        path="${ROBO_PATH_ROBOAG_USER}${user}/"
+        if [ ! -d "$path" ]; then continue; fi
+
+        # find bad characters
+        (
+            cd "$path"
+            file_name_clean_recursive_check >> /dev/null
+        )
+        if [ $? -ne 0 ]; then
+            error_flag__clean=1
+            echo ""
+            echo -n "  $user: found special characters in file name(s)"
+            break
+        fi
+
+        # check for temp folders & files
+        list_tmp="$(find "$path" -type d -name "tmp")"
+        list_lib="$(find "$path" -type d -name "lib")"
+        list_obj="$(find "$path" -type f -name "*.o")"
+
+        if [ "${list_tmp}${list_lib}${list_obj}" != "" ]; then
+            error_flag__clean=2
+            echo ""
+            echo -n "  $user: found temp folders/files"
+            break
+        fi
+    done
+    if [ $error_flag__clean -ne 0 ]; then
+        error_flag=2
+        echo ""
+        echo -n "    --> robo_server_userdata_clean"
+    fi
+}
+
+
+# 2023 02 05
 function robo_server_userdata_check() {
 
     # init variables
-    error_flag=0;
+    error_flag=0
 
     # initial output
     echo -n "user data         ... "
@@ -682,61 +893,9 @@ function robo_server_userdata_check() {
         echo -n "    --> robo_server_userdata_add"
     fi
 
-    for user in $users; do
-        path="${ROBO_PATH_ROBOAG_USER}${user}/"
-        if [ ! -d "$path" ]; then continue; fi
-
-        # check if new folder exists
-        if [ ! -d "${path}neu/" ]; then
-            error_flag=2;
-            echo ""
-            echo -n "  $user: missing folder \"neu\""
-            break
-        fi
-
-        # update owner of new folder
-        current_user="$(stat -c "%U" "${path}neu/")"
-        current_group="$(stat -c "%G" "${path}neu/")"
-        if [ $? -ne 0 ] || [ "$current_user" != "$USER" ] || \
-          [ "$current_group" != "roboag" ]; then
-            error_flag=2;
-            echo ""
-            echo -n "  $user: wrong owner of \"neu\""
-            break
-        fi
-
-        # update permissions of new folder
-        current_mode="$(stat -c "%a" "${path}neu/")"
-        if [ $? -ne 0 ] || [ "$current_mode" != "775" ]; then
-            error_flag=2;
-            echo ""
-            echo -n "  $user: wrong permissions of \"neu\""
-            break
-        fi
-
-        # update owner of subfolders and subfiles
-        result="$(find "${path}neu/" \! -user $USER -o \! -group roboag)"
-        if [ "$result" != "" ]; then
-            error_flag=2;
-            echo ""
-            echo -n "  $user: wrong owner of folders/files"
-            break
-        fi
-
-        # update permissions of subfolders and subfiles
-        result="$(find "${path}neu/" -type d \! -perm  775)"
-        result+="$(find "${path}neu/" -type f \! -perm -664)"
-        if [ "$result" != "" ]; then
-            error_flag=2;
-            echo ""
-            echo -n "  $user: wrong permissions of folders/files"
-            break
-        fi
-    done
-    if [ $error_flag -eq 2 ]; then
-        echo ""
-        echo -n "    --> robo_server_userdata_fix"
-    fi
+    _robo_server_userdata_backup_check
+    _robo_server_userdata_fix_check
+    _robo_server_userdata_clean_check
 
     # final result
     if [ $error_flag -eq 0 ]; then
@@ -745,4 +904,3 @@ function robo_server_userdata_check() {
         echo ""
     fi
 }
-
