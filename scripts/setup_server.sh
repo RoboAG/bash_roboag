@@ -1052,7 +1052,7 @@ function robo_setup_server_apache_check() {
     fi
 }
 
-# 2022 01 20
+# 2023 02 14
 function robo_setup_server_apache_restore() {
 
     # print help and check for user agreement
@@ -1136,6 +1136,7 @@ function robo_setup_server_apache_restore() {
     fi
 
     # restore config of ports
+    FILENAME_CONFIG="/etc/apache2/ports.conf"
     _config_file_restore_full "$FILENAME_CONFIG" "apache"
 
     # restart apache
