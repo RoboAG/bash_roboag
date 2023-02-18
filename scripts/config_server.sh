@@ -11,11 +11,12 @@
 
 
 #***************************[server ip]***************************************
-# 2021 01 19
+# 2023 02 14
 
 # overwritting default ip from config.sh
 if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     export ROBO_SERVER_IP="localhost"
+    export ROBO_SERVER_URL="${ROBO_SERVER_IP}:${ROBO_SERVER_PORT}"
 fi
 
 

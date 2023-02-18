@@ -14,14 +14,17 @@
 
 
 #***************************[server ip]***************************************
-# 2021 01 19
+# 2023 02 14
 
 export _ROBO_SERVER_IP="192.168.2.20"
 export _ROBO_SERVER_IP_MASK="255.255.255.0"
 export _ROBO_SERVER_IP_MASK2="${_ROBO_SERVER_IP}/24"
 
-# this definition is overwritten in server mode (see also config_server.sh)
+export ROBO_SERVER_PORT="8080"
+
+# these definitions are overwritten in server mode (see also config_server.sh)
 export ROBO_SERVER_IP="$_ROBO_SERVER_IP"
+export ROBO_SERVER_URL="${ROBO_SERVER_IP}:${ROBO_SERVER_PORT}"
 
 
 

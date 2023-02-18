@@ -1146,7 +1146,7 @@ function robo_setup_server_apache_restore() {
     echo "done :-)"
 }
 
-# 2021 07 23
+# 2023 02 14
 function _robo_setup_server_apache_getawk() {
 
     FILENAME_CONFIG="/etc/apache2/ports.conf"
@@ -1183,14 +1183,23 @@ function _robo_setup_server_apache_getawk() {
     AWK_STRING="
         # search for Listen directive
         \$0 ~ /^[^#]*(LISTEN|Listen) :?[0-9]+$/ {
+          # print old content with preceeding '# [EDIT]: '
           print \"# [EDIT]: \",\$0
+          # remove optional colon
           sub( /:/ , \"\")
+          # change port 80 to 8080
+          sub( /80/ , \"8080\")
+          # store current modified line in buffer
           tmp = \$0
+          # add localhost to buffer
           sub( /(LISTEN|Listen) / , \"&localhost:\", tmp )
+          # print buffer
           print tmp
+          # add server ip to current line
           sub( /(LISTEN|Listen) / , \"&$_ROBO_SERVER_IP:\")
         }
 
+        # print current line
         { print \$0 }
     "
 

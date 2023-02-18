@@ -882,7 +882,7 @@ function robo_config_paths_check() {
 # ROBO_SERVER_KEYS_LIST is defined in setup_server.sh
 
 
-# 2021 02 06
+# 2023 02 14
 function robo_config_keys() {
 
     # print help and check for user agreement
@@ -894,7 +894,7 @@ function robo_config_keys() {
     if [ $? -ne 0 ]; then return -2; fi
 
     # copy shared keys
-    key_src="${ROBO_SERVER_IP}/keys/";
+    key_src="${ROBO_SERVER_URL}/keys/";
     key_dest="/usr/share/keyrings/";
     tmp_file="$(mktemp)"
 
@@ -921,7 +921,7 @@ function robo_config_keys() {
     rm "${tmp_file}"
 }
 
-# 2021 02 06
+# 2023 02 14
 function robo_config_keys_check() {
 
     # init variables
@@ -931,7 +931,7 @@ function robo_config_keys_check() {
     echo -n "keys from server  ... "
 
     # check shared keys
-    key_src="${ROBO_SERVER_IP}/keys/";
+    key_src="${ROBO_SERVER_URL}/keys/";
     key_dest="/usr/share/keyrings/";
     tmp_file="$(mktemp)"
 
@@ -969,7 +969,7 @@ function robo_config_keys_check() {
 
 
 #***************************[open roberta connector]**************************
-# 2022 02 03
+# 2022 02 14
 
 function robo_config_orlab_connector () {
 
@@ -979,7 +979,7 @@ function robo_config_orlab_connector () {
     if [ $? -ne 0 ]; then return -1; fi
 
     # set paths
-    URL_ZIP="${ROBO_SERVER_IP}/orlab/${ROBO_ORLAB_CONNECTOR_NAME}.zip"
+    URL_ZIP="${ROBO_SERVER_URL}/orlab/${ROBO_ORLAB_CONNECTOR_NAME}.zip"
     PATH_DST="${ROBO_PATH_OPT_BIN}${ROBO_ORLAB_CONNECTOR_NAME}/"
 
 
