@@ -363,17 +363,24 @@ function _robo_server_userdata_list() {
     echo "$users"
 }
 
-# 2023 01 27
+# 2023 02 14
 function robo_server_userdata_show() {
 
     # print help
     if [ "$1" == "-h" ]; then
-        echo "$FUNCNAME [<flag>]"
+        echo "$FUNCNAME [<column>]"
 
         return
     fi
     if [ "$1" == "--help" ]; then
-        echo "$FUNCNAME needs no parameters"
+        echo "$FUNCNAME needs 0-1 parameters"
+        echo "    [#1:]column number for sorting (default \"\")"
+        echo "         \"\"  no explicit sorting"
+        echo "         1   sort by name"
+        echo "         2   sort by new"
+        echo "         3   sort by count (descending)"
+        echo "         4   sort by last  (descending)"
+        echo ""
         echo "Shows details of all existing users on shared data folder."
         echo "  ($ROBO_PATH_ROBOAG_USER)"
 
@@ -381,10 +388,23 @@ function robo_server_userdata_show() {
     fi
 
     # check parameter
-    if [ $# -gt 0 ]; then
+    if [ $# -gt 1 ]; then
         echo "$FUNCNAME: Parameter Error."
         $FUNCNAME --help
         return -1
+    fi
+    ADDITIONAL_SORTING="cat"
+    if [ "$1" != "" ]; then
+        if [ $1 -ge 1 ] && [ $1 -le 4 ]; then
+            ADDITIONAL_SORTING="sort --key=$1"
+            if [ $1 -ge 3 ]; then
+                ADDITIONAL_SORTING="${ADDITIONAL_SORTING} --reverse"
+            fi
+        else
+            echo "$FUNCNAME: Parameter Error - <column> is \"$1\"."
+            $FUNCNAME --help
+            return -1
+        fi
     fi
 
     # load list of users
@@ -395,33 +415,34 @@ function robo_server_userdata_show() {
 
     (
         echo -e "*name* *new* *count* *last*"
-        for user in $users; do
-            path="${ROBO_PATH_ROBOAG_USER}${user}/"
-            if [ ! -d "$path" ]; then continue; fi
+        (
+            for user in $users; do
+                path="${ROBO_PATH_ROBOAG_USER}${user}/"
+                if [ ! -d "$path" ]; then continue; fi
 
-            # name of client
-            echo -n "$user "
+                # name of client
+                echo -n "$user "
 
-            # load top-level folders
-            dirs="$(ls --file-type "$path" | grep "/")"
+                # load top-level folders
+                dirs="$(ls --file-type "$path" | grep "/")"
 
-            # check new folder
-            if echo "$dirs" | grep "^neu/$" > /dev/null 2>&1; then
-                echo -n "ok "
-            else
-                echo -n "--- "
-            fi
+                # check new folder
+                if echo "$dirs" | grep "^neu/$" > /dev/null 2>&1; then
+                    echo -n "ok "
+                else
+                    echo -n "--- "
+                fi
 
-            # count folder
-            count="$(echo "$dirs" | grep -v "^neu/$" | wc --lines)"
-            echo -n "$count "
+                # count folder
+                count="$(echo "$dirs" | grep -v "^neu/$" | wc --lines)"
+                echo -n "$count "
 
-            # show latest folder
-            last="$(echo "$dirs" | grep -E "^[0-9]{4}_" | sort | tail -n 1)"
-            echo "$last"
-        done
+                # show latest folder
+                last="$(echo "$dirs" | grep -E "^[0-9]{4}_" | sort | tail -n 1)"
+                echo "$last"
+            done
+        ) | $ADDITIONAL_SORTING
     ) | $ROBO_RUN_COLUMN
-
     echo ""
     echo "user data commands:"
     echo "  $ robo_server_userdata_show"
