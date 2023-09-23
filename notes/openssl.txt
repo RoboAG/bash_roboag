@@ -1,0 +1,23 @@
+1. generate keys:
+    $ openssl genrsa 2048 -out key.crt
+      $ cat private_key.crt
+    $ cat private_key.crt | openssl pkey -pubout -out pub.crt
+      $ cat pub.crt
+
+2. better:
+    $ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 1000 -nodes
+    info: https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl
+
+3. copy
+    $ sudo cp cert.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
+    $
+
+
+------
+
+
+0. Info
+    https://wiki.ubuntuusers.de/CA/#Eigene-CA-betreiben
+
+1. CA erstellen
+    $ /usr/lib/ssl/misc/CA.pl -newca

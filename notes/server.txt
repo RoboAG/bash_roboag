@@ -1,0 +1,2 @@
+1. start orlab server:
+    $ ./ora.sh start-from-git -d robot.whitelist=sim,mbot,calliope2017NoBlue,calliope2017,calliope2016 -d robot.default=mbot
