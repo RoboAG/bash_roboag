@@ -363,36 +363,8 @@ function _robo_config_need_client() {
 
 
 #***************************[apt-cacher-ng]***********************************
-
-# 2020 12 31
-function robo_config_aptcacher() {
-
-    # print help and check for user agreement
-    _config_simple_parameter_check "$FUNCNAME" "$1" \
-      "updates all source lists to use the apt-cacher-ng running on server."
-    if [ $? -ne 0 ]; then return -1; fi
-
-    config_source_list_aptcacher_set --https2http "$ROBO_SERVER_IP"
-    if [ $? -ne 0 ]; then return -2; fi
-
-    echo "done :-)"
-}
-
-# 2021 01 03
-function robo_config_aptcacher_check() {
-
-    echo -n "apt-cacher sources ... "
-    config_source_list_aptcacher_check "quiet"
-    if [ $? -eq 0 ]; then
-        echo "ok"
-    else
-        echo ""
-        echo "  --> robo_config_aptcacher"
-    fi
-}
-
-# 2020 12 31
-alias robo_config_aptcacher_restore="config_source_list_aptcacher_unset"
+# 2023 09 23
+alias robo_config_aptcacher_check="config_source_list_aptcacher_check"
 
 
 

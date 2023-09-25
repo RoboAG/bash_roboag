@@ -125,13 +125,13 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2023 02 04
+# 2023 09 23
 
 export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_COMMON="03.02.2023"
-export ROBO_SYSTEM_INSTALL_DATE_SERVER="20.01.2023"
+export ROBO_SYSTEM_INSTALL_DATE_SERVER="23.09.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_COMMON="07.07.2022"
-export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="04.02.2023"
+export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="23.09.2023"
 
 common_path="${ROBO_PATH_SCRIPT}system_config/install/"
 export ROBO_FILE_INSTALL_CLIENT="${common_path}/common.txt"
@@ -452,7 +452,7 @@ function robo_system_check_install() {
 
 
 #***************************[check]******************************************
-# 2021 11 02
+# 2023 09 23
 
 function robo_system_wtf() {
 
@@ -518,10 +518,10 @@ function robo_system_wtf() {
         echo "optional: $ robo_config_samba_check"
     fi
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
-        robo_setup_server_aptcacher_check
+        robo_setup_server_aptcacher_check # checks for removal
     fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
-        robo_config_aptcacher_check
+        robo_config_aptcacher_check # checks for removal
     fi
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_config_server_intranet_check

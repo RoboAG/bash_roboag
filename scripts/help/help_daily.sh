@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2021 11 07
+# 2023 09 23
 
 function robo_help_daily() {
 
@@ -21,9 +21,8 @@ function robo_help_daily() {
         echo "  $ robo_system_wtf"
         echo "  $ service --status-all"
         echo ""
-        echo "  $ sudo systemctl restart dnsmasq       # dns & dhcp"
-        echo "  $ sudo systemctl restart apt-cacher-ng # apt-cacher"
-        echo "  $ sudo systemctl restart smbd          # samba shares"
+        echo "  $ sudo systemctl restart dnsmasq         # dns & dhcp"
+        echo "  $ sudo systemctl restart smbd            # samba shares"
         echo ""
     fi
 

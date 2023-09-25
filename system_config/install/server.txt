@@ -4,9 +4,6 @@
 # filesystem
 exfat-fuse
 
-# apt
-apt-cacher-ng
-
 # samba share
 samba samba-common
 

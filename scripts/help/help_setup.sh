@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2023 01 28
+# 2023 09 23
 
 function robo_help_setup() {
 
@@ -102,10 +102,8 @@ function robo_help_setup() {
         echo "    $ sudo reboot"
         echo -e "\n<enter>\n"; read dummy
         echo ""
-        echo "setup apt-cacher-ng"
-        echo "    $ robo_setup_server_aptcacher"
-        echo "    $ robo_config_aptcacher"
-        echo "    $ robo_system_update"
+        echo "setup apt proxy"
+        echo "    ... ToDo ..."
         echo -e "\n<enter>\n"; read dummy
         echo ""
         echo "install client packages (this may take a while)"

@@ -561,15 +561,6 @@ function robo_config_server_intranet_check() {
         fi
     fi
 
-    # check apt-cacher
-    if config_check_service apt-cacher-ng > /dev/null; then
-        if ! echo "$port_list" | grep ":3142" > /dev/null; then
-            error_flag=1
-            echo ""
-            echo -n "  no apt-cacher --> sudo systemctl restart apt-cacher-ng"
-        fi
-    fi
-
     # check samba-server
     if config_check_service smbd > /dev/null; then
         if ! echo "$port_list" | grep ":445"  > /dev/null; then
