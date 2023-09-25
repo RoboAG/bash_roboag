@@ -14,3 +14,6 @@ php php-mysql phpmyadmin
 
 # java compiler
 maven
+
+# add-apt-repository for nextcloud install
+software-properties-common
