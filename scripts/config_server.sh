@@ -530,12 +530,12 @@ function _robo_config_server_dhcp_create_hostfile() {
 
 
 #***************************[intranet]****************************************
-# 2021 01 29
+# 2023 09 23
 
 function robo_config_server_intranet_check() {
 
     # initial output
-    echo -n "intranet on server ... "
+    echo -n "intranet on server... "
 
     # init variables
     error_flag=0;
@@ -548,7 +548,7 @@ function robo_config_server_intranet_check() {
         if ! echo "$port_list" | grep ":53"   > /dev/null; then
             error_flag=1
             echo ""
-            echo "  no dns-server --> sudo systemctl restart dnsmasq"
+            echo -n "  no dns-server --> sudo systemctl restart dnsmasq"
         fi
     fi
 
@@ -557,7 +557,7 @@ function robo_config_server_intranet_check() {
         if ! echo "$port_list" | grep ":80"   > /dev/null; then
             error_flag=1
             echo ""
-            echo "  no apache2 --> sudo systemctl restart apache2"
+            echo -n "  no apache2    --> sudo systemctl restart apache2"
         fi
     fi
 
@@ -566,16 +566,16 @@ function robo_config_server_intranet_check() {
         if ! echo "$port_list" | grep ":3142" > /dev/null; then
             error_flag=1
             echo ""
-            echo "  no apt-cacher --> sudo systemctl restart apt-cacher-ng"
+            echo -n "  no apt-cacher --> sudo systemctl restart apt-cacher-ng"
         fi
     fi
 
-    # check apt-cacher
+    # check samba-server
     if config_check_service smbd > /dev/null; then
         if ! echo "$port_list" | grep ":445"  > /dev/null; then
             error_flag=1
             echo ""
-            echo "  no samba      --> sudo systemctl restart smbd"
+            echo -n "  no samba      --> sudo systemctl restart smbd"
         fi
     fi
 
