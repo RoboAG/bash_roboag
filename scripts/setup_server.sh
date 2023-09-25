@@ -17,6 +17,133 @@ alias robo_setup_server_aptcacher_check="server_config_aptcacher_check"
 
 
 
+#***************************[apt proxy]***************************************
+
+# 2023 09 23
+function robo_setup_server_aptproxy() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "adds the additional apt repos to the apt proxy (squid-deb-proxy)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # Do the configuration
+    FILENAME_CONFIG="95-roboag"
+    CONFIG_SRC="${ROBO_PATH_SCRIPT}system_config/squid-deb-proxy/"
+    CONFIG_DST="/etc/squid-deb-proxy/mirror-dstdomain.acl.d/"
+    FILE_SRC="${CONFIG_SRC}${FILENAME_CONFIG}"
+    FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
+
+    # check if config path exists
+    if [ ! -d "$CONFIG_DST" ]; then
+        echo "Directory \"$CONFIG_DST\" does not exist."
+        echo "Is squid-deb-proxy installed ?"
+        return -3
+    fi
+
+    # check if config file exists
+    if [ ! -f "$FILE_DST" ]; then
+        echo "Adding config file for roboag."
+        echo "  ($FILE_DST)"
+
+        sudo cp "$FILE_SRC" "$FILE_DST"
+    else
+        # check if config file changed
+        if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+            echo "Updating config file for roboag."
+            echo "  ($FILE_DST)"
+            diff "$FILE_SRC" "$FILE_DST"
+
+            sudo cp "$FILE_SRC" "$FILE_DST"
+        else
+            echo "Config file is up to date - nothing todo."
+        fi
+    fi
+
+    echo "done :-)"
+}
+
+# 2023 09 23
+function robo_setup_server_aptproxy_check() {
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "apt proxy server  ... "
+
+    # Do the configuration
+    FILENAME_CONFIG="95-roboag"
+    CONFIG_SRC="${ROBO_PATH_SCRIPT}system_config/squid-deb-proxy/"
+    CONFIG_DST="/etc/squid-deb-proxy/mirror-dstdomain.acl.d/"
+    FILE_SRC="${CONFIG_SRC}${FILENAME_CONFIG}"
+    FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
+
+    # check if config file exists
+    if [ ! -f "$FILE_DST" ]; then
+        error_flag=1;
+        echo ""
+        echo -n "  missing config file"
+    else
+        # check if config file changed
+        if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+            error_flag=1;
+            echo ""
+            echo -n "  config file changed"
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_setup_server_aptproxy"
+    fi
+}
+
+# 2023 09 23
+function robo_setup_server_aptproxy_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes the additional apt repos to the apt proxy (squid-deb-proxy)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # Do the configuration
+    FILENAME_CONFIG="95-roboag"
+    CONFIG_DST="/etc/squid-deb-proxy/mirror-dstdomain.acl.d/"
+    FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
+
+    # check if config path exists
+    if [ ! -d "$CONFIG_DST" ]; then
+        echo "Directory \"$CONFIG_DST\" does not exist."
+        echo "Is squid-deb-proxy installed ?"
+        return -3
+    fi
+
+    # check if config file exists
+    if [ ! -f "$FILE_DST" ]; then
+        echo "Removing config file."
+        echo "  ($FILE_DST)"
+
+        sudo rm "$FILE_DST"
+    else
+        echo "Config file does not exist - nothing todo."
+    fi
+
+    echo "done :-)"
+}
+
+
+
 #***************************[network interfaces]******************************
 # 2021 01 12
 

@@ -1,0 +1,14 @@
+# /etc/squid-deb-proxy/mirror-dstdomain.acl.d/95-roboag
+#
+# Additional repositories("network destinations") used by the roboag server.
+#
+# https://github.com/RoboAG/bash_roboag
+# 23.09.2023
+
+# launchpad personal package archives
+#   see also https://blog.launchpad.net/ppa/new-domain-names-for-ppas
+ppa.launchpad.net
+ppa.launchpadcontent.net
+
+# visual studio code
+packages.microsoft.com

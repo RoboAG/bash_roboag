@@ -80,7 +80,7 @@ function robo_help_setup() {
     echo "update sources"
     #echo "    $ config_source_list_add_multiverse"
     if [ "$system_flag" == "client" ]; then
-        echo "    $ robo_config_aptcacher"
+        echo "    $ robo_config_aptproxy  # execute 3x times"
     fi
     echo -e "\n<enter>\n"; read dummy
 
@@ -103,7 +103,9 @@ function robo_help_setup() {
         echo -e "\n<enter>\n"; read dummy
         echo ""
         echo "setup apt proxy"
-        echo "    ... ToDo ..."
+        echo "    $ robo_setup_server_aptproxy"
+        echo "    $ robo_config_aptproxy  # execute 3x times"
+        echo "    $ robo_system_update"
         echo -e "\n<enter>\n"; read dummy
         echo ""
         echo "install client packages (this may take a while)"
@@ -124,7 +126,6 @@ function robo_help_setup() {
         echo "install vscode"
         echo "    $ robo_config_keys"
         echo "    $ config_install_vscode  # this will fail"
-        echo "    $ robo_config_aptcacher"
         echo "    $ robo_system_update"
         echo "    $ robo_system_install"
         echo -e "\n<enter>\n"; read dummy

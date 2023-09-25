@@ -362,6 +362,132 @@ function _robo_config_need_client() {
 
 
 
+#***************************[apt proxy]***************************************
+
+# 2023 09 24
+function robo_config_aptproxy() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "setup apt to (automatically) use an apt-proxy (squid-deb-proxy)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # Do the configuration
+    FILENAME_CONFIG="95-squid-deb-proxy-roboag.conf"
+    CONFIG_SRC="${ROBO_PATH_SCRIPT}system_config/squid-deb-proxy/"
+    CONFIG_DST="/etc/apt/apt.conf.d/"
+    FILE_SRC="${CONFIG_SRC}${FILENAME_CONFIG}"
+    FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
+
+    # check if auto-apt-proxy is installed
+    auto_proxy_installed="$(config_install_show | grep "auto-apt-proxy")"
+    if [ "$auto_proxy_installed" != "" ]; then
+        # check if http proxy of apt is set manual
+        if [ -f "$FILE_DST" ]; then
+            echo "Removing manual http proxy settings of apt."
+            sudo rm "$FILE_DST"
+        else
+            echo "Everything is up to date - nothing todo."
+        fi
+    else
+        # check if http proxy of apt is set manual
+        if [ -f "$FILE_DST" ]; then
+            echo "Installing auto-apt-proxy."
+            sudo apt install auto-apt-proxy
+
+            # check if temporary config is up to date
+            if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+                echo "Updating temporary settings of http proxy."
+                echo "  ($FILE_DST)"
+                sudo cp "$FILE_SRC" "$FILE_DST"
+            fi
+        else
+            echo "Temporary setting http proxy of apt."
+            echo "  ($FILE_DST)"
+            sudo cp "$FILE_SRC" "$FILE_DST"
+        fi
+    fi
+
+    echo "done :-)"
+}
+
+# 2023 09 24
+function robo_config_aptproxy_check() {
+   # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "apt-proxy         ... "
+
+    # Do the configuration
+    FILENAME_CONFIG="95-squid-deb-proxy-roboag.conf"
+    CONFIG_SRC="${ROBO_PATH_SCRIPT}system_config/squid-deb-proxy/"
+    CONFIG_DST="/etc/apt/apt.conf.d/"
+    FILE_SRC="${CONFIG_SRC}${FILENAME_CONFIG}"
+    FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
+
+    # check if auto-apt-proxy is installed
+    auto_proxy_installed="$(config_install_show | grep "auto-apt-proxy")"
+    if [ "$auto_proxy_installed" != "" ]; then
+        # check if http proxy of apt is set manual
+        if [ -f "$FILE_DST" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  manual http proxy settings of apt"
+        fi
+    else
+        # check if http proxy of apt is set manual
+        if [ -f "$FILE_DST" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  auto-apt-proxy not installed"
+            # check if temporary config is up to date
+            if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+                error_flag=1
+                echo ""
+                echo -n "  new http proxy settings of apt"
+            fi
+        else
+            error_flag=1
+            echo ""
+            echo -n "  no http proxy settings of apt"
+        fi
+    fi
+
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+        echo "  --> robo_config_aptproxy"
+    fi
+}
+
+# 2023 09 24
+function robo_config_aptproxy_restore() {
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "unset apt to (automatically) use an apt-proxy (squid-deb-proxy)."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # Do the configuration
+    FILE_DST="/etc/apt/apt.conf.d/95-squid-deb-proxy-roboag.conf"
+
+    # remove auto-apt-proxy
+    config_uninstall_list "auto-apt-proxy"
+
+    # check if http proxy of apt is set manual
+    if [ -f "$FILE_DST" ]; then
+        echo "Removing manual http proxy settings of apt."
+        sudo rm "$FILE_DST"
+    else
+        echo "No manual http proxy settings of apt."
+    fi
+
+    echo "done :-)"
+}
+
+
+
 #***************************[apt-cacher-ng]***********************************
 # 2023 09 23
 alias robo_config_aptcacher_check="config_source_list_aptcacher_check"

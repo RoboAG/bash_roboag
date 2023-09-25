@@ -1,6 +1,9 @@
 # ssh
 openssh-server
 
+# apt
+auto-apt-proxy
+
 # filesystem & network
 cifs-utils
 net-tools

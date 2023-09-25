@@ -128,7 +128,7 @@ function robo_system_check_update() {
 # 2023 09 23
 
 export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
-export ROBO_SYSTEM_INSTALL_DATE_COMMON="03.02.2023"
+export ROBO_SYSTEM_INSTALL_DATE_COMMON="23.09.2023"
 export ROBO_SYSTEM_INSTALL_DATE_SERVER="23.09.2023"
 export ROBO_SYSTEM_UNINSTALL_DATE_COMMON="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="23.09.2023"
@@ -519,9 +519,11 @@ function robo_system_wtf() {
     fi
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_setup_server_aptcacher_check # checks for removal
+        robo_setup_server_aptproxy_check
     fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
         robo_config_aptcacher_check # checks for removal
+        robo_config_aptproxy_check
     fi
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_config_server_intranet_check

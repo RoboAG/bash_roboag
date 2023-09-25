@@ -4,6 +4,9 @@
 # filesystem
 exfat-fuse
 
+# apt proxy
+squid-deb-proxy
+
 # samba share
 samba samba-common
 

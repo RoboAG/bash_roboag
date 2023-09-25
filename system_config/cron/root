@@ -8,4 +8,4 @@
 
 
 
-@reboot sleep 30 && systemctl restart apache2 dnsmasq smbd && mount -a
+@reboot sleep 30 && systemctl restart apache2 dnsmasq smbd squid-deb-proxy && mount -a

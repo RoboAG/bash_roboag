@@ -23,6 +23,7 @@ function robo_help_daily() {
         echo ""
         echo "  $ sudo systemctl restart dnsmasq         # dns & dhcp"
         echo "  $ sudo systemctl restart smbd            # samba shares"
+        echo "  $ sudo systemctl restart squid-deb-proxy # apt proxy"
         echo ""
     fi
 

@@ -561,6 +561,17 @@ function robo_config_server_intranet_check() {
         fi
     fi
 
+    # # check apt-proxy
+    # #   --> not possible as squid-deb-proxy is listening on all connections
+    # #       (0.0.0.0 instead of server ip)
+    # if config_check_service squid-deb-proxy > /dev/null; then
+    #     if ! echo "$port_list" | grep ":8000" > /dev/null; then
+    #         error_flag=1
+    #         echo ""
+    #         echo -n "  no apt-proxy  --> sudo systemctl restart squid-deb-proxy"
+    #     fi
+    # fi
+
     # check samba-server
     if config_check_service smbd > /dev/null; then
         if ! echo "$port_list" | grep ":445"  > /dev/null; then
