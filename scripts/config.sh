@@ -364,7 +364,7 @@ function _robo_config_need_client() {
 
 #***************************[apt proxy]***************************************
 
-# 2023 09 24
+# 2023 09 25
 function robo_config_aptproxy() {
 
     # print help and check for user agreement
@@ -379,9 +379,14 @@ function robo_config_aptproxy() {
     FILE_SRC="${CONFIG_SRC}${FILENAME_CONFIG}"
     FILE_DST="${CONFIG_DST}${FILENAME_CONFIG}"
 
+    # check ubuntu version
+    VER="$(lsb_release --release --short)"
+    VER="${VER::2}"
+    if [ ${#VER} -lt 2 ]; then VER="0"; fi # error handling
+
     # check if auto-apt-proxy is installed
     auto_proxy_installed="$(config_install_show | grep "auto-apt-proxy")"
-    if [ "$auto_proxy_installed" != "" ]; then
+    if [ $VER -ge 22 ] && [ "$auto_proxy_installed" != "" ]; then
         # check if http proxy of apt is set manual
         if [ -f "$FILE_DST" ]; then
             echo "Removing manual http proxy settings of apt."
@@ -390,19 +395,24 @@ function robo_config_aptproxy() {
             echo "Everything is up to date - nothing todo."
         fi
     else
+        # --> needs manual config
+        #     (either ubuntu < 22.04 or auto proxy is not installed)
         # check if http proxy of apt is set manual
         if [ -f "$FILE_DST" ]; then
-            echo "Installing auto-apt-proxy."
-            sudo apt install auto-apt-proxy
-
+            if [ $VER -ge 22 ]; then
+                echo "Installing auto-apt-proxy."
+                sudo apt install auto-apt-proxy
+            fi
             # check if temporary config is up to date
             if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
                 echo "Updating temporary settings of http proxy."
                 echo "  ($FILE_DST)"
                 sudo cp "$FILE_SRC" "$FILE_DST"
+            elif [ $VER -lt 22 ]; then
+                echo "Everything is up to date - nothing todo."
             fi
         else
-            echo "Temporary setting http proxy of apt."
+            echo "Setting http proxy of apt (temporary)."
             echo "  ($FILE_DST)"
             sudo cp "$FILE_SRC" "$FILE_DST"
         fi
@@ -411,7 +421,7 @@ function robo_config_aptproxy() {
     echo "done :-)"
 }
 
-# 2023 09 24
+# 2023 09 25
 function robo_config_aptproxy_check() {
    # init variables
     error_flag=0;
@@ -428,7 +438,16 @@ function robo_config_aptproxy_check() {
 
     # check if auto-apt-proxy is installed
     auto_proxy_installed="$(config_install_show | grep "auto-apt-proxy")"
-    if [ "$auto_proxy_installed" != "" ]; then
+
+    # check for stand-alone-mode
+    if [ "$ROBO_CONFIG_STANDALONE" == "1" ]; then
+        # --> remove everything
+        # check if auto-apt-proxy is installed
+        if [ "$auto_proxy_installed" != "" ]; then
+            error_flag=1
+            echo ""
+            echo -n "  auto-apt-proxy installed"
+        fi
         # check if http proxy of apt is set manual
         if [ -f "$FILE_DST" ]; then
             error_flag=1
@@ -436,21 +455,42 @@ function robo_config_aptproxy_check() {
             echo -n "  manual http proxy settings of apt"
         fi
     else
-        # check if http proxy of apt is set manual
-        if [ -f "$FILE_DST" ]; then
-            error_flag=1
-            echo ""
-            echo -n "  auto-apt-proxy not installed"
-            # check if temporary config is up to date
-            if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+        # --> set config
+        #     (is either server or client)
+        # check ubuntu version
+        VER="$(lsb_release --release --short)"
+        VER="${VER::2}"
+        if [ ${#VER} -lt 2 ]; then VER="0"; fi # error handling
+
+        # check if auto-apt-proxy is installed
+        if [ $VER -ge 22 ] && [ "$auto_proxy_installed" != "" ]; then
+            # check if http proxy of apt is set manual
+            if [ -f "$FILE_DST" ]; then
                 error_flag=1
                 echo ""
-                echo -n "  new http proxy settings of apt"
+                echo -n "  manual http proxy settings of apt"
             fi
         else
-            error_flag=1
-            echo ""
-            echo -n "  no http proxy settings of apt"
+            # --> needs manual config
+            #     (either ubuntu < 22.04 or auto proxy is not installed)
+            # check if http proxy of apt is set manual
+            if [ -f "$FILE_DST" ]; then
+                if [ $VER -ge 22 ]; then
+                    error_flag=1
+                    echo ""
+                    echo -n "  auto-apt-proxy not installed"
+                fi
+                # check if (temporary) config is up to date
+                if ! diff --brief "$FILE_SRC" "$FILE_DST" > /dev/null; then
+                    error_flag=1
+                    echo ""
+                    echo -n "  new http proxy settings of apt"
+                fi
+            else
+                error_flag=1
+                echo ""
+                echo -n "  no http proxy settings of apt"
+            fi
         fi
     fi
 
@@ -458,11 +498,15 @@ function robo_config_aptproxy_check() {
         echo "ok"
     else
         echo ""
-        echo "  --> robo_config_aptproxy"
+        if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
+            echo "  --> robo_config_aptproxy"
+        else
+            echo "  --> robo_config_aptproxy_restore"
+        fi
     fi
 }
 
-# 2023 09 24
+# 2023 09 25
 function robo_config_aptproxy_restore() {
     # print help and check for user agreement
     _config_simple_parameter_check "$FUNCNAME" "$1" \
@@ -473,7 +517,8 @@ function robo_config_aptproxy_restore() {
     FILE_DST="/etc/apt/apt.conf.d/95-squid-deb-proxy-roboag.conf"
 
     # remove auto-apt-proxy
-    config_uninstall_list "auto-apt-proxy"
+    echo "uninstalling auto-apt-proxy"
+    sudo apt remove auto-apt-proxy
 
     # check if http proxy of apt is set manual
     if [ -f "$FILE_DST" ]; then

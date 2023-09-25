@@ -452,7 +452,7 @@ function robo_system_check_install() {
 
 
 #***************************[check]******************************************
-# 2023 09 23
+# 2023 09 25
 
 function robo_system_wtf() {
 
@@ -521,10 +521,8 @@ function robo_system_wtf() {
         robo_setup_server_aptcacher_check # checks for removal
         robo_setup_server_aptproxy_check
     fi
-    if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
-        robo_config_aptcacher_check # checks for removal
-        robo_config_aptproxy_check
-    fi
+    robo_config_aptcacher_check # checks for removal
+    robo_config_aptproxy_check
     if [ "$ROBO_CONFIG_IS_SERVER" == "1" ]; then
         robo_config_server_intranet_check
         robo_server_userdata_check
