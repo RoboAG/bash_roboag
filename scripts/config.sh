@@ -808,13 +808,24 @@ function robo_config_samba() {
     temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOAG:0: -1}")"
     if [ "$temp" == "" ]; then
         need_roboag=1
+        uid="$(id --user roboag)"
+        if [ $? -ne 0 ] || [ "$uid" == "" ]; then
+            echo "Error: user id could not be read"
+            return -1
+        fi
+        gid="$(id -group roboag)"
+        if [ $? -ne 0 ] || [ "$gid" == "" ]; then
+            echo "Error: group id could not be read"
+            return -1
+        fi
         temp="            "
         temp+="print \"//${ROBO_SERVER_IP}/roboag    "
         temp+="${ROBO_SHARE_ROBOAG:0: -1}    "
         temp+="cifs   "
-        temp+="user,rw,credentials=$smb_file   "
+        temp+="user,rw,uid=${uid},gid=${gid},credentials=$smb_file   "
         temp+=$'0   0"\n'
         AWK_STRING+="$temp"
+
     fi
     need_robosax=0
     temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOSAX:0: -1}")"
