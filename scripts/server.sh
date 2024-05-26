@@ -152,7 +152,7 @@ function robo_server_ssh_getconfigs() {
 
 #***************************[client status]***********************************
 
-# 2023 01 27
+# 2024 05 26
 function robo_server_check_clients() {
 
     # print help
@@ -202,10 +202,10 @@ function robo_server_check_clients() {
     # setup constants for comparing dates
     now_secs="$(date +"%s")"
     date_install_secs="$(_robo_system_convert_date_to_sec \
-        "$ROBO_SYSTEM_INSTALL_DATE_CLIENT")"
+        "$ROBO_SYSTEM_INSTALL_DATE_COMMON")"
     if [ $? -ne 0 ]; then return -6; fi
     date_uninstall_secs="$(_robo_system_convert_date_to_sec \
-        "$ROBO_SYSTEM_UNINSTALL_DATE_CLIENT")"
+        "$ROBO_SYSTEM_UNINSTALL_DATE_COMMON")"
     if [ $? -ne 0 ]; then return -7; fi
 
     (
