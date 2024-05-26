@@ -727,7 +727,7 @@ function robo_config_user_restore() {
 
 #***************************[samba]*******************************************
 
-# 2021 01 16
+# 2024 05 26
 function robo_config_samba() {
 
     # print help and check for user agreement
@@ -815,7 +815,7 @@ function robo_config_samba() {
             echo "Error: user id could not be read"
             return -1
         fi
-        gid="$(id -group roboag)"
+        gid="$(id --group roboag)"
         if [ $? -ne 0 ] || [ "$gid" == "" ]; then
             echo "Error: group id could not be read"
             return -1
@@ -827,7 +827,6 @@ function robo_config_samba() {
         temp+="user,rw,uid=${uid},gid=${gid},credentials=$smb_file   "
         temp+=$'0   0"\n'
         AWK_STRING+="$temp"
-
     fi
     need_robosax=0
     temp="$(cat "$FILENAME_CONFIG" | grep "${ROBO_SHARE_ROBOSAX:0: -1}")"
