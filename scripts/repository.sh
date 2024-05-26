@@ -27,7 +27,7 @@ export REPO_ROOT_GITHUB_URL="https://github.com/peterweissig/"
 
 
 #***************************[bash]********************************************
-# 2020 10 11
+# 2023 11 18
 
 # paths
 # note: this is equivalent to setup in bash/repo/list.sh
@@ -39,17 +39,18 @@ if [ "$REPO_BASH_REPO" == "" ]; then
     export REPO_BASH_REPO=("${ROBO_BASH_PATH}repo/" \
     "${REPO_ROOT_GITHUB_URL}bash_repo.git")
 
-    alias git_clone_bash_repo="git clone ${REPO_BASH_REPO[1]} \
-      ${REPO_BASH_REPO[0]}"
+    function git_clone_bash_repo() {
+        git clone "${REPO_BASH_REPO[1]}" "${REPO_BASH_REPO[0]}"
+    }
 fi
 
 
 
 #***************************[change repo paths]*******************************
-# 2021 08 12
+# 2023 11 18
 
 export REPO_MODE="roboag"
-alias robo_repo_overview="repo_help_overview_roboag"
+function robo_repo_overview() { repo_help_overview_roboag; }
 
 if [ "$ROBO_CONFIG_IS_USER" == "1" ]; then
     return
@@ -58,10 +59,10 @@ fi
 
 
 #***************************[global update and stat]**************************
-# 2021 08 12
+# 2023 11 18
 
-alias robo_repo_status="repo_status_all"
-alias robo_repo_update_from_web="repo_pull_all"
+function robo_repo_status() { repo_status_all; }
+function robo_repo_update_from_web() { repo_pull_all; }
 
 # 2021 01 09
 function robo_repo_update_from_server() {

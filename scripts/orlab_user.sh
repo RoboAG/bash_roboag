@@ -18,13 +18,16 @@ export ROBO_ORLAB_CONNECTOR_NAME="OpenRobertaConnector"
 export _ROBO_ORLAB_CONNECTOR_PATH1="${ROBO_PATH_OPT_BIN}${ROBO_ORLAB_CONNECTOR_NAME}/"
 export _ROBO_ORLAB_CONNECTOR_PATH2="${HOME}/Downloads/${ROBO_ORLAB_CONNECTOR_NAME}/"
 
-# 2023 01 20
-alias orlab_connect="robo_orlab_connect"
+# 2023 11 17
+function orlab_connect() {
+    robo_orlab_connect
+}
 
+# 2023 01 20
 function robo_orlab_connect () {
     path="$_ROBO_ORLAB_CONNECTOR_PATH1"
     if [ -d "$path" ]; then
-        echo "using roboag version of connector"        
+        echo "using roboag version of connector"
     else
         path="$_ROBO_ORLAB_CONNECTOR_PATH2"
         if [ -d "$path" ]; then

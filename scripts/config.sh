@@ -534,8 +534,10 @@ function robo_config_aptproxy_restore() {
 
 
 #***************************[apt-cacher-ng]***********************************
-# 2023 09 23
-alias robo_config_aptcacher_check="config_source_list_aptcacher_check"
+# 2023 11 17
+function robo_config_aptcacher_check() {
+    config_source_list_aptcacher_check
+}
 
 
 

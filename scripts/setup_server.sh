@@ -11,9 +11,11 @@
 
 
 #***************************[apt-cacher-ng]***********************************
-# 2023 09 23
+# 2023 11 18
 
-alias robo_setup_server_aptcacher_check="server_config_aptcacher_check"
+function robo_setup_server_aptcacher_check() {
+    server_config_aptcacher_check
+}
 
 
 

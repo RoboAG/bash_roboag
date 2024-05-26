@@ -1,12 +1,19 @@
 #!/bin/bash
 
 #***************************[help]********************************************
+# 2023 11 18
+
+function robo_help_setup_workspace_shared() {
+    robo_help_setup_workspace shared
+}
+function robo_help_setup_workspace_client() {
+    robo_help_setup_workspace client
+}
+function robo_help_setup_workspace_simple() {
+    robo_help_setup_workspace simple
+}
+
 # 2021 02 06
-
-alias robo_help_setup_workspace_shared="robo_help_setup_workspace shared"
-alias robo_help_setup_workspace_client="robo_help_setup_workspace client"
-alias robo_help_setup_workspace_simple="robo_help_setup_workspace simple"
-
 function robo_help_setup_workspace() {
 
     # print help
