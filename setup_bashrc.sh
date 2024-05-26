@@ -24,7 +24,7 @@ else
     # get local directory
     SCRIPTDIR="$(realpath "$(dirname "${BASH_SOURCE}")" )/"
 
-    BASHRC_SOURCE=". ${SCRIPTDIR}bashrc.sh"
+    BASHRC_SOURCE="source ${SCRIPTDIR}bashrc.sh"
     if grep -Fq "${BASHRC_SOURCE}" ~/.bashrc; then
 
         echo "roboag already sourced within bashrc. This is good!"

@@ -93,7 +93,7 @@ fi
 
 echo ""
 echo "### automatically sourcing this project"
-./${PATH_THIS}setup_bashrc.sh $1
+source ./${PATH_THIS}setup_bashrc.sh $1
 
 
 echo ""

@@ -7,4 +7,4 @@ SCRIPTDIR="$(realpath "$(dirname "${BASH_SOURCE}")" )/"
 export ROBO_CONFIG_IS_USER=1
 
 # source setup_bashrc.sh
-. ${SCRIPTDIR}setup_bashrc.sh
+source ${SCRIPTDIR}setup_bashrc.sh
