@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #***************************[help]********************************************
-# 2023 09 23
+# 2024 08 08
 
 function robo_help_setup() {
 
@@ -137,6 +137,7 @@ function robo_help_setup() {
     fi
     echo "setup samba (file shares)"
     if [ "$system_flag" == "server" ]; then
+        echo "    $ robo_setup_server_rebind_repos"
         echo "    $ robo_setup_server_samba"
         echo "    $ robo_setup_server_smbuser"
     fi

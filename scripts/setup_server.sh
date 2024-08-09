@@ -843,6 +843,187 @@ function robo_setup_server_smbuser_restore() {
 
 
 
+#***************************[rebind repos]***********************************
+
+# 2024 08 08
+function robo_setup_server_rebind_repos() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "rebinds the repos to the samba share."
+    if [ $? -ne 0 ]; then return -1; fi
+
+    # check current mode
+    _robo_config_need_server "$FUNCNAME"
+    if [ $? -ne 0 ]; then return -2; fi
+
+    # check if folders exist
+    if [ ! -d "$ROBO_PATH_OPT_REPOS" ]; then
+        echo "Folder \"$ROBO_PATH_OPT_REPOS\" does not exist."
+        return -3
+    fi
+    if [ "$ROBO_PATH_ROBOAG" == "" ]; then
+        echo "Variable ROBO_PATH_ROBOAG is not set."
+        return -3
+    fi
+
+    # check/create data folder
+    if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
+        echo "creating roboag data folder"
+        echo "  ($ROBO_PATH_ROBOAG)"
+        sudo mkdir -p "$ROBO_PATH_ROBOAG"
+        sudo chown $USER:$USER "$ROBO_PATH_ROBOAG"
+        if [ $? -ne 0 ]; then return -3; fi
+    fi
+
+    # create mount point
+    REBIND_SRC="${ROBO_PATH_OPT_REPOS::-1}"
+    REBIND_DST="${ROBO_PATH_ROBOAG}/Repos"
+
+    if [ ! -d "$REBIND_DST" ]; then
+        echo "creating mount point"
+        echo "  ($REBIND_DST)"
+        sudo mkdir "$REBIND_DST"
+    fi
+
+    # Do the configuration
+    FILENAME_CONFIG="/etc/fstab"
+
+    # check config file
+    if [ ! -e "$FILENAME_CONFIG" ]; then
+        echo "File \"$FILENAME_CONFIG\" does not exist."
+        return -4
+    fi
+
+    content="$(cat "$FILENAME_CONFIG")"
+    if echo "$content" | grep --quiet -E "^ *${REBIND_SRC}"; then
+        echo "Source of repos is already part of fstab."
+        echo "  $REBIND_SRC"
+        return -4
+    fi
+    if echo "$content" | grep --quiet -E "^ *[^ ]* +${REBIND_DST}"; then
+        echo "Destination of repos is already part of fstab."
+        echo "  $REBIND_DST"
+        return -4
+    fi
+
+    # add rebind to fstab
+    echo "adding rebind of repos to $FILENAME_CONFIG"
+    AWK_STRING="
+        # keep file as it was
+        { print \$0 }
+
+        # add rebind at the end of file
+        END {
+            print \"\"
+            print \"# rebind roboag repos\"
+            print \"$REBIND_SRC   $REBIND_DST   none   bind   0   0\"
+        }
+    "
+
+    _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+    if [ $? -ne 0 ]; then return -5; fi
+
+    # mount rebind
+    sudo mount "$REBIND_DST"
+
+    echo "done :-)"
+}
+
+# 2024 08 08
+function robo_setup_server_rebind_repos_check() {
+
+    # init variables
+    error_flag=0;
+
+    # initial output
+    echo -n "rebind repos      ... "
+
+    # check folders
+    if [ ! -d "$ROBO_PATH_OPT_REPOS" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing repos folder"
+    fi
+    if [ "$ROBO_PATH_ROBOAG" == "" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  \$ROBO_PATH_ROBOAG not set"
+    else
+        if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing roboag data folder"
+        fi
+    fi
+
+    # check config file
+    REBIND_SRC="${ROBO_PATH_OPT_REPOS::-1}"
+    REBIND_DST="${ROBO_PATH_ROBOAG}/Repos"
+    FILENAME_CONFIG="/etc/fstab"
+
+
+    content="$(cat "$FILENAME_CONFIG")"
+    if ! echo "$content" | grep --quiet -E "^ *${REBIND_SRC}"; then
+        error_flag=1
+        echo ""
+        echo "  missing fstab entry"
+        echo -n "  -> robo_setup_server_rebind_repos"
+    elif ! echo "$content" | grep --quiet -E "^ *[^ ]* +${REBIND_DST}"; then
+        error_flag=1
+        echo ""
+        echo "  missing fstab entry"
+        echo -n "  -> robo_setup_server_rebind_repos"
+    fi
+
+    if [ $error_flag -eq 0 ]; then
+        if ! mount | grep --quiet " $REBIND_DST "; then
+            error_flag=1
+            echo ""
+            echo "  repos are not mounted"
+            echo -n "  -> sudo mount -a"
+        fi
+    fi
+
+    # final result
+    if [ $error_flag -eq 0 ]; then
+        echo "ok"
+    else
+        echo ""
+    fi
+}
+
+# 2024 08 09
+function robo_setup_server_rebind_repos_restore() {
+
+    # print help and check for user agreement
+    _config_simple_parameter_check "$FUNCNAME" "$1" \
+      "removes the rebind of the roboag repos from fstab."
+    if [ $? -ne 0 ]; then return -1; fi
+
+
+    # unmount rebind
+    if mount | grep --quiet " $REBIND_DST "; then
+        error_flag=1
+        echo "unmount repos"
+        sudo umount "$REBIND_DST"
+        if [ $? -ne 0 ]; then return -2; fi
+    fi
+
+    # Undo the configuration
+    FILENAME_CONFIG="/etc/samba/smb.conf"
+
+    _config_file_restore "$FILENAME_CONFIG" "backup-once"
+    if [ $? -ne 0 ]; then return -3; fi
+
+    echo "remove mount point"
+    sudo rmdir $REBIND_DST
+
+    echo "done :-)"
+}
+
+
+
 #***************************[cron]*********************************************
 
 # 2021 01 24

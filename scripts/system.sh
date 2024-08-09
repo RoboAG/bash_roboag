@@ -452,7 +452,7 @@ function robo_system_check_install() {
 
 
 #***************************[check]******************************************
-# 2023 09 25
+# 2024 08 08
 
 function robo_system_wtf() {
 
@@ -508,7 +508,7 @@ function robo_system_wtf() {
         robo_setup_server_dnsmasq_check
         robo_config_server_dhcp_check
         robo_setup_server_apache_check
-
+        robo_setup_server_rebind_repos_check
         robo_setup_server_samba_check
     fi
     if [ "$ROBO_CONFIG_STANDALONE" != "1" ]; then
