@@ -504,7 +504,7 @@ Additionally uninstalls dnsmasq."
 
 #***************************[samba]*******************************************
 
-# 2021 01 03
+# 2024 08 08
 function robo_setup_server_samba() {
 
     # print help and check for user agreement
@@ -521,23 +521,31 @@ function robo_setup_server_samba() {
         echo "Variable ROBO_PATH_ROBOAG is not set."
         return -3
     fi
-    if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
-        echo "Directory $ROBO_PATH_ROBOAG does not exist."
-        return -3
-    fi
     if [ "$ROBO_PATH_ROBOSAX" == "" ]; then
         echo "Variable ROBO_PATH_ROBOSAX is not set."
         return -3
     fi
+
+    # create shared folders if necessary
+    if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
+        echo "creating roboag data folder"
+        echo "  ($ROBO_PATH_ROBOAG)"
+        sudo mkdir -p "$ROBO_PATH_ROBOAG"
+        sudo chown $USER:$USER "$ROBO_PATH_ROBOAG"
+        if [ $? -ne 0 ]; then return -3; fi
+    fi
     if [ ! -d "$ROBO_PATH_ROBOSAX" ]; then
-        echo "Directory $ROBO_PATH_ROBOSAX does not exist."
-        return -3
+        echo "creating robosax data folder"
+        echo "  ($ROBO_PATH_ROBOSAX)"
+        sudo mkdir -p "$ROBO_PATH_ROBOSAX"
+        sudo chown $USER:$USER "$ROBO_PATH_ROBOSAX"
+        if [ $? -ne 0 ]; then return -3; fi
     fi
 
     # check internal network interface
     echo -n "checking "
     robo_setup_server_interfaces_check
-    if [ $? -ne 0 ]; then return -3; fi
+    if [ $? -ne 0 ]; then return -4; fi
 
     ## check & install samba server
     #_config_install_list "samba" quiet
@@ -579,7 +587,7 @@ function robo_setup_server_samba() {
     echo "done :-)"
 }
 
-# 2021 01 15
+# 2024 08 08
 function robo_setup_server_samba_check() {
 
     # init variables
@@ -591,6 +599,18 @@ function robo_setup_server_samba_check() {
     # check status of service
     config_check_service smbd "quiet" "enabled"
     if [ $? -ne 0 ]; then error_flag=1; fi
+
+    # check folders
+    if [ ! -d "$ROBO_PATH_ROBOAG" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing roboag folder"
+    fi
+    if [ ! -d "$ROBO_PATH_ROBOSAX" ]; then
+        error_flag=1
+        echo ""
+        echo -n "  missing robosax folder"
+    fi
 
     # check for shares
     AWK_STRING="$(_robo_setup_server_samba_getawk)"

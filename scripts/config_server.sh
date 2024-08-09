@@ -22,12 +22,12 @@ fi
 
 
 #***************************[server paths]************************************
-# 2021 01 01
+# 2024 08 08
 
 # setup server paths
 export _ROBO_SERVER_PATH_DATA="/mnt/data/"
 export _ROBO_SERVER_PATH_DATA2="/media/share/"
-
+export _ROBO_SERVER_PATH_DATA3="$ROBO_PATH_OPT_DATA"
 
 if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
 
@@ -38,8 +38,9 @@ if [ "$ROBO_CONFIG_IS_SERVER" != "" ]; then
     elif [ -d "$_ROBO_SERVER_PATH_DATA2" ]; then
         export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA2}roboag"
         export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA2}robosax"
-    #else
-        # echo "missing main data path"
+    else
+        export ROBO_PATH_ROBOAG="${_ROBO_SERVER_PATH_DATA3}roboag"
+        export ROBO_PATH_ROBOSAX="${_ROBO_SERVER_PATH_DATA3}robosax"
     fi
 fi
 
