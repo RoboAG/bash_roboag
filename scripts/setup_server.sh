@@ -504,7 +504,7 @@ Additionally uninstalls dnsmasq."
 
 #***************************[samba]*******************************************
 
-# 2024 08 08
+# 2024 08 09
 function robo_setup_server_samba() {
 
     # print help and check for user agreement
@@ -566,7 +566,7 @@ function robo_setup_server_samba() {
     if [ $? -ne 0 ]; then return -6; fi
 
     # apply awk string
-    _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+    _config_file_modify_full "$FILENAME_CONFIG" "samba/server" "$AWK_STRING" "backup-once"
     if [ $? -ne 0 ]; then return -7; fi
 
     echo "(re)starting service smbd"
@@ -655,7 +655,7 @@ function robo_setup_server_samba_check() {
     fi
 }
 
-# 2021 01 03
+# 2024 08 09
 function robo_setup_server_samba_restore() {
 
     # print help and check for user agreement
@@ -677,7 +677,7 @@ function robo_setup_server_samba_restore() {
     FILENAME_CONFIG="/etc/samba/smb.conf"
 
 
-    _config_file_restore "$FILENAME_CONFIG" "backup-once"
+    _config_file_restore_full "$FILENAME_CONFIG" "samba/server" "backup-once"
 
     echo "done :-)"
 }
@@ -845,7 +845,7 @@ function robo_setup_server_smbuser_restore() {
 
 #***************************[rebind repos]***********************************
 
-# 2024 08 08
+# 2024 08 09
 function robo_setup_server_rebind_repos() {
 
     # print help and check for user agreement
@@ -921,7 +921,7 @@ function robo_setup_server_rebind_repos() {
         }
     "
 
-    _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+    _config_file_modify_full "$FILENAME_CONFIG" "fstab/rebind" "$AWK_STRING" "backup-once"
     if [ $? -ne 0 ]; then return -5; fi
 
     # mount rebind
@@ -1013,7 +1013,7 @@ function robo_setup_server_rebind_repos_restore() {
     # Undo the configuration
     FILENAME_CONFIG="/etc/samba/smb.conf"
 
-    _config_file_restore "$FILENAME_CONFIG" "backup-once"
+    _config_file_restore_full "$FILENAME_CONFIG" "fstab/rebind" "backup-once"
     if [ $? -ne 0 ]; then return -3; fi
 
     echo "remove mount point"

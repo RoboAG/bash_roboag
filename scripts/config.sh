@@ -727,7 +727,7 @@ function robo_config_user_restore() {
 
 #***************************[samba]*******************************************
 
-# 2024 05 26
+# 2024 08 08
 function robo_config_samba() {
 
     # print help and check for user agreement
@@ -848,7 +848,7 @@ function robo_config_samba() {
         echo "modifying $FILENAME_CONFIG"
 
         # apply awk string
-        _config_file_modify "$FILENAME_CONFIG" "$AWK_STRING" "backup-once"
+        _config_file_modify_full "$FILENAME_CONFIG" "fstab/samba" "$AWK_STRING" "backup-once"
         if [ $? -ne 0 ]; then return -2; fi
 
         echo "running $ mount -a"
@@ -940,7 +940,7 @@ function robo_config_samba_check() {
     fi
 }
 
-# 2021 01 16
+# 2024 08 08
 function robo_config_samba_restore() {
 
     # print help and check for user agreement
@@ -995,7 +995,7 @@ function robo_config_samba_restore() {
     if [ "$temp" != "" ]; then has_robosax=1; fi
 
     if [ $has_roboag -eq 1 ] || [ $has_robosax -eq 1 ]; then
-        _config_file_restore "$FILENAME_CONFIG" "backup-once"
+        _config_file_restore_full "$FILENAME_CONFIG" "fstab/samba" "backup-once"
         if [ $? -ne 0 ]; then return -2; fi
         sudo mount -a
     fi
