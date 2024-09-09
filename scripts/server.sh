@@ -152,7 +152,7 @@ function robo_server_ssh_getconfigs() {
 
 #***************************[client status]***********************************
 
-# 2024 05 26
+# 2024 09 09
 function robo_server_check_clients() {
 
     # print help
@@ -223,7 +223,7 @@ function robo_server_check_clients() {
             if [ ! -f "$temp" ]; then
                 echo -n "--- "
             else
-                date="$(cat "$temp" | grep " install client " | \
+                date="$(cat "$temp" | grep -E " install (client|common) " | \
                 tail -n 1 | awk "{print \$5}")"
                 if [ $? -eq 0 ] && [ "$date" != "" ]; then
                     date_secs="$(_robo_system_convert_date_to_sec "$date")"
@@ -247,7 +247,7 @@ function robo_server_check_clients() {
             if [ ! -f "$temp" ]; then
                 echo -n "--- "
             else
-                date="$(cat "$temp" | grep " uninstall client " | \
+                date="$(cat "$temp" | grep -E " uninstall (client|common) " | \
                 tail -n 1 | awk "{print \$5}")"
                 if [ $? -eq 0 ] && [ "$date" != "" ]; then
                     date_secs="$(_robo_system_convert_date_to_sec "$date")"

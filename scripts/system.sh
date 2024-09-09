@@ -125,7 +125,7 @@ function robo_system_check_update() {
 
 
 #***************************[install]*****************************************
-# 2023 09 23
+# 2024 09 09
 
 export ROBO_FILE_LOG_INSTALL="${ROBO_PATH_CONFIG}install.log"
 export ROBO_SYSTEM_INSTALL_DATE_COMMON="23.09.2023"
@@ -134,12 +134,12 @@ export ROBO_SYSTEM_UNINSTALL_DATE_COMMON="07.07.2022"
 export ROBO_SYSTEM_UNINSTALL_DATE_SERVER="23.09.2023"
 
 common_path="${ROBO_PATH_SCRIPT}system_config/install/"
-export ROBO_FILE_INSTALL_CLIENT="${common_path}/common.txt"
+export ROBO_FILE_INSTALL_COMMON="${common_path}/common.txt"
 export ROBO_FILE_INSTALL_SERVER="${common_path}/server.txt"
-export ROBO_FILE_UNINSTALL_CLIENT="${common_path}/uninstall_common.txt"
+export ROBO_FILE_UNINSTALL_COMMON="${common_path}/uninstall_common.txt"
 export ROBO_FILE_UNINSTALL_SERVER="${common_path}/uninstall_server.txt"
 
-# 2023 02 04
+# 2024 09 09
 function robo_system_install() {
 
     # print help
@@ -194,7 +194,7 @@ function robo_system_install() {
     # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
         # common install
-        list="$(_robo_config_read_list "${ROBO_FILE_INSTALL_CLIENT}")"
+        list="$(_robo_config_read_list "${ROBO_FILE_INSTALL_COMMON}")"
         if [ $? -ne 0 ]; then return -2; fi
         _config_install_list "$list" "" --yes
         if [ $? -ne 0 ]; then return -3; fi
@@ -247,7 +247,7 @@ function robo_system_install() {
     echo "done :-)"
 }
 
-# 2023 02 04
+# 2024 09 09
 function robo_system_uninstall() {
 
     # print help
@@ -292,7 +292,7 @@ function robo_system_uninstall() {
     # select between common and only server
     if [ "$server_flag" -eq 0 ]; then
         # common uninstall
-        list="$(_robo_config_read_list "${ROBO_FILE_UNINSTALL_CLIENT}")"
+        list="$(_robo_config_read_list "${ROBO_FILE_UNINSTALL_COMMON}")"
         if [ $? -ne 0 ]; then return -2; fi
         _config_uninstall_list "$list" "" --yes
         if [ $? -ne 0 ]; then return -3; fi
