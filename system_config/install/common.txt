@@ -28,7 +28,7 @@ g++ cmake
 # installed version is distribution dependend
 
 # drawing & construction
-librecad inkscape dia
+librecad inkscape dia kicad
 
 # documentation
 zim doxygen
