@@ -574,7 +574,7 @@ function robo_config_user() {
     groups="$(cat /etc/group | grep ":.*$ROBO_USER_AG" | grep -o "^[^:]*")"
     for group in $groups_roboag; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
-            sudo usermod -a -G "$group" $ROBO_USER_AG
+            sudo usermod -a -G "$group" "$ROBO_USER_AG"
         fi
     done
 
@@ -582,7 +582,7 @@ function robo_config_user() {
     groups="$(cat /etc/group | grep ":.*$USER" | grep -o "^[^:]*")"
     for group in $groups_guru; do
         if [ "$(echo $groups | grep "$group")" == "" ]; then
-            sudo usermod -a -G "$group" $USER
+            sudo usermod -a -G "$group" "$USER"
         fi
     done
 
