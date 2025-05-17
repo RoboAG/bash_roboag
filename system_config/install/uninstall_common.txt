@@ -12,3 +12,6 @@ subversion
 
 # drawing & construction
 eagle
+
+# background
+brltty
