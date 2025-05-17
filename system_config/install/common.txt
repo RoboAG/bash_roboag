@@ -16,7 +16,7 @@ regexxer pwgen
 git meld bc
 
 # editors
-vim kate bless
+vim kate ghex neovim
 
 # µC & C
 arduino binutils gcc avr-libc avrdude
