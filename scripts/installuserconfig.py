@@ -101,19 +101,24 @@ def InstallConfig(debug = False, NoUser = False):
     else:
         print(" - " + users[userselection - 1])
         users_to_install.append(users[userselection - 1])
+
     if not NoUser:
         if not input("are you sure? y/N: ").strip().lower() in ["yes", "y"]:
             print("Aborting ...")
             sys.exit()
 
     for user in users_to_install:
-        userconfigdir = "/home/user/.config/"
+        userconfigdir = "/home/"+user+"/.config/"
         for config in configs_to_install:
             if debug == False:
                 shutil.copytree(configdirectory + "/" +config, userconfigdir)
-            print("copied "+configdirectory+config+" into "+userconfigdir+config)
+            print("copied "+configdirectory+"/"+config+" into "+userconfigdir+config)
 
     print("finished")
+
+if args == []:
+    InstallConfig()
+    sys.exit()
 
 if args[0][:2] == "-h":
     gethelp()
