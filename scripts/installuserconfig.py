@@ -110,7 +110,11 @@ def InstallConfig(debug = False, NoUser = False):
     for user in users_to_install:
         userconfigdir = "/home/"+user+"/.config/"
         for config in configs_to_install:
+            if os.path.exists(userconfigdir+config):
+                print("removing old config")
             if debug == False:
+                if os.path.exists(userconfigdir+config):
+                    os.removedirs(userconfigdir+config)
                 shutil.copytree(configdirectory + "/" +config, userconfigdir+config)
             print("copied "+configdirectory+"/"+config+" into "+userconfigdir+config)
 
