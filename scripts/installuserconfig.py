@@ -7,7 +7,15 @@ cwd = os.path.dirname(os.path.abspath(__file__))
 users = os.listdir("/home")
 configdirectory = cwd + "/../configs"
 
-def InstallConfig(debug = False):
+args = sys.argv[1:]
+
+def gethelp():
+    print("this script is made to install configs to /home/<user>/.config")
+    print(" -h: shows this help screen")
+    print(" -y: autoconfirm all, usefull for automatic updates")
+    print(" -d: enables debug mode")
+
+def InstallConfig(debug = False, NoUser = False):
     print()
     ### GET CONFIG TO INSTALL ###
     config_modules = os.listdir(configdirectory)
@@ -22,19 +30,20 @@ def InstallConfig(debug = False):
         print(line)
 
     configselection = -1
-
-    try:
-        userinput = input("config to install (default = 0): ")
-        print()
-        if userinput == "":
-            configselection = 0
-        else:
-            configselection = int(userinput)
-    except ValueError as e:
-        print("error: " + e.__str__())
-        print("Aborting ...")
-        sys.exit()
-
+    if NoUser:
+        configselection = 0
+    else:
+        try:
+            userinput = input("config to install (default = 0): ")
+            print()
+            if userinput == "":
+                configselection = 0
+            else:
+                configselection = int(userinput)
+        except ValueError as e:
+            print("error: " + e.__str__())
+            print("Aborting ...")
+            sys.exit()
     
     if configselection < 0 or configselection > len(config_modules):
         print("selection out of bounds")
@@ -50,18 +59,21 @@ def InstallConfig(debug = False):
 
     userselection = -1
 
-    try:
-        userinput = input("user to install to (default = 0): ")
-        print()
-        
-        if userinput == "":
-            userselection = 0
-        else:
-            userselection = int(userinput)
-    except ValueError as e:
-        print("error: " + e.__str__())
-        print("Aborting ...")
-        sys.exit()
+    if NoUser:
+        userselection = 0
+    else:
+        try:
+            userinput = input("user to install to (default = 0): ")
+            print()
+            
+            if userinput == "":
+                userselection = 0
+            else:
+                userselection = int(userinput)
+        except ValueError as e:
+            print("error: " + e.__str__())
+            print("Aborting ...")
+            sys.exit()
 
     
     if userselection < 0 or userselection > len(users):
@@ -89,10 +101,10 @@ def InstallConfig(debug = False):
     else:
         print(" - " + users[userselection - 1])
         users_to_install.append(users[userselection - 1])
-
-    if not input("are you sure? y/N: ").strip().lower() in ["yes", "y"]:
-        print("Aborting ...")
-        sys.exit()
+    if not NoUser:
+        if not input("are you sure? y/N: ").strip().lower() in ["yes", "y"]:
+            print("Aborting ...")
+            sys.exit()
 
     for user in users_to_install:
         userconfigdir = "/home/user/.config/"
@@ -103,4 +115,17 @@ def InstallConfig(debug = False):
 
     print("finished")
 
-InstallConfig(debug=True)
+if args[0][:2] == "-h":
+    gethelp()
+    sys.exit()
+else:
+    flags = args[0][1:]
+    NoUser = False
+    Debug = False
+    for flag in flags:
+        if flag == "y":
+            NoUser = True
+        if flag == "d":
+            Debug = True
+
+    InstallConfig(debug=Debug, NoUser=NoUser)
