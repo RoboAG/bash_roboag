@@ -111,7 +111,7 @@ def InstallConfig(debug = False, NoUser = False):
         userconfigdir = "/home/"+user+"/.config/"
         for config in configs_to_install:
             if debug == False:
-                shutil.copytree(configdirectory + "/" +config, userconfigdir)
+                shutil.copytree(configdirectory + "/" +config, userconfigdir+config)
             print("copied "+configdirectory+"/"+config+" into "+userconfigdir+config)
 
     print("finished")
