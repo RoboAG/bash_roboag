@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 cwd = os.path.dirname(os.path.abspath(__file__))
@@ -6,7 +7,7 @@ cwd = os.path.dirname(os.path.abspath(__file__))
 users = os.listdir("/home")
 configdirectory = cwd + "/../configs"
 
-def GetConfigToInstall(debug = False):
+def InstallConfig(debug = False):
     print()
     ### GET CONFIG TO INSTALL ###
     config_modules = os.listdir(configdirectory)
@@ -23,8 +24,8 @@ def GetConfigToInstall(debug = False):
     configselection = -1
 
     try:
-        print()
         userinput = input("config to install (default = 0): ")
+        print()
         if userinput == "":
             configselection = 0
         else:
@@ -50,8 +51,8 @@ def GetConfigToInstall(debug = False):
     userselection = -1
 
     try:
+        userinput = input("user to install to (default = 0): ")
         print()
-        userinput = input("config to install (default = 0): ")
         
         if userinput == "":
             userselection = 0
@@ -69,20 +70,37 @@ def GetConfigToInstall(debug = False):
         sys.exit()
 
 
+    configs_to_install = []
     print("installing: ")
     if configselection == 0:
         for module in config_modules:
             print(" - " + module)
+            configs_to_install.append(module)
     else:
         print(" - " + config_modules[configselection - 1])
+        configs_to_install.append(config_modules[configselection - 1])
 
+    users_to_install = []
     print("for: ")
     if userselection == 0:
         for user in users:
             print(" - " + user)
+            users_to_install.append(user)
     else:
         print(" - " + users[userselection - 1])
+        users_to_install.append(users[userselection - 1])
 
-GetConfigToInstall()
+    if not input("are you sure? y/N: ").strip().lower() in ["yes", "y"]:
+        print("Aborting ...")
+        sys.exit()
 
+    for user in users_to_install:
+        userconfigdir = "/home/user/.config/"
+        for config in configs_to_install:
+            if debug == False:
+                shutil.copytree(configdirectory + "/" +config, userconfigdir)
+            print("copied "+configdirectory+config+" into "+userconfigdir+config)
 
+    print("finished")
+
+InstallConfig(debug=True)
