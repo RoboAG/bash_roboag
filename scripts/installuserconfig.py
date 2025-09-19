@@ -129,7 +129,7 @@ def InstallConfig(debug = False, NoUser = False):
                 if os.path.exists(userconfigdir+config):
                     shutil.rmtree(userconfigdir+config)
                 shutil.copytree(configdirectory + "/" +config, userconfigdir+config)
-                chown(name = user, folder = userconfigdir+config)
+                chown(name = user,group = user ,folder = userconfigdir+config)
             print("copied "+configdirectory+"/"+config+" into "+userconfigdir+config)
 
     print("finished")
