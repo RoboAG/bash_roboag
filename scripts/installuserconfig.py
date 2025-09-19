@@ -1,6 +1,8 @@
 import os
 import shutil
 import sys
+import pwd
+import grp
 
 cwd = os.path.dirname(os.path.abspath(__file__))
 
@@ -8,6 +10,17 @@ users = os.listdir("/home")
 configdirectory = cwd + "/../configs"
 
 args = sys.argv[1:]
+
+def chown(name = "roboag", group = "roboag", folder = ""):
+    if folder == "":
+        sys.exit("error: no folder given")
+
+    userid = pwd.getpwnam(name).pw_uid
+    groupid = grp.getgrnam(group).gr_gid
+    
+    for root, dirs, files in os.walk(folder):
+        for name in dirs + files:
+            os.chown(os.path.join(root, name), userid, groupid)
 
 def gethelp():
     print("this script is made to install configs to /home/<user>/.config")
@@ -116,6 +129,7 @@ def InstallConfig(debug = False, NoUser = False):
                 if os.path.exists(userconfigdir+config):
                     shutil.rmtree(userconfigdir+config)
                 shutil.copytree(configdirectory + "/" +config, userconfigdir+config)
+                chown(name = user, folder = userconfigdir+config)
             print("copied "+configdirectory+"/"+config+" into "+userconfigdir+config)
 
     print("finished")

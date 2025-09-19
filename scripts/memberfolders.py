@@ -97,10 +97,8 @@ for char in args[0][1:]:
         Neu = True
     if char == "a":
         add = True
-        create_member_folder(args[2])
     if char == "r":
         rem = True
-        shutil.rmtree(os.path.join(MEMBER_FOLDER_PATH, args[2]))
 
 if add and rem:
     print("error: you can't add and remove at the same time")
