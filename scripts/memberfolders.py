@@ -5,7 +5,7 @@ import time
 import pwd
 import grp
 
-MEMBER_FOLDER_PATH = "/media/share/roboag/User"
+MEMBER_FOLDER_PATH = "/opt/roboag/data/roboag/User"
 
 def list_members():
     return os.listdir(MEMBER_FOLDER_PATH)
